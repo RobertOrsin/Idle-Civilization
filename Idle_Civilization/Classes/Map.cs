@@ -29,12 +29,12 @@ namespace Idle_Civilization.Classes
                     //tile on even x-value with even y-value => visible tile
                     if(x%2 == 0 && y%2 == 0)
                     {
-                        map[x].Add(new Tile(GraphicsDevice, tileMap, Classes.TileNumber.gras, x, y));
+                        map[x].Add(new Tile(GraphicsDevice, tileMap, Classes.TileNumber.deepwater, x, y));
                     }
                     //tile on odd x-value with odd y-value ==> visible tile
                     else if (x % 2 != 0 && y % 2 != 0)
                     {
-                        map[x].Add(new Tile(GraphicsDevice, tileMap, Classes.TileNumber.gras, x, y));
+                        map[x].Add(new Tile(GraphicsDevice, tileMap, Classes.TileNumber.deepwater, x, y));
                     }
                     //empty tile
                     else
@@ -42,8 +42,7 @@ namespace Idle_Civilization.Classes
                         map[x].Add(new Tile());
                     }
                 }
-            }
-                
+            }  
         }
 
         public void Update()
@@ -59,5 +58,13 @@ namespace Idle_Civilization.Classes
                 }
             }
         }
+
+        #region Map-Generation
+        private void GenerateBaseShape()
+        {
+            int width = map[0].Count;
+            int height = map.Count;
+        }
+        #endregion
     }
 }

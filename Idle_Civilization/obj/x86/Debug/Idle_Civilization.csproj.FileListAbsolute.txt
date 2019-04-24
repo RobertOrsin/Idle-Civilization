@@ -43,3 +43,25 @@ C:\Users\rober\Documents\Visual Studio 2017\Projects\idle civ\Idle_Civilization\
 C:\Users\rober\Documents\Visual Studio 2017\Projects\idle civ\Idle_Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.csprojResolveAssemblyReference.cache
 C:\Users\rober\Documents\Visual Studio 2017\Projects\idle civ\Idle_Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.exe
 C:\Users\rober\Documents\Visual Studio 2017\Projects\idle civ\Idle_Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.pdb
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\basetiles.xnb
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Idle_Civilization.exe
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Idle_Civilization.pdb
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.DXGI.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.Direct3D11.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.XInput.dll
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\MonoGame.Framework.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.XAudio2.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.DXGI.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\SharpDX.XInput.xml
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.csprojResolveAssemblyReference.cache
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.exe
+C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.pdb
