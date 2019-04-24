@@ -22,6 +22,8 @@ namespace Idle_Civilization
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 1366;
+            graphics.PreferredBackBufferHeight = 720;
             Content.RootDirectory = "Content";
         }
 
@@ -35,7 +37,7 @@ namespace Idle_Civilization
         {
             tileMap = Content.Load<Texture2D>("basetiles");
 
-            map = new Classes.Map(GraphicsDevice, tileMap);
+            map = new Classes.Map(GraphicsDevice, tileMap, 30, 45);
 
             base.Initialize();
         }
@@ -82,7 +84,7 @@ namespace Idle_Civilization
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
             map.Draw(spriteBatch);

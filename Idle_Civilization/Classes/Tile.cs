@@ -9,10 +9,12 @@ namespace Idle_Civilization.Classes
     class Tile
     {
         #region VARS
-        public TileNumber tiletype;
-        public int x, y; //koordinates on map
+        public TileBaseType tileBaseType;
+        private TileNumber tiletype;
+        private int x, y; //koordinates on map
         Texture2D tile_texture;
         bool empty = false;
+        Rectangle clickArea;
 
 
         #endregion
@@ -42,6 +44,8 @@ namespace Idle_Civilization.Classes
 
             tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
+
+            clickArea = GetClickArea();
         }
     
         public void Update(MouseState mouseState)
@@ -53,6 +57,47 @@ namespace Idle_Civilization.Classes
             if(!empty)
                 spriteBatch.Draw(tile_texture, GetTileMapPosition(), Color.Wheat);
         }
+
+        public void SetTileType(TileNumber _tileType, GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        {
+            tiletype = _tileType;
+
+            Color[] data;
+            Rectangle rect = GetTileSpritePosition(tiletype);
+
+            tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+            data = new Color[rect.Width * rect.Height];
+
+            tileMap.GetData(0, rect, data, 0, data.Length);
+            tile_texture.SetData(data);
+        }
+        public void SetTileType(TileBaseType _tilebasetype, GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        {
+            tileBaseType = _tilebasetype;
+            switch (tileBaseType)
+            {
+                case TileBaseType.Mountain:
+                    tiletype = TileNumber.mountain;
+                    break;
+                case TileBaseType.Wood:
+                    tiletype = TileNumber.wood;
+                    break;
+                case TileBaseType.Water:
+                    tiletype = TileNumber.flatwater;
+                    break;
+            }
+
+            Color[] data;
+            Rectangle rect = GetTileSpritePosition(tiletype);
+
+            tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+            data = new Color[rect.Width * rect.Height];
+
+            tileMap.GetData(0, rect, data, 0, data.Length);
+            tile_texture.SetData(data);
+        }
+
+
         /// <summary>
         /// Returns a Rectangle descriping position and dimension of sprite on a spritemap
         /// </summary>
@@ -62,7 +107,10 @@ namespace Idle_Civilization.Classes
         {
             return new Rectangle(Constants.tile_width * ((int)tileNumber % Constants.tiles_per_row), Constants.tile_height * ((int)tileNumber / Constants.tiles_per_row), Constants.tile_width, Constants.tile_height);
         }
-
+        /// <summary>
+        /// Calculate Position of Tilesprite for x,y of this tile
+        /// </summary>
+        /// <returns></returns>
         private Rectangle GetTileMapPosition()
         {
             Rectangle rect = new Rectangle(Constants.tile_x_offset * x, Constants.tile_y_offset * y, 32, 48);
@@ -92,6 +140,14 @@ namespace Idle_Civilization.Classes
 
 
             return new Rectangle(rect_x, rect_y, 32, 48);
+        }
+        /// <summary>
+        /// Calculate ClickArea of this tile, depending on x,y of this tile
+        /// </summary>
+        /// <returns></returns>
+        private Rectangle GetClickArea()
+        {
+            return new Rectangle();
         }
     }
 }
