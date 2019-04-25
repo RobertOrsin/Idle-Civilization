@@ -15,7 +15,7 @@ namespace Idle_Civilization
 
         Classes.Map map;
 
-        Texture2D tileMap;
+        Texture2D tileMap, buttons_medium, buttons_small;
 
         public static MouseState mouseState, oldMouseState;
         public static KeyboardState keyboardState, oldKeyboardState;
@@ -39,6 +39,8 @@ namespace Idle_Civilization
             IsMouseVisible = true;
 
             tileMap = Content.Load<Texture2D>("basetiles");
+            buttons_medium = Content.Load<Texture2D>("Buttons_Medium_Spritesheet");
+            buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
 
             map = new Classes.Map(GraphicsDevice, tileMap, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 

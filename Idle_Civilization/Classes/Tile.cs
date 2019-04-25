@@ -16,7 +16,9 @@ namespace Idle_Civilization.Classes
         bool empty = false;
         Rectangle clickArea;
 
-
+        //Delay for Ressourceupdate
+        double timer = 5000; //in ms
+        const double TIME = 5000;
         #endregion
 
 
@@ -47,17 +49,40 @@ namespace Idle_Civilization.Classes
 
             clickArea = GetClickArea();
         }
-    
-        public void Update(MouseState mouseState)
+
+        /// <summary>
+        /// Update Inputs on Map and its tiles
+        /// </summary>
+        /// <param name="mouseState"></param>
+        public void Update(MouseState mouseState, GameTime gameTime)
         {
-            
+            #region GameValue Update
+            double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
+            timer -= elapsed;
+
+            if (timer < 0)
+            {
+                timer = TIME;
+                //Ressourceupdate
+            }
+            #endregion
         }
+        /// <summary>
+        /// Draw Part of Map
+        /// </summary>
+        /// <param name="spriteBatch"></param>
+        /// <param name="mapPosition"></param>
         public void Draw(SpriteBatch spriteBatch, Vector2 mapPosition)
         { 
             if(!empty)
                 spriteBatch.Draw(tile_texture, GetTileMapPosition(mapPosition), Color.Wheat);
         }
-
+        /// <summary>
+        /// Set Tiletype bei Enum-TileType; Update Texture of tile
+        /// </summary>
+        /// <param name="_tileType"></param>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
         public void SetTileType(TileNumber _tileType, GraphicsDevice GraphicsDevice, Texture2D tileMap)
         {
             tiletype = _tileType;
@@ -71,6 +96,12 @@ namespace Idle_Civilization.Classes
             tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
         }
+        /// <summary>
+        /// Set Tiletype bei Enum-TileBaseType; Update Texture of tile; used bei Map-Generation
+        /// </summary>
+        /// <param name="_tilebasetype"></param>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
         public void SetTileType(TileBaseType _tilebasetype, GraphicsDevice GraphicsDevice, Texture2D tileMap)
         {
             tileBaseType = _tilebasetype;

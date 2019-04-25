@@ -40,6 +40,15 @@ namespace Idle_Civilization.Classes
 
         #endregion
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
+        /// <param name="_width"></param>
+        /// <param name="_height"></param>
+        /// <param name="screen_width"></param>
+        /// <param name="screen_height"></param>
         public Map(GraphicsDevice GraphicsDevice, Texture2D tileMap, int _width, int _height, int screen_width, int screen_height)
         {
             width = _width;
@@ -59,7 +68,11 @@ namespace Idle_Civilization.Classes
             lower_left = new Rectangle(0, screen_height - 50, 50, 50);
             lower_right = new Rectangle(screen_width - 50, screen_height - 50, 50, 50);
         }
-
+        /// <summary>
+        /// Updatefunction
+        /// </summary>
+        /// <param name="mouseState"></param>
+        /// <param name="gameTime"></param>
         public void Update(MouseState mouseState, GameTime gameTime)
         {
             #region scrolling
@@ -122,7 +135,10 @@ namespace Idle_Civilization.Classes
             }
             #endregion
         }
-    
+        /// <summary>
+        /// Drawfunction
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             for (int x = (int)mapPosition.X; x < width; x++)
@@ -135,10 +151,26 @@ namespace Idle_Civilization.Classes
         }
 
         #region Map-Generation
+        /// <summary>
+        /// Set Map-Parameters to generate different mapstyles
+        /// </summary>
+        /// <param name="_mountain_density"></param>
+        /// <param name="_mountain_spread"></param>
+        /// <param name="_wood_density"></param>
+        /// <param name="_wood_spread"></param>
+        /// <param name="_water_density"></param>
+        /// <param name="_water_spread"></param>
+        /// <param name="_enemy_density"></param>
+        /// <param name="_enemy_spread"></param>
         public void SetMapParameters(int _mountain_density, int _mountain_spread, int _wood_density, int _wood_spread, int _water_density, int _water_spread, int _enemy_density, int _enemy_spread)
         {
 
         }
+        /// <summary>
+        /// Generate Map
+        /// </summary>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
         private void GenerateMap(GraphicsDevice GraphicsDevice, Texture2D tileMap)
         {
             map = new List<List<Tile>>();
@@ -212,11 +244,24 @@ namespace Idle_Civilization.Classes
                 SetNeighbors(start_x, start_y, TileBaseType.Water, GraphicsDevice, tileMap);
             }
         }
+        /// <summary>
+        /// Check if a Tile is Valid to be set to TileType
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         private bool IsValidTile(int x, int y)
         {
             return (x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0);
         }
-
+        /// <summary>
+        /// Rekursive function to spread a tiletype across the map
+        /// </summary>
+        /// <param name="_x"></param>
+        /// <param name="_y"></param>
+        /// <param name="tileBaseType"></param>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
         private void SetNeighbors(int _x, int _y, TileBaseType tileBaseType, GraphicsDevice GraphicsDevice, Texture2D tileMap)
         {
             int x = _x, y = _y;
@@ -293,7 +338,9 @@ namespace Idle_Civilization.Classes
         }
         #endregion
     }
-
+    /// <summary>
+    /// Basetypes for tiles, used by MapGeneration
+    /// </summary>
     enum TileBaseType
     {
         None,

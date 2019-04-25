@@ -194,8 +194,8 @@ namespace Utility_Functions
     class Pushbutton
     {
         public Vector2 position = new Vector2();
-        private Dictionary<stateType, Texture2D> textures = new Dictionary<stateType, Texture2D>();
-        private stateType state = new stateType();
+        private Dictionary<ButtonStateType, Texture2D> textures = new Dictionary<ButtonStateType, Texture2D>();
+        private ButtonStateType state = new ButtonStateType();
         private Rectangle bounds = new Rectangle();
         private string text;
         private Color color;
@@ -212,12 +212,12 @@ namespace Utility_Functions
         /// <param name="_textures">3 textures, idle, hoover, pressed</param>
         public Pushbutton(Vector2 _position, List<Texture2D> _textures, string _text, Color _color)
         {
-            state = stateType.idle;
+            state = ButtonStateType.idle;
             position = _position;
 
-            textures.Add(stateType.idle, _textures[0]);
-            textures.Add(stateType.hoover, _textures[1]);
-            textures.Add(stateType.pressed, _textures[2]);
+            textures.Add(ButtonStateType.idle, _textures[0]);
+            textures.Add(ButtonStateType.hoover, _textures[1]);
+            textures.Add(ButtonStateType.pressed, _textures[2]);
 
             bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), textures[0].Width, textures[0].Height);
 
@@ -233,12 +233,12 @@ namespace Utility_Functions
         /// <param name="presstex">texture of pressed button</param>
         public Pushbutton(Vector2 _position, Texture2D idletex, Texture2D hoovertex, Texture2D presstex, string _text, Color _color)
         {
-            state = stateType.idle;
+            state = ButtonStateType.idle;
             position = _position;
 
-            textures.Add(stateType.idle, idletex);
-            textures.Add(stateType.hoover, hoovertex);
-            textures.Add(stateType.pressed, presstex);
+            textures.Add(ButtonStateType.idle, idletex);
+            textures.Add(ButtonStateType.hoover, hoovertex);
+            textures.Add(ButtonStateType.pressed, presstex);
 
             bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), textures[0].Width, textures[0].Height);
 
@@ -250,12 +250,12 @@ namespace Utility_Functions
         /// </summary>
         /// <param name="_position">where the button is drawn, upper left corner</param>
         /// <param name="_textures">dictionary of statetype and textures</param>
-        public Pushbutton(Vector2 _position, Dictionary<stateType, Texture2D> _textures, string _text, Color _color)
+        public Pushbutton(Vector2 _position, Dictionary<ButtonStateType, Texture2D> _textures, string _text, Color _color)
         {
-            state = stateType.idle;
+            state = ButtonStateType.idle;
             position = _position;
 
-            foreach (KeyValuePair<stateType, Texture2D> tex in _textures)
+            foreach (KeyValuePair<ButtonStateType, Texture2D> tex in _textures)
             {
                 textures.Add(tex.Key, tex.Value);
             }
@@ -273,16 +273,16 @@ namespace Utility_Functions
             {
                 if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
                 {
-                    state = stateType.pressed;
+                    state = ButtonStateType.pressed;
                     if (onClickEvent != null)
                     {
                         callClickEvent();
                     }
                 }
                 else if (Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
-                    state = stateType.hoover;
+                    state = ButtonStateType.hoover;
                 else
-                    state = stateType.idle;
+                    state = ButtonStateType.idle;
 
                 bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), textures[0].Width, textures[0].Height);
             }
@@ -303,7 +303,6 @@ namespace Utility_Functions
                 }
             }
         }
-
         public void setClickEvent(eventmethod _event)
         {
             onClickEvent = _event;
@@ -319,7 +318,7 @@ namespace Utility_Functions
 
     }
 
-    public enum stateType
+    public enum ButtonStateType
     {
         idle,
         hoover,

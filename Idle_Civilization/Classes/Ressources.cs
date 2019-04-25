@@ -13,6 +13,9 @@ namespace Idle_Civilization.Classes
         public const int tiles_per_row = 8;
 
         public const int tile_stretch_factor = 3;
+
+        public const int medium_button_diameter = 24;
+        public const int small_button_diameter = 16;
     }
     
 
@@ -152,5 +155,28 @@ namespace Idle_Civilization.Classes
         lighthouse,
         oldcastle,
         oldvillage       
+    }
+    /// <summary>
+    /// Row of Button on Spritesheet
+    /// </summary>
+    public enum MediumButtonNumber
+    {
+        clear,
+        people,
+        wood,
+        food,
+        ore,
+        army,
+        foundCity,
+        addTile,
+        attackTile
+    }
+    /// <summary>
+    /// Row of Button on Spritesheet
+    /// </summary>
+    public enum SmallButtonNumber
+    {
+        minus,
+        plus
     }
 }
