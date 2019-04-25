@@ -12,6 +12,7 @@ namespace Idle_Civilization
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont spriteFont;
 
         Classes.Map map;
 
@@ -38,11 +39,12 @@ namespace Idle_Civilization
         {
             IsMouseVisible = true;
 
+            spriteFont = Content.Load<SpriteFont>("std_font");
             tileMap = Content.Load<Texture2D>("basetiles");
             buttons_medium = Content.Load<Texture2D>("Buttons_Medium_Spritesheet");
             buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
 
-            map = new Classes.Map(GraphicsDevice, tileMap, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            map = new Classes.Map(GraphicsDevice, tileMap, buttons_medium, buttons_small, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             base.Initialize();
         }
@@ -76,9 +78,10 @@ namespace Idle_Civilization
         protected override void Update(GameTime gameTime)
         {
             mouseState = Mouse.GetState();
+            keyboardState = Keyboard.GetState();
 
             // TODO: Add your update logic here
-            map.Update(mouseState, gameTime);
+            map.Update(keyboardState, mouseState, gameTime);
 
             base.Update(gameTime);
         }
@@ -92,7 +95,7 @@ namespace Idle_Civilization
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            map.Draw(spriteBatch);
+            map.Draw(spriteBatch, spriteFont);
             spriteBatch.End();
             // TODO: Add your drawing code here
 

@@ -13,6 +13,7 @@ namespace Idle_Civilization.Classes
 {
     class Map
     {
+        TileMenu tileMenu;
         private List<List<Tile>> map;
         int width, height;
         Vector2 mapPosition;
@@ -49,7 +50,7 @@ namespace Idle_Civilization.Classes
         /// <param name="_height"></param>
         /// <param name="screen_width"></param>
         /// <param name="screen_height"></param>
-        public Map(GraphicsDevice GraphicsDevice, Texture2D tileMap, int _width, int _height, int screen_width, int screen_height)
+        public Map(GraphicsDevice GraphicsDevice, Texture2D tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _width, int _height, int screen_width, int screen_height)
         {
             width = _width;
             height = _height;
@@ -67,13 +68,15 @@ namespace Idle_Civilization.Classes
             upper_right = new Rectangle(screen_width - 50, 0, 50, 50);
             lower_left = new Rectangle(0, screen_height - 50, 50, 50);
             lower_right = new Rectangle(screen_width - 50, screen_height - 50, 50, 50);
+
+            tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
         }
         /// <summary>
         /// Updatefunction
         /// </summary>
         /// <param name="mouseState"></param>
         /// <param name="gameTime"></param>
-        public void Update(MouseState mouseState, GameTime gameTime)
+        public void Update(KeyboardState keyboardState, MouseState mouseState, GameTime gameTime)
         {
             #region scrolling
             double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -134,12 +137,14 @@ namespace Idle_Civilization.Classes
                 }
             }
             #endregion
+
+            tileMenu.Update(keyboardState, mouseState);
         }
         /// <summary>
         /// Drawfunction
         /// </summary>
         /// <param name="spriteBatch"></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
             for (int x = (int)mapPosition.X; x < width; x++)
             {
@@ -148,6 +153,8 @@ namespace Idle_Civilization.Classes
                     map[x][y].Draw(spriteBatch, mapPosition);
                 }
             }
+
+            tileMenu.Draw(spriteBatch, spriteFont);
         }
 
         #region Map-Generation

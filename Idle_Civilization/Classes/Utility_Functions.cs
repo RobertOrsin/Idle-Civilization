@@ -200,6 +200,7 @@ namespace Utility_Functions
         private string text;
         private Color color;
         public bool visible = true;
+        public bool locked = false;
 
         public delegate dynamic eventmethod();
         private eventmethod onClickEvent;
@@ -269,7 +270,7 @@ namespace Utility_Functions
 
         public void update(MouseState mouseState)
         {
-            if (visible)
+            if (visible && !locked)
             {
                 if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
                 {
@@ -311,11 +312,6 @@ namespace Utility_Functions
         {
             return onClickEvent();
         }
-    }
-
-    class Icon
-    {
-
     }
 
     public enum ButtonStateType

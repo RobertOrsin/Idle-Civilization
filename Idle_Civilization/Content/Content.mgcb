@@ -49,3 +49,10 @@
 /processorParam:TextureFormat=Color
 /build:Buttons_Small_Spritesheet.png
 
+#begin std_font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:std_font.spritefont
+

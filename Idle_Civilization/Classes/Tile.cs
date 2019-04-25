@@ -21,7 +21,6 @@ namespace Idle_Civilization.Classes
         const double TIME = 5000;
         #endregion
 
-
         public Tile()
         {
             empty = true;
@@ -49,7 +48,6 @@ namespace Idle_Civilization.Classes
 
             clickArea = GetClickArea();
         }
-
         /// <summary>
         /// Update Inputs on Map and its tiles
         /// </summary>

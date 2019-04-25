@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/rober/Documents/GitHub/Idle-Civilization/Idle_Civilization/Content/basetiles.png</SourceFile>
-  <SourceTime>2019-04-24T20:15:17.783133+02:00</SourceTime>
-  <DestFile>C:/Users/rober/Documents/GitHub/Idle-Civilization/Idle_Civilization/Content/bin/Windows/Content/basetiles.xnb</DestFile>
-  <DestTime>2019-04-25T21:23:57.4186845+02:00</DestTime>
+  <SourceFile>C:/Users/rober/Documents/GitHub/Idle-Civilization/Idle_Civilization/Content/Buttons_Small_Spritesheet.png</SourceFile>
+  <SourceTime>2019-04-25T20:36:16.2710299+02:00</SourceTime>
+  <DestFile>C:/Users/rober/Documents/GitHub/Idle-Civilization/Idle_Civilization/Content/bin/Windows/Content/Buttons_Small_Spritesheet.xnb</DestFile>
+  <DestTime>2019-04-25T21:23:57.4486108+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-08-16T17:47:58+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
