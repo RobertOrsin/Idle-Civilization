@@ -17,7 +17,8 @@ namespace Idle_Civilization
 
         Texture2D tileMap;
 
-
+        public static MouseState mouseState, oldMouseState;
+        public static KeyboardState keyboardState, oldKeyboardState;
 
         public Game1()
         {
@@ -35,9 +36,11 @@ namespace Idle_Civilization
         /// </summary>
         protected override void Initialize()
         {
+            IsMouseVisible = true;
+
             tileMap = Content.Load<Texture2D>("basetiles");
 
-            map = new Classes.Map(GraphicsDevice, tileMap, 30, 45);
+            map = new Classes.Map(GraphicsDevice, tileMap, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             base.Initialize();
         }
@@ -70,10 +73,10 @@ namespace Idle_Civilization
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            mouseState = Mouse.GetState();
 
             // TODO: Add your update logic here
+            map.Update(mouseState, gameTime);
 
             base.Update(gameTime);
         }

@@ -52,10 +52,10 @@ namespace Idle_Civilization.Classes
         {
             
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, Vector2 mapPosition)
         { 
             if(!empty)
-                spriteBatch.Draw(tile_texture, GetTileMapPosition(), Color.Wheat);
+                spriteBatch.Draw(tile_texture, GetTileMapPosition(mapPosition), Color.Wheat);
         }
 
         public void SetTileType(TileNumber _tileType, GraphicsDevice GraphicsDevice, Texture2D tileMap)
@@ -96,8 +96,6 @@ namespace Idle_Civilization.Classes
             tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
         }
-
-
         /// <summary>
         /// Returns a Rectangle descriping position and dimension of sprite on a spritemap
         /// </summary>
@@ -111,35 +109,30 @@ namespace Idle_Civilization.Classes
         /// Calculate Position of Tilesprite for x,y of this tile
         /// </summary>
         /// <returns></returns>
-        private Rectangle GetTileMapPosition()
+        private Rectangle GetTileMapPosition(Vector2 mapPosition)
         {
-            Rectangle rect = new Rectangle(Constants.tile_x_offset * x, Constants.tile_y_offset * y, 32, 48);
-
             int rect_x;
             int rect_y;
 
-            if(x%2 == 0)
+            if((x - (int)mapPosition.X)%2 == 0)
             {
-                rect_x = (x/2) * (Constants.tile_x_offset + Constants.tile_x_offset / 3);
+                rect_x = ((x - (int)mapPosition.X) / 2) * (Constants.tile_x_offset + Constants.tile_x_offset / 3);
             }
             else
             {
-                rect_x = (Constants.tile_x_offset / 3 * 2) + ((x-1)/2) * (Constants.tile_x_offset + Constants.tile_x_offset / 3);
+                rect_x = (Constants.tile_x_offset / 3 * 2) + (((x - (int)mapPosition.X) - 1)/2) * (Constants.tile_x_offset + Constants.tile_x_offset / 3);
             }
 
-            if(y%2 == 0)
+            if((y-mapPosition.Y)%2 == 0)
             {
-                rect_y = (y / 2) * Constants.tile_y_offset;
+                rect_y = ((y - (int)mapPosition.Y) / 2) * Constants.tile_y_offset;
             }
             else
             {
-                rect_y = (Constants.tile_y_offset/2) + ((y-1) / 2) * Constants.tile_y_offset;
+                rect_y = (Constants.tile_y_offset/2) + (((y - (int)mapPosition.Y) - 1) / 2) * Constants.tile_y_offset;
             }
                     
-
-
-
-            return new Rectangle(rect_x, rect_y, 32, 48);
+            return new Rectangle(rect_x * Constants.tile_stretch_factor, rect_y * Constants.tile_stretch_factor, Constants.tile_width * Constants.tile_stretch_factor, Constants.tile_height * Constants.tile_stretch_factor);
         }
         /// <summary>
         /// Calculate ClickArea of this tile, depending on x,y of this tile
