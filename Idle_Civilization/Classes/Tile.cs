@@ -15,6 +15,7 @@ namespace Idle_Civilization.Classes
         Texture2D tile_texture;
         bool empty = false;
         Rectangle clickArea;
+        public Rectangle drawArea;
 
         //Delay for Ressourceupdate
         double timer = 5000; //in ms
@@ -45,25 +46,35 @@ namespace Idle_Civilization.Classes
 
             tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
-
-            clickArea = GetClickArea();
         }
         /// <summary>
         /// Update Inputs on Map and its tiles
         /// </summary>
         /// <param name="mouseState"></param>
-        public void Update(MouseState mouseState, GameTime gameTime)
+        public TileUpdateData Update(MouseState mouseState, GameTime gameTime)
         {
-            #region GameValue Update
-            double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
-            timer -= elapsed;
+            TileUpdateData tileUpdateData = new TileUpdateData();
 
-            if (timer < 0)
+            if (!empty)
             {
-                timer = TIME;
-                //Ressourceupdate
+                #region GameValue Update
+                double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
+                timer -= elapsed;
+
+                if (timer < 0)
+                {
+                    timer = TIME;
+                    //Ressourceupdate
+                }
+                #endregion
+
+                if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(clickArea, new Vector2(mouseState.X, mouseState.Y)))
+                {
+                    tileUpdateData.clickDetected = true;
+                }
             }
-            #endregion
+
+            return tileUpdateData;
         }
         /// <summary>
         /// Draw Part of Map
@@ -71,9 +82,14 @@ namespace Idle_Civilization.Classes
         /// <param name="spriteBatch"></param>
         /// <param name="mapPosition"></param>
         public void Draw(SpriteBatch spriteBatch, Vector2 mapPosition)
-        { 
-            if(!empty)
-                spriteBatch.Draw(tile_texture, GetTileMapPosition(mapPosition), Color.Wheat);
+        {
+            if (!empty)
+            {
+                drawArea = GetTileMapPosition(mapPosition);
+                clickArea = GetClickArea();
+
+                spriteBatch.Draw(tile_texture, drawArea, Color.Wheat);
+            }
         }
         /// <summary>
         /// Set Tiletype bei Enum-TileType; Update Texture of tile
@@ -169,7 +185,19 @@ namespace Idle_Civilization.Classes
         /// <returns></returns>
         private Rectangle GetClickArea()
         {
-            return new Rectangle();
+            return new Rectangle(drawArea.X + ((Constants.tile_width - Constants.tile_x_click_space) / 2) * Constants.tile_stretch_factor,
+                                drawArea.Y + Constants.tile_height - Constants.tile_y_space,
+                                Constants.tile_x_click_space * Constants.tile_stretch_factor,
+                                Constants.tile_y_space * Constants.tile_stretch_factor);
+
         }
+    }
+    /// <summary>
+    /// Returnvalue of Updatefunction of Tile
+    /// </summary>
+    public struct TileUpdateData
+    {
+        public bool clickDetected;
+        public RessourceDemand demand;
     }
 }

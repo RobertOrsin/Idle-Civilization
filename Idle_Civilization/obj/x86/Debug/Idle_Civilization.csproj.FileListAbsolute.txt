@@ -91,3 +91,6 @@ D:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.pd
 C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\Buttons_Medium_Spritesheet.xnb
 C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\Buttons_Small_Spritesheet.xnb
 C:\Users\rober\Documents\GitHub\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\std_font.xnb
+D:\Privat\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\Buttons_Medium_Spritesheet.xnb
+D:\Privat\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\Buttons_Small_Spritesheet.xnb
+D:\Privat\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\std_font.xnb

@@ -10,8 +10,10 @@ namespace Idle_Civilization.Classes
     {
         Texture2D mediumButtonSheet, smallButtonSheet;
 
-        bool visible = true;
+        public bool visible = false;
         Vector2 centerPosition = new Vector2(5,5);
+
+        public Rectangle tileArea;
 
         #region MenuItems
         Pushbutton addPeople;
@@ -48,7 +50,7 @@ namespace Idle_Civilization.Classes
 
             #region Init Elements
             List<string> emptyStringList = new List<string>();
-            emptyStringList.Add("");
+            emptyStringList.Add("0000");
 
             List<Texture2D> minusButton, plusButton;
             minusButton = new List<Texture2D>();
@@ -63,13 +65,13 @@ namespace Idle_Civilization.Classes
             addPeople = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue);
-            Population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 10), 1, false, emptyStringList);
+            Population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
 
             oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue);
             oreIcon.locked = true;
-            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 10), 1, false, emptyStringList);
+            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
             addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
             subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
 
@@ -77,7 +79,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue);
             woodIcon.locked = true;
-            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 10), 1, false, emptyStringList);
+            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
             addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
             subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
 
@@ -85,7 +87,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue);
             FoodIcon.locked = true;
-            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 10), 1, false, emptyStringList);
+            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
             addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
             subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
 
@@ -93,7 +95,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue);
             armyIcon.locked = true;
-            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 10), 1, false, emptyStringList);
+            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
             addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
             subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
 
@@ -113,10 +115,6 @@ namespace Idle_Civilization.Classes
 
         public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
-            SetPositions();
-
-            //Set Data
-
             #region update elements
             foundCity.update(mouseState);
             addTile.update(mouseState);
@@ -148,6 +146,8 @@ namespace Idle_Civilization.Classes
             #region draw elements
             if (visible)
             {
+                SetPositions();
+
                 addPeople.draw(spriteBatch, spriteFont);
                 Population.draw(spriteBatch, spriteFont);
 
@@ -242,45 +242,51 @@ namespace Idle_Civilization.Classes
         {
             return new Rectangle(((int)buttonStateType) * Constants.small_button_diameter, ((int)position) * Constants.small_button_diameter, Constants.small_button_diameter, Constants.small_button_diameter);
         }
-
+        /// <summary>
+        /// Set Screenposition for MenuElements depending on Centerpoint of selected tile
+        /// </summary>
         private void SetPositions()
         {
-            Vector2 centerpoint = new Vector2();
-
-            #region calculate centerpoint
-            if ((int)centerPosition.X % 2 == 0)
-            {
-                centerpoint.X = (((int)centerPosition.X) / 2) * (Constants.tile_x_offset + Constants.tile_x_offset / 3) * Constants.tile_stretch_factor;
-            }
-            else
-            {
-                centerpoint.X = (Constants.tile_x_offset / 3 * 2) + (( (int)centerPosition.X - 1) / 2) * (Constants.tile_x_offset + Constants.tile_x_offset / 3) * Constants.tile_stretch_factor;
-            }
-
-            if ((int)centerPosition.Y % 2 == 0)
-            {
-                centerpoint.Y = ((int)centerPosition.Y) / 2 * Constants.tile_y_offset * Constants.tile_stretch_factor;
-            }
-            else
-            {
-                centerpoint.Y = (Constants.tile_y_offset / 2) + (((int)centerPosition.Y - 1) / 2) * Constants.tile_y_offset * Constants.tile_stretch_factor;
-            }
-            #endregion
-
+            Vector2 centerpoint = new Vector2(tileArea.X + (Constants.tile_width * Constants.tile_stretch_factor / 2),
+                                             tileArea.Y + ((Constants.tile_height - Constants.tile_y_offset)*Constants.tile_stretch_factor) + (Constants.tile_y_space * Constants.tile_stretch_factor / 2));
 
             #region set position of elements
-            addPeople.position = centerpoint;
+            addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton];
+            Population.position = centerpoint + menuElementOffsets[MenuElement.TopTextBox];
+
+            foundCity.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            addTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            attackTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+
+            subOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightMinus];
+            addOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightPlus];
+            oreIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerRightButton];
+            oreworkers.position = centerpoint + menuElementOffsets[MenuElement.LowerRightTextBox];
+
+            subWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomMinus];
+            addWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomPlus];
+            woodIcon.position = centerpoint + menuElementOffsets[MenuElement.BottomButton];
+            woodWorkers.position = centerpoint + menuElementOffsets[MenuElement.BottomTextBox];
+
+            subFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftMinus];
+            addFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftPlus];
+            FoodIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftButton];
+            foodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftTextBox];
+
+            subArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftMinus];
+            addArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftPlus];
+            armyIcon.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftButton];
+            armyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftTextBox];
             #endregion
-
-
         }
-
         /// <summary>
         /// Initialze Offsetvalues of all Menu-Elements
         /// See https://github.com/RobertOrsin/GameButtons.git 
         /// </summary>
         private void InitMenuItemOffsets()
         {
+            menuElementOffsets = new Dictionary<MenuElement, Vector2>();
+
             menuElementOffsets.Add(MenuElement.TopButton, new Vector2(-11, -86));
             menuElementOffsets.Add(MenuElement.TopTextBox, new Vector2(-25, -58));
 

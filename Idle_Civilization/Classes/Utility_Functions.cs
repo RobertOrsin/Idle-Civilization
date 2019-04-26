@@ -81,7 +81,7 @@ namespace Utility_Functions
             }
             bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), _dimension.X, _dimension.Y);
             frame = new Texture2D(graphicsDevice, 1, 1);
-            frame.SetData<Color>(new Color[] { Color.Black });
+            frame.SetData<Color>(new Color[] { Color.White });
             displayName = "type here";
             editingEnables = _editingEnables;
         }
@@ -172,8 +172,8 @@ namespace Utility_Functions
             bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), dimension.X, dimension.Y);
             if (visible)
             {
-                //Draw Frame
-                Utility.drawFrame(spriteBatch, frame, bounds, 1, Color.Black);
+                //Draw Frame            
+                spriteBatch.Draw(frame, bounds, Color.White);
                 //Displayname if no text typed yet
                 if (textArray.Count <= 1 && textArray[0].Count() < 1)
                     spriteBatch.DrawString(spriteFont, displayName, new Vector2(bounds.X, bounds.Y), Color.LightGray);
@@ -317,7 +317,8 @@ namespace Utility_Functions
     public enum ButtonStateType
     {
         idle,
+        pressed,
         hoover,
-        pressed
+        
     }
 }

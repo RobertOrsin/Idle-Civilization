@@ -18,6 +18,8 @@ namespace Idle_Civilization.Classes
         int width, height;
         Vector2 mapPosition;
 
+        Point selectedTile;
+
         #region Map-Characteristics and Generation
         private int mountain_density = 10;
         private int mountain_spread = 20;
@@ -138,6 +140,23 @@ namespace Idle_Civilization.Classes
             }
             #endregion
 
+            TileUpdateData tileUpdateData;
+
+            for(int x = 0; x < map.Count; x++)
+            {
+                for(int y = 0; y < map[0].Count; y++)
+                {
+                    tileUpdateData = map[x][y].Update(mouseState, gameTime);
+
+                    if (tileUpdateData.clickDetected)
+                    {
+                        tileMenu.visible = true;
+                        selectedTile = new Point(x, y);    
+                    }
+                }
+            }
+
+            tileMenu.tileArea = map[selectedTile.X][selectedTile.Y].drawArea;
             tileMenu.Update(keyboardState, mouseState);
         }
         /// <summary>

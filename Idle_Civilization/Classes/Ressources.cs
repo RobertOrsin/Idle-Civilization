@@ -11,6 +11,8 @@ namespace Idle_Civilization.Classes
         public const int tile_width = 32, tile_height = 48;
         public const int tile_x_offset = 36, tile_y_offset = 30;
         public const int tiles_per_row = 8;
+        public const int tile_y_space = 24;
+        public const int tile_x_click_space = 16;
 
         public const int tile_stretch_factor = 3;
 
