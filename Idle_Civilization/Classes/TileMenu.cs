@@ -36,11 +36,17 @@ namespace Idle_Civilization.Classes
         TextBox armyWorker;
         #endregion
 
+        Dictionary<MenuElement, Vector2> menuElementOffsets;
+
         public TileMenu(GraphicsDevice GraphicsDevice, Texture2D _mediumButtonSheet, Texture2D _smallButtonSheet)
         {
             mediumButtonSheet = _mediumButtonSheet;
             smallButtonSheet = _smallButtonSheet;
 
+            InitMenuItemOffsets();
+
+
+            #region Init Elements
             List<string> emptyStringList = new List<string>();
             emptyStringList.Add("");
 
@@ -102,6 +108,7 @@ namespace Idle_Civilization.Classes
             attackTile = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.pressed), "", Color.AliceBlue);
+            #endregion
         }
 
         public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
@@ -266,6 +273,60 @@ namespace Idle_Civilization.Classes
             #endregion
 
 
+        }
+
+        /// <summary>
+        /// Initialze Offsetvalues of all Menu-Elements
+        /// See https://github.com/RobertOrsin/GameButtons.git 
+        /// </summary>
+        private void InitMenuItemOffsets()
+        {
+            menuElementOffsets.Add(MenuElement.TopButton, new Vector2(-11, -86));
+            menuElementOffsets.Add(MenuElement.TopTextBox, new Vector2(-25, -58));
+
+            menuElementOffsets.Add(MenuElement.UpperRightButton, new Vector2(41, -48));
+
+            menuElementOffsets.Add(MenuElement.LowerRightMinus, new Vector2(37, 29));
+            menuElementOffsets.Add(MenuElement.LowerRightPlus, new Vector2(67, 29));
+            menuElementOffsets.Add(MenuElement.LowerRightButton, new Vector2(48, 42));
+            menuElementOffsets.Add(MenuElement.LowerRightTextBox, new Vector2(35, 69));
+
+            menuElementOffsets.Add(MenuElement.BottomMinus, new Vector2(-22, 49));
+            menuElementOffsets.Add(MenuElement.BottomPlus, new Vector2(8, 49));
+            menuElementOffsets.Add(MenuElement.BottomButton, new Vector2(-11, 62));
+            menuElementOffsets.Add(MenuElement.BottomTextBox, new Vector2(-24, 89));
+
+            menuElementOffsets.Add(MenuElement.LowerLeftMinus, new Vector2(-82, 29));
+            menuElementOffsets.Add(MenuElement.LowerLeftPlus, new Vector2(-52, 29));
+            menuElementOffsets.Add(MenuElement.LowerLeftButton, new Vector2(-71, 42));
+            menuElementOffsets.Add(MenuElement.LowerLeftTextBox, new Vector2(-86, 69));
+
+            menuElementOffsets.Add(MenuElement.UpperLeftMinus, new Vector2(-92, -64));
+            menuElementOffsets.Add(MenuElement.UpperLeftPlus, new Vector2(-62, -64));
+            menuElementOffsets.Add(MenuElement.UpperLeftButton, new Vector2(-81, -51));
+            menuElementOffsets.Add(MenuElement.UpperLeftTextBox, new Vector2(-94, -24));
+        }
+        private enum MenuElement
+        {
+            TopButton,
+            TopTextBox,
+            UpperRightButton,
+            LowerRightMinus,
+            LowerRightPlus,
+            LowerRightButton,
+            LowerRightTextBox,
+            BottomMinus,
+            BottomPlus,
+            BottomButton,
+            BottomTextBox,
+            LowerLeftMinus,
+            LowerLeftPlus,
+            LowerLeftButton,
+            LowerLeftTextBox,
+            UpperLeftMinus,
+            UpperLeftPlus,
+            UpperLeftButton,
+            UpperLeftTextBox
         }
 
     }
