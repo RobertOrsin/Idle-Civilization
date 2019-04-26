@@ -88,3 +88,5 @@ D:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.cs
 D:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.csproj.CoreCompileInputs.cache
 D:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.exe
 D:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.pdb
+D:\Privat\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\Buttons_Medium_Spritesheet.xnb
+D:\Privat\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\Buttons_Small_Spritesheet.xnb

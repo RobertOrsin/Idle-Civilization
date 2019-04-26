@@ -5,5 +5,7 @@
   <Config />
   <SourceFiles>
     <File>D:/Privat/Idle-Civilization/Idle_Civilization/Content/basetiles.png</File>
+    <File>D:/Privat/Idle-Civilization/Idle_Civilization/Content/Buttons_Medium_Spritesheet.png</File>
+    <File>D:/Privat/Idle-Civilization/Idle_Civilization/Content/Buttons_Small_Spritesheet.png</File>
   </SourceFiles>
 </SourceFileCollection>
