@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Utility_Functions;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Idle_Civilization.Classes
 {
@@ -12,8 +13,8 @@ namespace Idle_Civilization.Classes
 
         public bool visible = false;
         Vector2 centerPosition = new Vector2(5,5);
-
         public Rectangle tileArea;
+        TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData();
 
         #region MenuItems
         Pushbutton addPeople;
@@ -36,9 +37,9 @@ namespace Idle_Civilization.Classes
         Pushbutton subArmyWorker, addArmyWorker;
         Pushbutton armyIcon;
         TextBox armyWorker;
-        #endregion
 
         Dictionary<MenuElement, Vector2> menuElementOffsets;
+        #endregion
 
         public TileMenu(GraphicsDevice GraphicsDevice, Texture2D _mediumButtonSheet, Texture2D _smallButtonSheet)
         {
@@ -116,29 +117,33 @@ namespace Idle_Civilization.Classes
         public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
             #region update elements
-            foundCity.update(mouseState);
-            addTile.update(mouseState);
-            attackTile.update(mouseState);
+            foundCity.Update(mouseState);
+            addTile.Update(mouseState);
+            attackTile.Update(mouseState);
 
-            subOreWorker.update(mouseState);
-            addOreWorker.update(mouseState);
-            oreIcon.update(mouseState);
+            subOreWorker.Update(mouseState);
+            addOreWorker.Update(mouseState);
+            oreIcon.Update(mouseState);
             oreworkers.update(currentKeyboardState, mouseState);
 
-            subWoodWorker.update(mouseState);
-            addWoodWorker.update(mouseState);
-            woodIcon.update(mouseState);
+            subWoodWorker.Update(mouseState);
+            addWoodWorker.Update(mouseState);
+            woodIcon.Update(mouseState);
             woodWorkers.update(currentKeyboardState, mouseState);
 
-            subFoodWorker.update(mouseState);
-            addFoodWorker.update(mouseState);
-            FoodIcon.update(mouseState);
+            subFoodWorker.Update(mouseState);
+            addFoodWorker.Update(mouseState);
+            FoodIcon.Update(mouseState);
             foodWorker.update(currentKeyboardState, mouseState);
 
-            subArmyWorker.update(mouseState);
-            addArmyWorker.update(mouseState);
-            armyIcon.update(mouseState);
+            subArmyWorker.Update(mouseState);
+            addArmyWorker.Update(mouseState);
+            armyIcon.Update(mouseState);
             armyWorker.update(currentKeyboardState, mouseState);
+            #endregion
+
+            #region compile button states, search for clicks
+            
             #endregion
         }
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
@@ -148,36 +153,37 @@ namespace Idle_Civilization.Classes
             {
                 SetPositions();
 
-                addPeople.draw(spriteBatch, spriteFont);
+                addPeople.Draw(spriteBatch, spriteFont);
                 Population.draw(spriteBatch, spriteFont);
 
-                foundCity.draw(spriteBatch, spriteFont);
-                addTile.draw(spriteBatch, spriteFont);
-                attackTile.draw(spriteBatch, spriteFont);
+                foundCity.Draw(spriteBatch, spriteFont);
+                addTile.Draw(spriteBatch, spriteFont);
+                attackTile.Draw(spriteBatch, spriteFont);
 
-                subOreWorker.draw(spriteBatch, spriteFont);
-                addOreWorker.draw(spriteBatch, spriteFont);
-                oreIcon.draw(spriteBatch, spriteFont);
+                subOreWorker.Draw(spriteBatch, spriteFont);
+                addOreWorker.Draw(spriteBatch, spriteFont);
+                oreIcon.Draw(spriteBatch, spriteFont);
                 oreworkers.draw(spriteBatch, spriteFont);
 
-                subWoodWorker.draw(spriteBatch, spriteFont);
-                addWoodWorker.draw(spriteBatch, spriteFont);
-                woodIcon.draw(spriteBatch, spriteFont);
+                subWoodWorker.Draw(spriteBatch, spriteFont);
+                addWoodWorker.Draw(spriteBatch, spriteFont);
+                woodIcon.Draw(spriteBatch, spriteFont);
                 woodWorkers.draw(spriteBatch, spriteFont);
 
-                subFoodWorker.draw(spriteBatch, spriteFont);
-                addFoodWorker.draw(spriteBatch, spriteFont);
-                FoodIcon.draw(spriteBatch, spriteFont);
+                subFoodWorker.Draw(spriteBatch, spriteFont);
+                addFoodWorker.Draw(spriteBatch, spriteFont);
+                FoodIcon.Draw(spriteBatch, spriteFont);
                 foodWorker.draw(spriteBatch, spriteFont);
 
-                subArmyWorker.draw(spriteBatch, spriteFont);
-                addArmyWorker.draw(spriteBatch, spriteFont);
-                armyIcon.draw(spriteBatch, spriteFont);
+                subArmyWorker.Draw(spriteBatch, spriteFont);
+                addArmyWorker.Draw(spriteBatch, spriteFont);
+                armyIcon.Draw(spriteBatch, spriteFont);
                 armyWorker.draw(spriteBatch, spriteFont);
             }
             #endregion
         }
 
+        #region getter/setter
         /// <summary>
         /// Get Texture of medium button for a buttonstate
         /// </summary>
@@ -279,6 +285,8 @@ namespace Idle_Civilization.Classes
             armyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftTextBox];
             #endregion
         }
+        #endregion
+
         /// <summary>
         /// Initialze Offsetvalues of all Menu-Elements
         /// See https://github.com/RobertOrsin/GameButtons.git 
@@ -312,6 +320,9 @@ namespace Idle_Civilization.Classes
             menuElementOffsets.Add(MenuElement.UpperLeftButton, new Vector2(-81, -51));
             menuElementOffsets.Add(MenuElement.UpperLeftTextBox, new Vector2(-94, -24));
         }
+        /// <summary>
+        /// Enum-List for all TileMenuItems
+        /// </summary>
         private enum MenuElement
         {
             TopButton,
@@ -333,6 +344,32 @@ namespace Idle_Civilization.Classes
             UpperLeftPlus,
             UpperLeftButton,
             UpperLeftTextBox
+        }
+        /// <summary>
+        /// Data to eval TileMenu in calling function
+        /// </summary>
+        public struct TileMenuUpdateData
+        {
+            public TileMenuFunction tileMenuFunction;
+        }
+        /// <summary>
+        /// Enum-List of valid TileMenu-Functions
+        /// </summary>
+        public enum TileMenuFunction
+        {
+            none,
+            addPeople,
+            foundCity,
+            addTile,
+            attackTile,
+            subOre,
+            addOre,
+            subWood,
+            addWood,
+            subFood,
+            addFood,
+            subArmy,
+            addArmy
         }
 
     }

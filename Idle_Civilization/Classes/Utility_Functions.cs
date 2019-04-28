@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-
 namespace Utility_Functions
 {
     /// <summary>
@@ -268,7 +267,7 @@ namespace Utility_Functions
         }
         #endregion
 
-        public void update(MouseState mouseState)
+        public void Update(MouseState mouseState)
         {
             if (visible && !locked)
             {
@@ -277,7 +276,7 @@ namespace Utility_Functions
                     state = ButtonStateType.pressed;
                     if (onClickEvent != null)
                     {
-                        callClickEvent();
+                        CallClickEvent();
                     }
                 }
                 else if (Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
@@ -288,7 +287,7 @@ namespace Utility_Functions
                 bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), textures[0].Width, textures[0].Height);
             }
         }
-        public void draw(SpriteBatch spriteBatch, SpriteFont font)
+        public void Draw(SpriteBatch spriteBatch, SpriteFont font)
         {
             if (visible)
             {
@@ -304,11 +303,11 @@ namespace Utility_Functions
                 }
             }
         }
-        public void setClickEvent(eventmethod _event)
+        public void SetClickEvent(eventmethod _event)
         {
             onClickEvent = _event;
         }
-        private dynamic callClickEvent()
+        private dynamic CallClickEvent()
         {
             return onClickEvent();
         }

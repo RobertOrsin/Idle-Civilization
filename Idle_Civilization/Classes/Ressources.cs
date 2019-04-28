@@ -87,13 +87,6 @@ namespace Idle_Civilization.Classes
         AddOre,
         RemoveOre
     }
-    public enum Direction
-    {
-        TOP,
-        BOTTOM,
-        LEFT,
-        RIGHT
-    }
     public enum GlobalUpgrade
     {
         something

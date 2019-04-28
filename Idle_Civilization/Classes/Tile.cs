@@ -186,7 +186,7 @@ namespace Idle_Civilization.Classes
         private Rectangle GetClickArea()
         {
             return new Rectangle(drawArea.X + ((Constants.tile_width - Constants.tile_x_click_space) / 2) * Constants.tile_stretch_factor,
-                                drawArea.Y + Constants.tile_height - Constants.tile_y_space,
+                                drawArea.Y + (Constants.tile_height - Constants.tile_y_space) * Constants.tile_stretch_factor,
                                 Constants.tile_x_click_space * Constants.tile_stretch_factor,
                                 Constants.tile_y_space * Constants.tile_stretch_factor);
 

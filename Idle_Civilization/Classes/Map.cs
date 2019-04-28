@@ -87,6 +87,7 @@ namespace Idle_Civilization.Classes
             if(timer < 0)
             {
                 timer = TIME;
+                Vector2 mapPosOld = mapPosition;
 
                 //check if mouse is inside boundaries
                 if(Utility.mouseInBounds(top_bar, new Vector2(mouseState.X, mouseState.Y)))
@@ -137,6 +138,9 @@ namespace Idle_Civilization.Classes
                     if(mapPosition.X > 0)
                         mapPosition.X -= 1;
                 }
+
+                if (mapPosOld != mapPosition)
+                    tileMenu.visible = false;
             }
             #endregion
 
