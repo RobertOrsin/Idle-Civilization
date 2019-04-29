@@ -20,6 +20,31 @@ namespace Idle_Civilization.Classes
         //Delay for Ressourceupdate
         double timer = 5000; //in ms
         const double TIME = 5000;
+
+
+        public bool hasCity = false;
+        public bool isCitypart;
+        public bool hasEnemy; //Tile has fog of war
+
+        #region cityattributes
+        public int population;
+        public int food_worker;
+        public int ore_worker;
+        public int wood_worker;
+        public int unemployed;
+
+        public int food_upgrade_level = 0, wood_upgrade_level = 0, ore_upgrade_level = 0;
+        public Modifier modifier = new Modifier();
+
+        #endregion
+
+        #region enemyattributes
+        public int EnemyID = -1; //descripes to which enemyBase this tiles counts
+        public bool isEnemyBase; //is markt as a base for the enemy which (is target for attack)
+        public int armystrength = 0;
+        public int territorysize = 0;
+        #endregion
+
         #endregion
 
         public Tile()
@@ -91,6 +116,9 @@ namespace Idle_Civilization.Classes
                 spriteBatch.Draw(tile_texture, drawArea, Color.Wheat);
             }
         }
+
+
+        #region setter/getter
         /// <summary>
         /// Set Tiletype bei Enum-TileType; Update Texture of tile
         /// </summary>
@@ -191,6 +219,13 @@ namespace Idle_Civilization.Classes
                                 Constants.tile_y_space * Constants.tile_stretch_factor);
 
         }
+
+        public void SetAsCity(GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        {
+            hasCity = true;
+            SetTileType(TileNumber.town, GraphicsDevice, tileMap);
+        }
+        #endregion
     }
     /// <summary>
     /// Returnvalue of Updatefunction of Tile
@@ -198,6 +233,6 @@ namespace Idle_Civilization.Classes
     public struct TileUpdateData
     {
         public bool clickDetected;
-        public RessourceDemand demand;
+        public Ressources demand;
     }
 }

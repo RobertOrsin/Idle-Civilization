@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
+using Idle_Civilization.Classes;
+
 namespace Utility_Functions
 {
     /// <summary>
@@ -190,6 +192,9 @@ namespace Utility_Functions
             }
         }
     }
+    /// <summary>
+    /// Represents a Pushbutton
+    /// </summary>
     class Pushbutton
     {
         public Vector2 position = new Vector2();
@@ -200,9 +205,10 @@ namespace Utility_Functions
         private Color color;
         public bool visible = true;
         public bool locked = false;
+        private TileMenuFunction buttonFunction = new TileMenuFunction();
 
-        public delegate dynamic eventmethod();
-        private eventmethod onClickEvent;
+        public delegate void ClickEventHandler(TileMenuFunction function);
+        public event ClickEventHandler onClick;
 
         #region constructors
         /// <summary>
@@ -210,7 +216,7 @@ namespace Utility_Functions
         /// </summary>
         /// <param name="_position">where the button is drawn, upper left corner</param>
         /// <param name="_textures">3 textures, idle, hoover, pressed</param>
-        public Pushbutton(Vector2 _position, List<Texture2D> _textures, string _text, Color _color)
+        public Pushbutton(Vector2 _position, List<Texture2D> _textures, string _text, Color _color, TileMenuFunction _buttonFunction)
         {
             state = ButtonStateType.idle;
             position = _position;
@@ -223,6 +229,7 @@ namespace Utility_Functions
 
             text = _text;
             color = _color;
+            buttonFunction = _buttonFunction;
         }
         /// <summary>
         /// Creates a new Pushbutton-objekt
@@ -231,7 +238,7 @@ namespace Utility_Functions
         /// <param name="idletex">texture of idlebutton</param>
         /// <param name="hoovertex">texture of hoovering button</param>
         /// <param name="presstex">texture of pressed button</param>
-        public Pushbutton(Vector2 _position, Texture2D idletex, Texture2D hoovertex, Texture2D presstex, string _text, Color _color)
+        public Pushbutton(Vector2 _position, Texture2D idletex, Texture2D hoovertex, Texture2D presstex, string _text, Color _color, TileMenuFunction _buttonFunction)
         {
             state = ButtonStateType.idle;
             position = _position;
@@ -244,13 +251,14 @@ namespace Utility_Functions
 
             text = _text;
             color = _color;
+            buttonFunction = _buttonFunction;
         }
         /// <summary>
         /// Creates a new Pushbutton-objekt
         /// </summary>
         /// <param name="_position">where the button is drawn, upper left corner</param>
         /// <param name="_textures">dictionary of statetype and textures</param>
-        public Pushbutton(Vector2 _position, Dictionary<ButtonStateType, Texture2D> _textures, string _text, Color _color)
+        public Pushbutton(Vector2 _position, Dictionary<ButtonStateType, Texture2D> _textures, string _text, Color _color, TileMenuFunction _buttonFunction)
         {
             state = ButtonStateType.idle;
             position = _position;
@@ -264,6 +272,7 @@ namespace Utility_Functions
 
             text = _text;
             color = _color;
+            buttonFunction = _buttonFunction;
         }
         #endregion
 
@@ -274,10 +283,7 @@ namespace Utility_Functions
                 if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
                 {
                     state = ButtonStateType.pressed;
-                    if (onClickEvent != null)
-                    {
-                        CallClickEvent();
-                    }
+                    onClick?.Invoke(buttonFunction);
                 }
                 else if (Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
                     state = ButtonStateType.hoover;
@@ -303,13 +309,15 @@ namespace Utility_Functions
                 }
             }
         }
-        public void SetClickEvent(eventmethod _event)
+    }
+
+    public class MyEventArgs : EventArgs
+    {
+        public TileMenuFunction function;
+
+        public MyEventArgs(TileMenuFunction _function)
         {
-            onClickEvent = _event;
-        }
-        private dynamic CallClickEvent()
-        {
-            return onClickEvent();
+            function = _function;
         }
     }
 
@@ -317,7 +325,6 @@ namespace Utility_Functions
     {
         idle,
         pressed,
-        hoover,
-        
+        hoover,  
     }
 }

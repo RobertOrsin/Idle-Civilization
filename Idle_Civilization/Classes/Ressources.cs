@@ -21,42 +21,46 @@ namespace Idle_Civilization.Classes
     }
     
 
-    public struct RessourceDemand
+    public struct Ressources
     {
-        public RessourceDemand(double _wood, double _ore, double _food)
+        public Ressources(double _wood, double _ore, double _food, double _army)
         {
             wood = _wood;
             ore = _ore;
             food = _food;
+            army = _army;
         }
         /// <summary>
         /// wood;food;ore
         /// </summary>
         /// <param name="str"></param>
-        public RessourceDemand(string str)
+        public Ressources(string str)
         {
             string[] splits = str.Split(';');
 
             wood = Convert.ToDouble(splits[0]);
             food = Convert.ToDouble(splits[1]);
             ore = Convert.ToDouble(splits[2]);
+            army = Convert.ToDouble(splits[3]);
         }
 
-        public void SumDemand(RessourceDemand adder)
+        public void AddRessources(Ressources adder)
         {
             wood += adder.wood;
             food += adder.food;
             ore += adder.ore;
+            army += adder.army;
         }
 
         public string AsString()
         {
-            return wood.ToString() + ";" + food.ToString() + ";" + ore.ToString();
+            return wood.ToString() + ";" + food.ToString() + ";" + ore.ToString() + ";" + army.ToString();
         }
 
         public double wood;
         public double ore;
         public double food;
+        public double army;
     }
     public struct Modifier
     {
@@ -100,7 +104,7 @@ namespace Idle_Civilization.Classes
     public enum Buildcosts
     {
         CreateCity,
-        AddCityTiel,
+        AddCityTile,
         Worker,
     }
 

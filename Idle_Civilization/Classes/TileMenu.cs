@@ -10,11 +10,12 @@ namespace Idle_Civilization.Classes
     class TileMenu
     {
         Texture2D mediumButtonSheet, smallButtonSheet;
-
         public bool visible = false;
         Vector2 centerPosition = new Vector2(5,5);
-        public Rectangle tileArea;
-        TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData();
+        //public Rectangle tileArea;
+        public Tile selectedTile;
+        public TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData();
+        MouseState oldMouseState = new MouseState();
 
         #region MenuItems
         Pushbutton addPeople;
@@ -48,7 +49,6 @@ namespace Idle_Civilization.Classes
 
             InitMenuItemOffsets();
 
-
             #region Init Elements
             List<string> emptyStringList = new List<string>();
             emptyStringList.Add("0000");
@@ -65,86 +65,113 @@ namespace Idle_Civilization.Classes
 
             addPeople = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue, TileMenuFunction.addPeople);
+            addPeople.onClick += TileMenuClick;
             Population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
 
             oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             oreIcon.locked = true;
             oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
-            addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
-            subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
+            addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addOre);
+            addOreWorker.onClick += TileMenuClick;
+            subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subOre);
+            subOreWorker.onClick += TileMenuClick;
 
             woodIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             woodIcon.locked = true;
             woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
-            addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
-            subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
+            addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addWood);
+            addWoodWorker.onClick += TileMenuClick;
+            subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subWood);
+            subWoodWorker.onClick += TileMenuClick;
 
             FoodIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             FoodIcon.locked = true;
             foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
-            addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
-            subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
+            addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addFood);
+            addFoodWorker.onClick += TileMenuClick;
+            subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subFood);
+            subFoodWorker.onClick += TileMenuClick;
 
             armyIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             armyIcon.locked = true;
             armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
-            addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue);
-            subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue);
+            addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addArmy);
+            addArmyWorker.onClick += TileMenuClick;
+            subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subArmy);
+            subArmyWorker.onClick += TileMenuClick;
 
             foundCity = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.foundCity);
+            foundCity.onClick += TileMenuClick;
 
             addTile = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.addTile);
+            addTile.onClick += TileMenuClick;
 
             attackTile = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.pressed), "", Color.AliceBlue);
+                                                        GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.attackTile);
+            attackTile.onClick += TileMenuClick;
             #endregion
+        }
+
+        public void TileMenuClick(TileMenuFunction function)
+        {
+            tileMenuUpdateData.tileMenuFunction = function;
         }
 
         public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
             #region update elements
-            foundCity.Update(mouseState);
-            addTile.Update(mouseState);
-            attackTile.Update(mouseState);
+            if (oldMouseState != mouseState)
+            {
+                tileMenuUpdateData = new TileMenuUpdateData();
 
-            subOreWorker.Update(mouseState);
-            addOreWorker.Update(mouseState);
-            oreIcon.Update(mouseState);
-            oreworkers.update(currentKeyboardState, mouseState);
+                addPeople.Update(mouseState);
+                
 
-            subWoodWorker.Update(mouseState);
-            addWoodWorker.Update(mouseState);
-            woodIcon.Update(mouseState);
-            woodWorkers.update(currentKeyboardState, mouseState);
+                foundCity.Update(mouseState);
+                addTile.Update(mouseState);
+                addTile.visible = false;
+                attackTile.Update(mouseState);
+                attackTile.visible = false;
 
-            subFoodWorker.Update(mouseState);
-            addFoodWorker.Update(mouseState);
-            FoodIcon.Update(mouseState);
-            foodWorker.update(currentKeyboardState, mouseState);
+                subOreWorker.Update(mouseState);
+                addOreWorker.Update(mouseState);
+                oreIcon.Update(mouseState);
+                oreworkers.update(currentKeyboardState, mouseState);
 
-            subArmyWorker.Update(mouseState);
-            addArmyWorker.Update(mouseState);
-            armyIcon.Update(mouseState);
-            armyWorker.update(currentKeyboardState, mouseState);
+                subWoodWorker.Update(mouseState);
+                addWoodWorker.Update(mouseState);
+                woodIcon.Update(mouseState);
+                woodWorkers.update(currentKeyboardState, mouseState);
+
+                subFoodWorker.Update(mouseState);
+                addFoodWorker.Update(mouseState);
+                FoodIcon.Update(mouseState);
+                foodWorker.update(currentKeyboardState, mouseState);
+
+                subArmyWorker.Update(mouseState);
+                addArmyWorker.Update(mouseState);
+                armyIcon.Update(mouseState);
+                armyWorker.update(currentKeyboardState, mouseState);
+            }
+            oldMouseState = mouseState;
             #endregion
 
-            #region compile button states, search for clicks
-            
-            #endregion
+            Population.textArray[0] = selectedTile.population.ToString();
+
         }
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
@@ -155,6 +182,7 @@ namespace Idle_Civilization.Classes
 
                 addPeople.Draw(spriteBatch, spriteFont);
                 Population.draw(spriteBatch, spriteFont);
+
 
                 foundCity.Draw(spriteBatch, spriteFont);
                 addTile.Draw(spriteBatch, spriteFont);
@@ -253,8 +281,8 @@ namespace Idle_Civilization.Classes
         /// </summary>
         private void SetPositions()
         {
-            Vector2 centerpoint = new Vector2(tileArea.X + (Constants.tile_width * Constants.tile_stretch_factor / 2),
-                                             tileArea.Y + ((Constants.tile_height - Constants.tile_y_offset)*Constants.tile_stretch_factor) + (Constants.tile_y_space * Constants.tile_stretch_factor / 2));
+            Vector2 centerpoint = new Vector2(selectedTile.drawArea.X + (Constants.tile_width * Constants.tile_stretch_factor / 2),
+                                             selectedTile.drawArea.Y + ((Constants.tile_height - Constants.tile_y_offset)*Constants.tile_stretch_factor) + (Constants.tile_y_space * Constants.tile_stretch_factor / 2));
 
             #region set position of elements
             addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton];
@@ -319,58 +347,58 @@ namespace Idle_Civilization.Classes
             menuElementOffsets.Add(MenuElement.UpperLeftPlus, new Vector2(-62, -64));
             menuElementOffsets.Add(MenuElement.UpperLeftButton, new Vector2(-81, -51));
             menuElementOffsets.Add(MenuElement.UpperLeftTextBox, new Vector2(-94, -24));
-        }
-        /// <summary>
-        /// Enum-List for all TileMenuItems
-        /// </summary>
-        private enum MenuElement
-        {
-            TopButton,
-            TopTextBox,
-            UpperRightButton,
-            LowerRightMinus,
-            LowerRightPlus,
-            LowerRightButton,
-            LowerRightTextBox,
-            BottomMinus,
-            BottomPlus,
-            BottomButton,
-            BottomTextBox,
-            LowerLeftMinus,
-            LowerLeftPlus,
-            LowerLeftButton,
-            LowerLeftTextBox,
-            UpperLeftMinus,
-            UpperLeftPlus,
-            UpperLeftButton,
-            UpperLeftTextBox
-        }
-        /// <summary>
-        /// Data to eval TileMenu in calling function
-        /// </summary>
-        public struct TileMenuUpdateData
-        {
-            public TileMenuFunction tileMenuFunction;
-        }
-        /// <summary>
-        /// Enum-List of valid TileMenu-Functions
-        /// </summary>
-        public enum TileMenuFunction
-        {
-            none,
-            addPeople,
-            foundCity,
-            addTile,
-            attackTile,
-            subOre,
-            addOre,
-            subWood,
-            addWood,
-            subFood,
-            addFood,
-            subArmy,
-            addArmy
-        }
-
+        }   
+    }
+    /// <summary>
+    /// Enum-List for all TileMenuItems
+    /// </summary>
+    public enum MenuElement
+    {
+        TopButton,
+        TopTextBox,
+        UpperRightButton,
+        LowerRightMinus,
+        LowerRightPlus,
+        LowerRightButton,
+        LowerRightTextBox,
+        BottomMinus,
+        BottomPlus,
+        BottomButton,
+        BottomTextBox,
+        LowerLeftMinus,
+        LowerLeftPlus,
+        LowerLeftButton,
+        LowerLeftTextBox,
+        UpperLeftMinus,
+        UpperLeftPlus,
+        UpperLeftButton,
+        UpperLeftTextBox
+    }
+    /// <summary>
+    /// Data to eval TileMenu in calling function
+    /// </summary>
+    public struct TileMenuUpdateData
+    {
+        public TileMenuFunction tileMenuFunction;
+    }
+    /// <summary>
+    /// Enum-List of valid TileMenu-Functions
+    /// </summary>
+    public enum TileMenuFunction
+    {
+        _void_,
+        none,
+        addPeople,
+        foundCity,
+        addTile,
+        attackTile,
+        subOre,
+        addOre,
+        subWood,
+        addWood,
+        subFood,
+        addFood,
+        subArmy,
+        addArmy
     }
 }

@@ -11,12 +11,18 @@ using Utility_Functions;
 
 namespace Idle_Civilization.Classes
 {
-    class Map
+    class Session
     {
         TileMenu tileMenu;
+
         private List<List<Tile>> map;
-        int width, height;
-        Vector2 mapPosition;
+        int width, height;  // of map
+        Vector2 mapPosition; //upper left corner
+
+        Player player;
+
+        Texture2D tileMap;
+        GraphicsDevice GraphicsDevice;
 
         Point selectedTile;
 
@@ -52,11 +58,13 @@ namespace Idle_Civilization.Classes
         /// <param name="_height"></param>
         /// <param name="screen_width"></param>
         /// <param name="screen_height"></param>
-        public Map(GraphicsDevice GraphicsDevice, Texture2D tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _width, int _height, int screen_width, int screen_height)
+        public Session(GraphicsDevice _GraphicsDevice, Texture2D _tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _width, int _height, int screen_width, int screen_height)
         {
             width = _width;
             height = _height;
 
+            tileMap = _tileMap;
+            GraphicsDevice = _GraphicsDevice;
             GenerateMap(GraphicsDevice, tileMap);
 
             mapPosition = new Vector2(0, 0);
@@ -72,6 +80,8 @@ namespace Idle_Civilization.Classes
             lower_right = new Rectangle(screen_width - 50, screen_height - 50, 50, 50);
 
             tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
+
+            player = new Player(new Ressources(1000, 1000, 1000, 0));
         }
         /// <summary>
         /// Updatefunction
@@ -146,22 +156,26 @@ namespace Idle_Civilization.Classes
 
             TileUpdateData tileUpdateData;
 
-            for(int x = 0; x < map.Count; x++)
+            tileMenu.selectedTile = map[selectedTile.X][selectedTile.Y];
+            tileMenu.Update(keyboardState, mouseState);
+
+            if (tileMenu.tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_)
+                ExecuteFunction(tileMenu.tileMenuUpdateData.tileMenuFunction);
+
+
+            for (int x = 0; x < map.Count; x++)
             {
                 for(int y = 0; y < map[0].Count; y++)
                 {
                     tileUpdateData = map[x][y].Update(mouseState, gameTime);
 
-                    if (tileUpdateData.clickDetected)
+                    if (tileUpdateData.clickDetected && tileMenu.tileMenuUpdateData.tileMenuFunction == TileMenuFunction._void_)
                     {
                         tileMenu.visible = true;
                         selectedTile = new Point(x, y);    
                     }
                 }
-            }
-
-            tileMenu.tileArea = map[selectedTile.X][selectedTile.Y].drawArea;
-            tileMenu.Update(keyboardState, mouseState);
+            } 
         }
         /// <summary>
         /// Drawfunction
@@ -178,6 +192,24 @@ namespace Idle_Civilization.Classes
             }
 
             tileMenu.Draw(spriteBatch, spriteFont);
+        }
+
+        public void ExecuteFunction(TileMenuFunction function)
+        {
+            switch(function)
+            {
+                case TileMenuFunction.addPeople:
+                    map[selectedTile.X][selectedTile.Y].population++;
+                    break;
+                case TileMenuFunction.foundCity:
+                    if (FoundCityValid(map[selectedTile.X][selectedTile.Y]))
+                    {
+                        map[selectedTile.X][selectedTile.Y].SetAsCity(GraphicsDevice, tileMap);
+                    }
+                    break;
+
+                default: break;
+            }
         }
 
         #region Map-Generation
@@ -365,6 +397,13 @@ namespace Idle_Civilization.Classes
                     SetNeighbors(x - 1, y - 1, tileBaseType, GraphicsDevice, tileMap);
                 }
             }
+        }
+        #endregion
+
+        #region controllfunctions
+        private bool FoundCityValid(Tile tile)
+        {
+            return true;
         }
         #endregion
     }

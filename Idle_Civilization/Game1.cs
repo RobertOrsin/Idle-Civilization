@@ -14,7 +14,7 @@ namespace Idle_Civilization
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Classes.Map map;
+        Classes.Session map;
 
         Texture2D tileMap, buttons_medium, buttons_small;
 
@@ -44,7 +44,7 @@ namespace Idle_Civilization
             buttons_medium = Content.Load<Texture2D>("Buttons_Medium_Spritesheet");
             buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
 
-            map = new Classes.Map(GraphicsDevice, tileMap, buttons_medium, buttons_small, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            map = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
 
             base.Initialize();
         }
