@@ -62,26 +62,6 @@ namespace Idle_Civilization.Classes
         public double food;
         public double army;
     }
-    public struct Modifier
-    {
-        public Modifier(double _wood, double _ore, double _food)
-        {
-            wood = _wood;
-            ore = _ore;
-            food = _food;
-        }
-
-        public void AddModifier(Modifier modifier)
-        {
-            wood += modifier.wood;
-            food += modifier.food;
-            ore += modifier.ore;
-        }
-
-        public double wood;
-        public double ore;
-        public double food;
-    }
     public enum WorkerAdding
     {
         AddFood,
@@ -106,6 +86,7 @@ namespace Idle_Civilization.Classes
         CreateCity,
         AddCityTile,
         Worker,
+        addTile
     }
 
     /// <summary>
@@ -168,7 +149,8 @@ namespace Idle_Civilization.Classes
         army,
         foundCity,
         addTile,
-        attackTile
+        attackTile,
+        upgradeCity
     }
     /// <summary>
     /// Row of Button on Spritesheet

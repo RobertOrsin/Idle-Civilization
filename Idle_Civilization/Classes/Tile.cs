@@ -34,7 +34,7 @@ namespace Idle_Civilization.Classes
         public int unemployed;
 
         public int food_upgrade_level = 0, wood_upgrade_level = 0, ore_upgrade_level = 0;
-        public Modifier modifier = new Modifier();
+        public Ressources modifier = new Ressources();
 
         #endregion
 

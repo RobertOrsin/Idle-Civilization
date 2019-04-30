@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Xml;
 
 using Utility_Functions;
 
@@ -14,18 +15,18 @@ namespace Idle_Civilization.Classes
     class Session
     {
         TileMenu tileMenu;
-
-        private List<List<Tile>> map;
+        Point selectedTile;
+        
         int width, height;  // of map
         Vector2 mapPosition; //upper left corner
 
         Player player;
+        HUD hud;
+        UpgradeMenu upgradeMenu;
 
         Texture2D tileMap;
         GraphicsDevice GraphicsDevice;
-
-        Point selectedTile;
-
+        private List<List<Tile>> map;
         #region Map-Characteristics and Generation
         private int mountain_density = 10;
         private int mountain_spread = 20;
@@ -39,7 +40,6 @@ namespace Idle_Civilization.Classes
         Random rand = new Random();
         int spread = 0;
         #endregion
-
         #region mapscrolling
         //Updatetimer
         double timer = 100; //500ms
@@ -47,6 +47,11 @@ namespace Idle_Civilization.Classes
         //Rectangle-Boundaries 
         Rectangle top_bar, bottom_bar, left_bar, right_bar, upper_left, upper_right, lower_left, lower_right;
 
+        #endregion
+
+        #region Upgrades/Costs
+        List<Upgrade> wood_Upgrades, food_Upgrades, ore_Upgrades, army_Upgrades, global_Upgrades;
+        List<Ressources> buildCosts;
         #endregion
 
         /// <summary>
@@ -82,6 +87,7 @@ namespace Idle_Civilization.Classes
             tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
 
             player = new Player(new Ressources(1000, 1000, 1000, 0));
+            LoadUpgradesCosts();
         }
         /// <summary>
         /// Updatefunction
@@ -404,6 +410,319 @@ namespace Idle_Civilization.Classes
         private bool FoundCityValid(Tile tile)
         {
             return true;
+        }
+        #endregion
+
+        #region config-file
+        /// <summary>
+        /// load upgrade-texts from xml-file
+        /// </summary>
+        public void LoadUpgradesCosts()
+        {
+            //Clear Lists
+            wood_Upgrades = new List<Upgrade>();
+            food_Upgrades = new List<Upgrade>();
+            ore_Upgrades = new List<Upgrade>();
+            army_Upgrades = new List<Upgrade>();
+            global_Upgrades = new List<Upgrade>();
+            buildCosts = new List<Ressources>();
+
+
+            string directory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string filepath = directory + "\\config.xml";
+
+            XmlTextReader reader = new XmlTextReader(filepath);
+
+            while (reader.Read())
+            {
+                string nodeName = reader.Name;
+
+                if (nodeName == "Wood_Upgrades")
+                {
+                    reader.Read();
+                    do
+                    {
+                        nodeName = reader.Name;
+                        if (nodeName == "Wood_Upgrade")
+                        {
+                            wood_Upgrades.Add(new Upgrade(reader.GetAttribute("Name"), reader.GetAttribute("Tooltip"), reader.GetAttribute("Cost"), reader.GetAttribute("Modifier")));
+                        }
+                        reader.Read();
+                    } while (nodeName != "Wood_Upgrades");
+                }
+                else if (nodeName == "Food_Upgrades")
+                {
+                    reader.Read();
+                    do
+                    {
+                        nodeName = reader.Name;
+                        if (nodeName == "Food_Upgrade")
+                        {
+                            food_Upgrades.Add(new Upgrade(reader.GetAttribute("Name"), reader.GetAttribute("Tooltip"), reader.GetAttribute("Cost"), reader.GetAttribute("Modifier")));
+                        }
+                        reader.Read();
+                    } while (nodeName != "Food_Upgrades");
+                }
+                else if (nodeName == "Ore_Upgrades")
+                {
+                    reader.Read();
+                    do
+                    {
+                        nodeName = reader.Name;
+                        if (nodeName == "Ore_Upgrade")
+                        {
+                            ore_Upgrades.Add(new Upgrade(reader.GetAttribute("Name"), reader.GetAttribute("Tooltip"), reader.GetAttribute("Cost"), reader.GetAttribute("Modifier")));
+                        }
+                        reader.Read();
+                    } while (nodeName != "Ore_Upgrades");
+                }
+                else if (nodeName == "Army_Upgrades")
+                {
+                    reader.Read();
+                    do
+                    {
+                        nodeName = reader.Name;
+                        if (nodeName == "Army_Upgrade")
+                        {
+                            army_Upgrades.Add(new Upgrade(reader.GetAttribute("Name"), reader.GetAttribute("Tooltip"), reader.GetAttribute("Cost"), reader.GetAttribute("Modifier")));
+                        }
+                        reader.Read();
+                    } while (nodeName != "Army_Upgrades");
+                }
+                else if (nodeName == "Global_Upgrades")
+                {
+                    reader.Read();
+                    do
+                    {
+                        nodeName = reader.Name;
+                        if (nodeName == "Global_Upgrade")
+                        {
+                            global_Upgrades.Add(new Upgrade(reader.GetAttribute("Name"), reader.GetAttribute("Tooltip"), reader.GetAttribute("Cost"), reader.GetAttribute("Modifier")));
+                        }
+                        reader.Read();
+                    } while (nodeName != "Global_Upgrades");
+                }
+                else if (nodeName == "BuildCosts")
+                {
+                    reader.Read();
+                    do
+                    {
+                        nodeName = reader.Name;
+                        if (nodeName == "BuildCost")
+                        {
+                            buildCosts.Add(new Ressources(reader.GetAttribute("Cost")));
+                        }
+                        reader.Read();
+                    } while (nodeName != "BuildCosts");
+                }
+            }
+        }
+        /// <summary>
+        /// create dummy xml-file for upgrades
+        /// </summary>
+        public void SaveUpgradesCosts()
+        {
+            #region generate dummylist
+            wood_Upgrades = new List<Upgrade>();
+
+            wood_Upgrades.Add(new Upgrade("Upgrade1", "Tooltip 1", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            wood_Upgrades.Add(new Upgrade("Upgrade2", "Tooltip 2", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            wood_Upgrades.Add(new Upgrade("Upgrade3", "Tooltip 3", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            wood_Upgrades.Add(new Upgrade("Upgrade4", "Tooltip 4", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+
+            food_Upgrades = new List<Upgrade>();
+
+            food_Upgrades.Add(new Upgrade("Upgrade1", "Tooltip 1", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            food_Upgrades.Add(new Upgrade("Upgrade2", "Tooltip 2", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            food_Upgrades.Add(new Upgrade("Upgrade3", "Tooltip 3", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            food_Upgrades.Add(new Upgrade("Upgrade4", "Tooltip 4", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+
+            ore_Upgrades = new List<Upgrade>();
+
+            ore_Upgrades.Add(new Upgrade("Upgrade1", "Tooltip 1", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            ore_Upgrades.Add(new Upgrade("Upgrade2", "Tooltip 2", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            ore_Upgrades.Add(new Upgrade("Upgrade3", "Tooltip 3", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            ore_Upgrades.Add(new Upgrade("Upgrade4", "Tooltip 4", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+
+            army_Upgrades = new List<Upgrade>();
+
+            army_Upgrades.Add(new Upgrade("Upgrade1", "Tooltip 1", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            army_Upgrades.Add(new Upgrade("Upgrade2", "Tooltip 2", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            army_Upgrades.Add(new Upgrade("Upgrade3", "Tooltip 3", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            army_Upgrades.Add(new Upgrade("Upgrade4", "Tooltip 4", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+
+
+            global_Upgrades = new List<Upgrade>();
+
+            global_Upgrades.Add(new Upgrade("Upgrade1", "Tooltip 1", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            global_Upgrades.Add(new Upgrade("Upgrade2", "Tooltip 2", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            global_Upgrades.Add(new Upgrade("Upgrade3", "Tooltip 3", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+            global_Upgrades.Add(new Upgrade("Upgrade4", "Tooltip 4", new Ressources(100, 100, 100, 0), new Ressources(0.5, 0, 10.0, 0)));
+
+            buildCosts = new List<Ressources>();
+
+            buildCosts.Add(new Ressources(200, 200, 200, 0));
+            buildCosts.Add(new Ressources(100, 100, 100, 0));
+            buildCosts.Add(new Ressources(0, 100, 0, 0));
+            buildCosts.Add(new Ressources(0, 0, 0, 200));
+            #endregion
+
+
+            //Path of File on folder of executeable
+            string directory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            #region create XML
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlNode rootNode = xmlDoc.CreateElement("IDLECIV_Upgrades");
+            xmlDoc.AppendChild(rootNode);
+
+            //wood upgrades
+            XmlNode Node_wood_Upgrades = xmlDoc.CreateElement("Wood_Upgrades");
+            foreach (Upgrade upgrade in wood_Upgrades)
+            {
+                XmlNode node_wood_upgrade = xmlDoc.CreateElement("Wood_Upgrade");
+
+                XmlAttribute node_wood_attribute_name = xmlDoc.CreateAttribute("Name");
+                node_wood_attribute_name.Value = upgrade.name;
+                node_wood_upgrade.Attributes.Append(node_wood_attribute_name);
+
+                XmlAttribute node_wood_attribute_tooltip = xmlDoc.CreateAttribute("Tooltip");
+                node_wood_attribute_tooltip.Value = upgrade.tooltip;
+                node_wood_upgrade.Attributes.Append(node_wood_attribute_tooltip);
+
+                XmlAttribute node_wood_attribute_cost = xmlDoc.CreateAttribute("Cost");
+                node_wood_attribute_cost.Value = upgrade.cost.AsString();
+                node_wood_upgrade.Attributes.Append(node_wood_attribute_cost);
+
+                XmlAttribute node_wood_attribute_modifier = xmlDoc.CreateAttribute("Modifier");
+                node_wood_attribute_modifier.Value = upgrade.modifier.AsString();
+                node_wood_upgrade.Attributes.Append(node_wood_attribute_modifier);
+
+                Node_wood_Upgrades.AppendChild(node_wood_upgrade);
+            }
+            rootNode.AppendChild(Node_wood_Upgrades);
+
+            //food upgrades
+            XmlNode Node_food_Upgrades = xmlDoc.CreateElement("Food_Upgrades");
+            foreach (Upgrade upgrade in food_Upgrades)
+            {
+                XmlNode node_food_upgrade = xmlDoc.CreateElement("Food_Upgrade");
+
+                XmlAttribute node_food_attribute_name = xmlDoc.CreateAttribute("Name");
+                node_food_attribute_name.Value = upgrade.name;
+                node_food_upgrade.Attributes.Append(node_food_attribute_name);
+
+                XmlAttribute node_food_attribute_tooltip = xmlDoc.CreateAttribute("Tooltip");
+                node_food_attribute_tooltip.Value = upgrade.tooltip;
+                node_food_upgrade.Attributes.Append(node_food_attribute_tooltip);
+
+                XmlAttribute node_food_attribute_cost = xmlDoc.CreateAttribute("Cost");
+                node_food_attribute_cost.Value = upgrade.cost.AsString();
+                node_food_upgrade.Attributes.Append(node_food_attribute_cost);
+
+                XmlAttribute node_food_attribute_modifier = xmlDoc.CreateAttribute("Modifier");
+                node_food_attribute_modifier.Value = upgrade.modifier.AsString();
+                node_food_upgrade.Attributes.Append(node_food_attribute_modifier);
+
+                Node_food_Upgrades.AppendChild(node_food_upgrade);
+            }
+            rootNode.AppendChild(Node_food_Upgrades);
+
+            //ore upgrades
+            XmlNode Node_ore_Upgrades = xmlDoc.CreateElement("Ore_Upgrades");
+            foreach (Upgrade upgrade in ore_Upgrades)
+            {
+                XmlNode node_ore_upgrade = xmlDoc.CreateElement("Ore_Upgrade");
+
+                XmlAttribute node_ore_attribute_name = xmlDoc.CreateAttribute("Name");
+                node_ore_attribute_name.Value = upgrade.name;
+                node_ore_upgrade.Attributes.Append(node_ore_attribute_name);
+
+                XmlAttribute node_ore_attribute_tooltip = xmlDoc.CreateAttribute("Tooltip");
+                node_ore_attribute_tooltip.Value = upgrade.tooltip;
+                node_ore_upgrade.Attributes.Append(node_ore_attribute_tooltip);
+
+                XmlAttribute node_ore_attribute_cost = xmlDoc.CreateAttribute("Cost");
+                node_ore_attribute_cost.Value = upgrade.cost.AsString();
+                node_ore_upgrade.Attributes.Append(node_ore_attribute_cost);
+
+                XmlAttribute node_ore_attribute_modifier = xmlDoc.CreateAttribute("Modifier");
+                node_ore_attribute_modifier.Value = upgrade.modifier.AsString();
+                node_ore_upgrade.Attributes.Append(node_ore_attribute_modifier);
+
+                Node_ore_Upgrades.AppendChild(node_ore_upgrade);
+            }
+            rootNode.AppendChild(Node_ore_Upgrades);
+
+            //army upgrades
+            XmlNode Node_army_Upgrades = xmlDoc.CreateElement("Army_Upgrades");
+            foreach (Upgrade upgrade in army_Upgrades)
+            {
+                XmlNode node_army_upgrade = xmlDoc.CreateElement("Army_Upgrade");
+
+                XmlAttribute node_army_attribute_name = xmlDoc.CreateAttribute("Name");
+                node_army_attribute_name.Value = upgrade.name;
+                node_army_upgrade.Attributes.Append(node_army_attribute_name);
+
+                XmlAttribute node_army_attribute_tooltip = xmlDoc.CreateAttribute("Tooltip");
+                node_army_attribute_tooltip.Value = upgrade.tooltip;
+                node_army_upgrade.Attributes.Append(node_army_attribute_tooltip);
+
+                XmlAttribute node_army_attribute_cost = xmlDoc.CreateAttribute("Cost");
+                node_army_attribute_cost.Value = upgrade.cost.AsString();
+                node_army_upgrade.Attributes.Append(node_army_attribute_cost);
+
+                XmlAttribute node_army_attribute_modifier = xmlDoc.CreateAttribute("Modifier");
+                node_army_attribute_modifier.Value = upgrade.modifier.AsString();
+                node_army_upgrade.Attributes.Append(node_army_attribute_modifier);
+
+                Node_army_Upgrades.AppendChild(node_army_upgrade);
+            }
+            rootNode.AppendChild(Node_army_Upgrades);
+
+            //global upgrades
+            XmlNode Node_global_Upgrades = xmlDoc.CreateElement("Global_Upgrades");
+            foreach (Upgrade upgrade in global_Upgrades)
+            {
+                XmlNode node_global_upgrade = xmlDoc.CreateElement("Global_Upgrade");
+
+                XmlAttribute node_global_attribute_name = xmlDoc.CreateAttribute("Name");
+                node_global_attribute_name.Value = upgrade.name;
+                node_global_upgrade.Attributes.Append(node_global_attribute_name);
+
+                XmlAttribute node_global_attribute_tooltip = xmlDoc.CreateAttribute("Tooltip");
+                node_global_attribute_tooltip.Value = upgrade.tooltip;
+                node_global_upgrade.Attributes.Append(node_global_attribute_tooltip);
+
+                XmlAttribute node_global_attribute_cost = xmlDoc.CreateAttribute("Cost");
+                node_global_attribute_cost.Value = upgrade.cost.AsString();
+                node_global_upgrade.Attributes.Append(node_global_attribute_cost);
+
+                XmlAttribute node_global_attribute_modifier = xmlDoc.CreateAttribute("Modifier");
+                node_global_attribute_modifier.Value = upgrade.modifier.AsString();
+                node_global_upgrade.Attributes.Append(node_global_attribute_modifier);
+
+                Node_global_Upgrades.AppendChild(node_global_upgrade);
+            }
+            rootNode.AppendChild(Node_global_Upgrades);
+
+            //buildCosts
+            XmlNode Node_BuildCosts = xmlDoc.CreateElement("BuildCosts");
+            foreach (Ressources cost in buildCosts)
+            {
+                XmlNode node_BuildCost = xmlDoc.CreateElement("BuildCost");
+
+                XmlAttribute node_cost = xmlDoc.CreateAttribute("Cost");
+                node_cost.Value = cost.AsString();
+                node_BuildCost.Attributes.Append(node_cost);
+
+                Node_BuildCosts.AppendChild(node_BuildCost);
+            }
+            rootNode.AppendChild(Node_BuildCosts);
+
+            xmlDoc.Save(directory + "\\" + "config.xml");
+
+            #endregion
         }
         #endregion
     }

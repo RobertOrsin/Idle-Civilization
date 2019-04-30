@@ -41,11 +41,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\HUD.cs" />
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\Player.cs" />
     <Compile Include="Classes\Ressources.cs" />
     <Compile Include="Classes\Tile.cs" />
     <Compile Include="Classes\TileMenu.cs" />
+    <Compile Include="Classes\Upgrade.cs" />
+    <Compile Include="Classes\UpgradeMenu.cs" />
     <Compile Include="Classes\Utility_Functions.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Program.cs" />

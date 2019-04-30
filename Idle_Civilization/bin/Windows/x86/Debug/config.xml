@@ -1,0 +1,39 @@
+<IDLECIV_Upgrades>
+  <Wood_Upgrades>
+    <Wood_Upgrade Name="Lumberjacks: Use waterways" Tooltip="Dont carry your wood, let dump mother nature do it!" Cost="200;100;0;0" Modifier="0;0,2;0;0" />
+    <Wood_Upgrade Name="Lumberjacks: Improved Outposts" Tooltip="Stay longer in the woods" Cost="400;200;100;0" Modifier="-0,1;0,3;0;0" />
+    <Wood_Upgrade Name="Lumberjacks: Woodmanager" Tooltip="The smart guy who plans the forest for efficient chopchop" Cost="600;400;200;0" Modifier="0;0,5;0;0" />
+    <Wood_Upgrade Name="Lumberjacks: Chopchoper" Tooltip="A hellish automaton cutting through the woods" Cost="0;700;700;0" Modifier="0;1;-0,3;0" />
+  </Wood_Upgrades>
+  <Food_Upgrades>
+    <Food_Upgrade Name="Farming: Better Tools" Tooltip="Staffs as Plow equals mind blown!" Cost="10;300;0;0" Modifier="0,5;-0,1;0;0" />
+    <Food_Upgrade Name="Farming: Use Fertilizer" Tooltip="Make gold out of shit" Cost="300;0;0;0" Modifier="0,2;0;0;0" />
+    <Food_Upgrade Name="Farming: Paid Labor" Tooltip="People get motivated by nice things" Cost="0;0;500;0" Modifier="0,5;0;-0,2;0" />
+    <Food_Upgrade Name="Farming: Slavery" Tooltip="Sometimes people just need to shut up" Cost="300;200;800;0" Modifier="1;-0,1;-0,4;0" />
+  </Food_Upgrades>
+  <Army_Upgrades>
+    <Army_Upgrade Name="Upgrade1" Tooltip="Tooltip" Cost="0;300;0;0" Modifier="0;0;0,2;0" />
+    <Army_Upgrade Name="Upgrade2" Tooltip="Tooltip" Cost="0;500;000;0" Modifier="0;-0,2;0,5;0" />
+    <Army_Upgrade Name="Upgrade3" Tooltip="Tooltip" Cost="500;200;200;0" Modifier="-0,4;0;0,5;0" />
+    <Army_Upgrade Name="Upgrade4" Tooltip="Tooltip" Cost="1000;1000;1000;0" Modifier="-0,3;-0,3;1;0" />
+  </Army_Upgrades>
+  
+  <Ore_Upgrades>
+    <Ore_Upgrade Name="Mining: Headlight" Tooltip="See more and dig deeper" Cost="0;300;0;0" Modifier="0;0;0,2;0" />
+    <Ore_Upgrade Name="Mining: Improved Tunnels" Tooltip="Less averlanges equal more profit" Cost="0;500;000;0" Modifier="0;-0,2;0,5;0" />
+    <Ore_Upgrade Name="Mining: Work Overtime" Tooltip="Do more in more time" Cost="500;200;200;0" Modifier="-0,4;0;0,5;0" />
+    <Ore_Upgrade Name="Mining: Surfacemining" Tooltip="No more tunnels, just remove the mountain" Cost="1000;1000;1000;0" Modifier="-0,3;-0,3;1;0" />
+  </Ore_Upgrades>
+  <Global_Upgrades>
+    <Global_Upgrade Name="Upgrade1" Tooltip="Tooltip 1" Cost="100;100;100;0" Modifier="10;0,5;0;0" />
+    <Global_Upgrade Name="Upgrade2" Tooltip="Tooltip 2" Cost="100;100;100;0" Modifier="10;0,5;0;0" />
+    <Global_Upgrade Name="Upgrade3" Tooltip="Tooltip 3" Cost="100;100;100;0" Modifier="10;0,5;0;0" />
+    <Global_Upgrade Name="Upgrade4" Tooltip="Tooltip 4" Cost="100;100;100;0" Modifier="10;0,5;0;0" />
+  </Global_Upgrades>
+  <BuildCosts>
+    <BuildCost Cost="200;200;200;0" />
+    <BuildCost Cost="100;100;100;0" />
+	<BuildCost Cost="0;100;0;0" />
+	<BuildCost Cost="0;0;0;200" />
+  </BuildCosts>
+</IDLECIV_Upgrades>
