@@ -15,6 +15,7 @@ namespace Idle_Civilization.Classes
         //public Rectangle tileArea;
         public Tile selectedTile;
         public TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData();
+        private TileMenuUpdateData oldUpdateData = new TileMenuUpdateData();
         MouseState oldMouseState = new MouseState();
 
         #region MenuItems
@@ -134,44 +135,40 @@ namespace Idle_Civilization.Classes
         public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
             #region update elements
-            if (oldMouseState != mouseState)
-            {
-                tileMenuUpdateData = new TileMenuUpdateData();
 
-                addPeople.Update(mouseState);
+            //tileMenuUpdateData = new TileMenuUpdateData();
+
+            addPeople.Update(mouseState);
                 
+            foundCity.Update(mouseState);
+            addTile.Update(mouseState);
+            addTile.visible = false;
+            attackTile.Update(mouseState);
+            attackTile.visible = false;
 
-                foundCity.Update(mouseState);
-                addTile.Update(mouseState);
-                addTile.visible = false;
-                attackTile.Update(mouseState);
-                attackTile.visible = false;
+            subOreWorker.Update(mouseState);
+            addOreWorker.Update(mouseState);
+            oreIcon.Update(mouseState);
+            oreworkers.update(currentKeyboardState, mouseState);
 
-                subOreWorker.Update(mouseState);
-                addOreWorker.Update(mouseState);
-                oreIcon.Update(mouseState);
-                oreworkers.update(currentKeyboardState, mouseState);
+            subWoodWorker.Update(mouseState);
+            addWoodWorker.Update(mouseState);
+            woodIcon.Update(mouseState);
+            woodWorkers.update(currentKeyboardState, mouseState);
 
-                subWoodWorker.Update(mouseState);
-                addWoodWorker.Update(mouseState);
-                woodIcon.Update(mouseState);
-                woodWorkers.update(currentKeyboardState, mouseState);
+            subFoodWorker.Update(mouseState);
+            addFoodWorker.Update(mouseState);
+            FoodIcon.Update(mouseState);
+            foodWorker.update(currentKeyboardState, mouseState);
 
-                subFoodWorker.Update(mouseState);
-                addFoodWorker.Update(mouseState);
-                FoodIcon.Update(mouseState);
-                foodWorker.update(currentKeyboardState, mouseState);
+            subArmyWorker.Update(mouseState);
+            addArmyWorker.Update(mouseState);
+            armyIcon.Update(mouseState);
+            armyWorker.update(currentKeyboardState, mouseState);
 
-                subArmyWorker.Update(mouseState);
-                addArmyWorker.Update(mouseState);
-                armyIcon.Update(mouseState);
-                armyWorker.update(currentKeyboardState, mouseState);
-            }
-            oldMouseState = mouseState;
             #endregion
 
             Population.textArray[0] = selectedTile.population.ToString();
-
         }
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {

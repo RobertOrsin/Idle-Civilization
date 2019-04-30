@@ -24,6 +24,8 @@ namespace Idle_Civilization.Classes
         HUD hud;
         UpgradeMenu upgradeMenu;
 
+        bool debounce_function = false;
+
         Texture2D tileMap;
         GraphicsDevice GraphicsDevice;
         private List<List<Tile>> map;
@@ -86,7 +88,7 @@ namespace Idle_Civilization.Classes
 
             tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
 
-            player = new Player(new Ressources(1000, 1000, 1000, 0));
+            player = new Player(new Ressources(100000, 100000, 100000, 0));
             LoadUpgradesCosts();
         }
         /// <summary>
@@ -165,9 +167,11 @@ namespace Idle_Civilization.Classes
             tileMenu.selectedTile = map[selectedTile.X][selectedTile.Y];
             tileMenu.Update(keyboardState, mouseState);
 
-            if (tileMenu.tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_)
-                ExecuteFunction(tileMenu.tileMenuUpdateData.tileMenuFunction);
+            if (tileMenu.tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_ && !debounce_function)
+                ExecuteFunction(tileMenu.tileMenuUpdateData.tileMenuFunction, map[selectedTile.X][selectedTile.Y]);
 
+            else
+                debounce_function = false;
 
             for (int x = 0; x < map.Count; x++)
             {
@@ -200,12 +204,16 @@ namespace Idle_Civilization.Classes
             tileMenu.Draw(spriteBatch, spriteFont);
         }
 
-        public void ExecuteFunction(TileMenuFunction function)
+        public void ExecuteFunction(TileMenuFunction function, Tile tile)
         {
             switch(function)
             {
                 case TileMenuFunction.addPeople:
-                    map[selectedTile.X][selectedTile.Y].population++;
+                    if (tile.hasCity && player.CanAfford(buildCosts[(int)Buildcosts.Worker]))
+                    {
+                        map[selectedTile.X][selectedTile.Y].population++;
+                        player.ressources.SubRessources(buildCosts[(int)Buildcosts.Worker]);
+                    }
                     break;
                 case TileMenuFunction.foundCity:
                     if (FoundCityValid(map[selectedTile.X][selectedTile.Y]))

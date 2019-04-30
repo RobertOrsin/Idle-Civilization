@@ -51,6 +51,13 @@ namespace Idle_Civilization.Classes
             ore += adder.ore;
             army += adder.army;
         }
+        public void SubRessources(Ressources subtractor)
+        {
+            wood -= subtractor.wood;
+            food -= subtractor.food;
+            ore -= subtractor.ore;
+            army -= subtractor.army;
+        }
 
         public string AsString()
         {

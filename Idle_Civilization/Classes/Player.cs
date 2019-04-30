@@ -15,5 +15,16 @@ namespace Idle_Civilization.Classes
         {
             ressources = _ressources;
         }
+
+        public bool CanAfford(Ressources price)
+        {
+            if (ressources.food >= price.food &&
+               ressources.wood >= price.wood &&
+               ressources.ore >= price.ore &&
+               ressources.army >= price.army)
+                return true;
+            else
+                return false;
+        }
     }
 }
