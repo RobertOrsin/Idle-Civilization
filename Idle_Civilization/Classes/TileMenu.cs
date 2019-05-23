@@ -14,9 +14,7 @@ namespace Idle_Civilization.Classes
         Vector2 centerPosition = new Vector2(5,5);
         //public Rectangle tileArea;
         public Tile selectedTile;
-        public TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData();
-        private TileMenuUpdateData oldUpdateData = new TileMenuUpdateData();
-        MouseState oldMouseState = new MouseState();
+        public TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData(false);
 
         #region MenuItems
         Pushbutton addPeople;
@@ -132,11 +130,11 @@ namespace Idle_Civilization.Classes
             tileMenuUpdateData.tileMenuFunction = function;
         }
 
-        public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
+        public TileMenuUpdateData Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
             #region update elements
 
-            //tileMenuUpdateData = new TileMenuUpdateData();
+            tileMenuUpdateData = new TileMenuUpdateData(false);
 
             addPeople.Update(mouseState);
                 
@@ -169,6 +167,8 @@ namespace Idle_Civilization.Classes
             #endregion
 
             Population.textArray[0] = selectedTile.population.ToString();
+
+            return tileMenuUpdateData;
         }
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
@@ -377,6 +377,11 @@ namespace Idle_Civilization.Classes
     public struct TileMenuUpdateData
     {
         public TileMenuFunction tileMenuFunction;
+
+        public TileMenuUpdateData(bool what)
+        {
+            tileMenuFunction = TileMenuFunction._void_;
+        }
     }
     /// <summary>
     /// Enum-List of valid TileMenu-Functions

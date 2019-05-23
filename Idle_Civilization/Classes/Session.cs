@@ -163,29 +163,35 @@ namespace Idle_Civilization.Classes
             #endregion
 
             TileUpdateData tileUpdateData;
+            TileMenuUpdateData tileMenuUpdateData;
 
             tileMenu.selectedTile = map[selectedTile.X][selectedTile.Y];
-            tileMenu.Update(keyboardState, mouseState);
+            tileMenuUpdateData = tileMenu.Update(keyboardState, mouseState);
 
-            if (tileMenu.tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_ && !debounce_function)
-                ExecuteFunction(tileMenu.tileMenuUpdateData.tileMenuFunction, map[selectedTile.X][selectedTile.Y]);
+            if ((tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_ || tileMenuUpdateData.tileMenuFunction != TileMenuFunction.none))
+            {
+                ExecuteFunction(tileMenuUpdateData.tileMenuFunction, map[selectedTile.X][selectedTile.Y]);
+                //tileMenu.tileMenuUpdateData.tileMenuFunction = TileMenuFunction.none;
+            }
 
-            else
-                debounce_function = false;
 
             for (int x = 0; x < map.Count; x++)
             {
-                for(int y = 0; y < map[0].Count; y++)
+                for (int y = 0; y < map[0].Count; y++)
                 {
                     tileUpdateData = map[x][y].Update(mouseState, gameTime);
 
-                    if (tileUpdateData.clickDetected && tileMenu.tileMenuUpdateData.tileMenuFunction == TileMenuFunction._void_)
+                    if (tileUpdateData.clickDetected && tileMenuUpdateData.tileMenuFunction == TileMenuFunction._void_)
                     {
                         tileMenu.visible = true;
-                        selectedTile = new Point(x, y);    
+                        selectedTile = new Point(x, y);
                     }
                 }
-            } 
+            }
+            
+
+
+
         }
         /// <summary>
         /// Drawfunction

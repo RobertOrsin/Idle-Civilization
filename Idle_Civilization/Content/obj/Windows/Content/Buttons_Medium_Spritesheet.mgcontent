@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>D:/Privat/Idle-Civilization/Idle_Civilization/Content/Buttons_Medium_Spritesheet.png</SourceFile>
+  <SourceFile>F:/Privat/Idle-Civilization/Idle_Civilization/Content/Buttons_Medium_Spritesheet.png</SourceFile>
   <SourceTime>2019-04-30T08:01:52+02:00</SourceTime>
-  <DestFile>D:/Privat/Idle-Civilization/Idle_Civilization/Content/bin/Windows/Content/Buttons_Medium_Spritesheet.xnb</DestFile>
-  <DestTime>2019-04-30T08:13:08+02:00</DestTime>
+  <DestFile>F:/Privat/Idle-Civilization/Idle_Civilization/Content/bin/Windows/Content/Buttons_Medium_Spritesheet.xnb</DestFile>
+  <DestTime>2019-05-23T13:07:48+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-08-16T17:47:58+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

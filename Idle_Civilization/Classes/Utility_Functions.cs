@@ -280,13 +280,15 @@ namespace Utility_Functions
         {
             if (visible && !locked)
             {
-                if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
+                if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)) && state != ButtonStateType.pressed)
                 {
-                    state = ButtonStateType.pressed;
-                    onClick?.Invoke(buttonFunction);
+                        state = ButtonStateType.pressed;
+                        onClick?.Invoke(buttonFunction);
                 }
                 else if (Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
+                {
                     state = ButtonStateType.hoover;
+                }
                 else
                     state = ButtonStateType.idle;
 
