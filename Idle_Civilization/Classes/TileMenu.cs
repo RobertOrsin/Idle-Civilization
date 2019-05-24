@@ -377,8 +377,8 @@ namespace Idle_Civilization.Classes
             armyIcon.visible = selectedTile.hasCity;
             armyWorker.visible = selectedTile.hasCity;
 
-            foundCity.visible = !selectedTile.hasCity;
-            addTile.visible = !selectedTile.hasCity && false; //TO DO: add check for adjacent city-tile
+            foundCity.visible = !selectedTile.hasCity && !selectedTile.isCitypart && !selectedTile.aNeighborisCity && !selectedTile.aNeighborisEnemy;
+            addTile.visible = !selectedTile.hasCity && !selectedTile.isCitypart && selectedTile.aNeighborisCity; //TO DO: add check for adjacent city-tile
             attackTile.visible = selectedTile.hasEnemy;
         }
     }

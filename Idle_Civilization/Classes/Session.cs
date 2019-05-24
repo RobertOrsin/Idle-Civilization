@@ -14,6 +14,7 @@ namespace Idle_Civilization.Classes
 {
     class Session
     {
+        #region VARS
         TileMenu tileMenu;
         Point selectedTile;
         
@@ -56,6 +57,8 @@ namespace Idle_Civilization.Classes
         List<Ressources> buildCosts;
         #endregion
 
+        #endregion
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -88,7 +91,7 @@ namespace Idle_Civilization.Classes
 
             tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
 
-            player = new Player(new Ressources(100000, 100000, 100000, 0));
+            player = new Player(new Ressources(100000, 100000, 100000, 100000));
             LoadUpgradesCosts();
         }
         /// <summary>
@@ -220,6 +223,8 @@ namespace Idle_Civilization.Classes
                         //Add adjacent tiles to this city
                         MakeNeighborsToPartsOfCity(map[selectedTile.X][selectedTile.Y]);
 
+                        player.ressources.SubRessources(buildCosts[(int)Buildcosts.CreateCity]);
+
                         player.cityCount++;
                     }
                     break;
@@ -229,6 +234,15 @@ namespace Idle_Civilization.Classes
                         map[selectedTile.X][selectedTile.Y].population++;
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.Worker]);
                     }
+                    break;
+                case TileMenuFunction.addTile:
+                    if(player.CanAfford(buildCosts[(int)Buildcosts.addTile])) //AdjacentTo(TileControllType.cityTile,tile) && 
+                    {
+                        map[selectedTile.X][selectedTile.Y].SetAsCityPart(0);
+                        player.ressources.SubRessources(buildCosts[(int)Buildcosts.addTile]);
+                    }
+                break;
+                case TileMenuFunction.attackTile:
                     break;
                 case TileMenuFunction.addArmy:
                     break;
@@ -246,10 +260,7 @@ namespace Idle_Civilization.Classes
                     break;
                 case TileMenuFunction.subWood:
                     break;
-                case TileMenuFunction.addTile:
-                    break;
-                case TileMenuFunction.attackTile:
-                    break;
+                
                 default: break;
             }
         }

@@ -2,9 +2,18 @@
 
 To do:
 
-fancy cursors for normal mouse and scrolling
+	- fancy cursors for normal mouse and scrolling
+	- some exceptions
+	- add all functions of tileMenu
+	- give buttons to citytiles
+	- add informations for enemytiles
+	- add HUD
+	
 
 done lately:
+	- added addTile-Function
+	
+done earlier:
 	- debounce of button fixed
 	- prepared all buttonfunctions for execution
 	- created rules for city-creation
@@ -19,7 +28,4 @@ done lately:
 	- added function to session to fill border-texture-lists
 	- added drawing of borders to tiles
 	- added Enemies to Mapgeneration
-	
-done earlier:
-	...
 

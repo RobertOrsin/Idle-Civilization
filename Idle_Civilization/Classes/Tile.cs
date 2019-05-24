@@ -31,6 +31,7 @@ namespace Idle_Civilization.Classes
         public bool hasEnemy; //Tile has fog of war
 
         public List<bool> borders; //6 lines, beginning upper left and goes CW
+        public bool aNeighborisCity = false, aNeighborisEnemy = false;
 
         #region cityattributes
         public int population;
@@ -121,9 +122,17 @@ namespace Idle_Civilization.Classes
 
             //update border-state
             borders = new List<bool>();
-            foreach(Tile tile in neighbors)
+            aNeighborisCity = false;
+            aNeighborisEnemy = false;
+            foreach (Tile tile in neighbors)
             {
                 borders.Add( (!tile.isCitypart && isCitypart) || (!tile.hasEnemy && hasEnemy));
+
+                if (tile.isCitypart)
+                    aNeighborisCity = true;
+
+                if (tile.hasEnemy)
+                    aNeighborisEnemy = true;
             }
 
             return tileUpdateData;
@@ -299,14 +308,20 @@ namespace Idle_Civilization.Classes
             isCitypart = true;
             cityID = _cityID;
         }
-
+        /// <summary>
+        /// Set Tile as EnemyBase
+        /// </summary>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
         public void SetAsEnemyBase(GraphicsDevice GraphicsDevice, Texture2D tileMap)
         {
             hasEnemy = true;
             isEnemyBase = true;
             SetTileType(TileNumber.townwithstrongwall, GraphicsDevice, tileMap);
         }
-
+        /// <summary>
+        /// Set Tile as Part of Enemy
+        /// </summary>
         public void SetAsEnemyTile()
         {
             hasEnemy = true;

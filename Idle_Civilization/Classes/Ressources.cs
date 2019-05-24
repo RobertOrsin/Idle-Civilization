@@ -191,7 +191,6 @@ namespace Idle_Civilization.Classes
         bottom,
         lowerLeft
     }
-
     /// <summary>
     /// Stuff a tile can be adjacent to
     /// </summary>
