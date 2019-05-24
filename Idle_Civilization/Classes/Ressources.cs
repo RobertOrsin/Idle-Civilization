@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Idle_Civilization.Classes
 {
@@ -19,7 +22,15 @@ namespace Idle_Civilization.Classes
         public const int medium_button_diameter = 24;
         public const int small_button_diameter = 16;
     }
-    
+
+    public static class Globals
+    {
+        public static Texture2D primitive;
+
+        public static List<Texture2D> playerBorders;
+        public static List<Texture2D> enemyBorders;
+    }
+
 
     public struct Ressources
     {
@@ -98,6 +109,7 @@ namespace Idle_Civilization.Classes
 
     /// <summary>
     /// 8 in a row; 6 rows
+    /// for Spritesheet
     /// </summary>
     public enum TileNumber
     { 
@@ -166,5 +178,26 @@ namespace Idle_Civilization.Classes
     {
         minus,
         plus
+    }
+    /// <summary>
+    /// Colum of Border in Spritesheet
+    /// </summary>
+    public enum BorderNumber
+    {
+        upperLeft,
+        top,
+        upperRight,
+        lowerRight,
+        bottom,
+        lowerLeft
+    }
+
+    /// <summary>
+    /// Stuff a tile can be adjacent to
+    /// </summary>
+    public enum TileControllType
+    {
+        cityTile,
+        enemyTile,       
     }
 }

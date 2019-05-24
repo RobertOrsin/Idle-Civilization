@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Idle_Civilization.Classes;
+
 
 namespace Idle_Civilization
 {
@@ -14,9 +16,9 @@ namespace Idle_Civilization
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Classes.Session map;
+        Classes.Session session;
 
-        Texture2D tileMap, buttons_medium, buttons_small;
+        Texture2D tileMap, buttons_medium, buttons_small, borders;
 
         public static MouseState mouseState, oldMouseState;
         public static KeyboardState keyboardState, oldKeyboardState;
@@ -39,13 +41,16 @@ namespace Idle_Civilization
         {
             IsMouseVisible = true;
 
+            Globals.primitive = new Texture2D(GraphicsDevice, 1, 1);
+
             spriteFont = Content.Load<SpriteFont>("std_font");
             tileMap = Content.Load<Texture2D>("basetiles");
             buttons_medium = Content.Load<Texture2D>("Buttons_Medium_Spritesheet");
             buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
+            borders = Content.Load<Texture2D>("borders");
 
-            map = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
+            session = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            session.SerializeBorderTextures(GraphicsDevice, borders);
             base.Initialize();
         }
 
@@ -80,8 +85,7 @@ namespace Idle_Civilization
             mouseState = Mouse.GetState();
             keyboardState = Keyboard.GetState();
 
-            // TODO: Add your update logic here
-            map.Update(keyboardState, mouseState, gameTime);
+            session.Update(keyboardState, mouseState, gameTime);
 
             base.Update(gameTime);
         }
@@ -95,7 +99,7 @@ namespace Idle_Civilization
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            map.Draw(spriteBatch, spriteFont);
+            session.Draw(spriteBatch, spriteFont);
             spriteBatch.End();
             // TODO: Add your drawing code here
 

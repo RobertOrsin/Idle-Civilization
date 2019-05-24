@@ -18,7 +18,7 @@ namespace Idle_Civilization.Classes
 
         #region MenuItems
         Pushbutton addPeople;
-        TextBox Population;
+        TextBox population;
 
         Pushbutton foundCity, addTile, attackTile;
 
@@ -49,9 +49,6 @@ namespace Idle_Civilization.Classes
             InitMenuItemOffsets();
 
             #region Init Elements
-            List<string> emptyStringList = new List<string>();
-            emptyStringList.Add("0000");
-
             List<Texture2D> minusButton, plusButton;
             minusButton = new List<Texture2D>();
             minusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.minus, ButtonStateType.idle));
@@ -66,13 +63,13 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue, TileMenuFunction.addPeople);
             addPeople.onClick += TileMenuClick;
-            Population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
+            population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
 
             oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             oreIcon.locked = true;
-            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
+            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
             addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addOre);
             addOreWorker.onClick += TileMenuClick;
             subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subOre);
@@ -82,7 +79,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             woodIcon.locked = true;
-            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
+            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
             addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addWood);
             addWoodWorker.onClick += TileMenuClick;
             subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subWood);
@@ -92,7 +89,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             FoodIcon.locked = true;
-            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
+            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
             addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addFood);
             addFoodWorker.onClick += TileMenuClick;
             subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subFood);
@@ -102,7 +99,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             armyIcon.locked = true;
-            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, emptyStringList);
+            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
             addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addArmy);
             addArmyWorker.onClick += TileMenuClick;
             subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subArmy);
@@ -132,17 +129,16 @@ namespace Idle_Civilization.Classes
 
         public TileMenuUpdateData Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
+            tileMenuUpdateData = new TileMenuUpdateData(false);
             #region update elements
 
-            tileMenuUpdateData = new TileMenuUpdateData(false);
+            UpdateButtonVisibility();
 
             addPeople.Update(mouseState);
                 
             foundCity.Update(mouseState);
             addTile.Update(mouseState);
-            addTile.visible = false;
             attackTile.Update(mouseState);
-            attackTile.visible = false;
 
             subOreWorker.Update(mouseState);
             addOreWorker.Update(mouseState);
@@ -166,7 +162,15 @@ namespace Idle_Civilization.Classes
 
             #endregion
 
-            Population.textArray[0] = selectedTile.population.ToString();
+            #region write tile-values to menu
+            population.textArray[0] = selectedTile.population.ToString();
+            oreworkers.textArray[0] = selectedTile.ore_worker.ToString();
+            woodWorkers.textArray[0] = selectedTile.wood_worker.ToString();
+            foodWorker.textArray[0] = selectedTile.food_worker.ToString();
+            armyWorker.textArray[0] = selectedTile.army_worker.ToString();
+            #endregion
+
+            tileMenuUpdateData.clickDetected = tileMenuUpdateData.tileMenuFunction != TileMenuFunction.none && tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_;
 
             return tileMenuUpdateData;
         }
@@ -178,7 +182,7 @@ namespace Idle_Civilization.Classes
                 SetPositions();
 
                 addPeople.Draw(spriteBatch, spriteFont);
-                Population.draw(spriteBatch, spriteFont);
+                population.draw(spriteBatch, spriteFont);
 
 
                 foundCity.Draw(spriteBatch, spriteFont);
@@ -283,7 +287,7 @@ namespace Idle_Civilization.Classes
 
             #region set position of elements
             addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton];
-            Population.position = centerpoint + menuElementOffsets[MenuElement.TopTextBox];
+            population.position = centerpoint + menuElementOffsets[MenuElement.TopTextBox];
 
             foundCity.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
             addTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
@@ -345,6 +349,38 @@ namespace Idle_Civilization.Classes
             menuElementOffsets.Add(MenuElement.UpperLeftButton, new Vector2(-81, -51));
             menuElementOffsets.Add(MenuElement.UpperLeftTextBox, new Vector2(-94, -24));
         }   
+        /// <summary>
+        /// Depending on tile-attributes set MenuItems in/visible
+        /// </summary>
+        private void UpdateButtonVisibility()
+        {
+            addPeople.visible = selectedTile.hasCity;
+            population.visible = selectedTile.hasCity;
+
+            subOreWorker.visible = selectedTile.hasCity;
+            addOreWorker.visible = selectedTile.hasCity;
+            oreIcon.visible = selectedTile.hasCity;
+            oreworkers.visible = selectedTile.hasCity;
+
+            subWoodWorker.visible = selectedTile.hasCity;
+            addWoodWorker.visible = selectedTile.hasCity;
+            woodIcon.visible = selectedTile.hasCity;
+            woodWorkers.visible = selectedTile.hasCity;
+
+            subFoodWorker.visible = selectedTile.hasCity;
+            addFoodWorker.visible = selectedTile.hasCity;
+            FoodIcon.visible = selectedTile.hasCity;
+            foodWorker.visible = selectedTile.hasCity;
+
+            subArmyWorker.visible = selectedTile.hasCity;
+            addArmyWorker.visible = selectedTile.hasCity;
+            armyIcon.visible = selectedTile.hasCity;
+            armyWorker.visible = selectedTile.hasCity;
+
+            foundCity.visible = !selectedTile.hasCity;
+            addTile.visible = !selectedTile.hasCity && false; //TO DO: add check for adjacent city-tile
+            attackTile.visible = selectedTile.hasEnemy;
+        }
     }
     /// <summary>
     /// Enum-List for all TileMenuItems
@@ -377,10 +413,12 @@ namespace Idle_Civilization.Classes
     public struct TileMenuUpdateData
     {
         public TileMenuFunction tileMenuFunction;
+        public bool clickDetected;
 
         public TileMenuUpdateData(bool what)
         {
             tileMenuFunction = TileMenuFunction._void_;
+            clickDetected = false;
         }
     }
     /// <summary>

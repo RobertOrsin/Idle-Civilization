@@ -11,6 +11,8 @@ namespace Idle_Civilization.Classes
         public Ressources ressources; //food,wood,ore the player has
         public Ressources ressource_demand; //
 
+        public int cityCount = 0;
+
         public Player(Ressources _ressources)
         {
             ressources = _ressources;

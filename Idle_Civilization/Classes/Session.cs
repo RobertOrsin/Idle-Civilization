@@ -36,8 +36,8 @@ namespace Idle_Civilization.Classes
         private int wood_spread = 20;
         private int water_density = 10;
         private int water_spread = 0;
-        private int enemy_density = 20;
-        private int enemy_spread = 40;
+        private int enemy_density = 5;
+        private int enemy_spread = 20;
 
         Random rand = new Random();
         int spread = 0;
@@ -163,35 +163,29 @@ namespace Idle_Civilization.Classes
             #endregion
 
             TileUpdateData tileUpdateData;
-            TileMenuUpdateData tileMenuUpdateData;
+            TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData(false);
 
             tileMenu.selectedTile = map[selectedTile.X][selectedTile.Y];
             tileMenuUpdateData = tileMenu.Update(keyboardState, mouseState);
 
-            if ((tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_ || tileMenuUpdateData.tileMenuFunction != TileMenuFunction.none))
+            if (tileMenuUpdateData.clickDetected)
             {
                 ExecuteFunction(tileMenuUpdateData.tileMenuFunction, map[selectedTile.X][selectedTile.Y]);
-                //tileMenu.tileMenuUpdateData.tileMenuFunction = TileMenuFunction.none;
             }
-
 
             for (int x = 0; x < map.Count; x++)
             {
                 for (int y = 0; y < map[0].Count; y++)
                 {
-                    tileUpdateData = map[x][y].Update(mouseState, gameTime);
+                    tileUpdateData = map[x][y].Update(mouseState, gameTime, GetNeighbors(map[x][y]));
 
-                    if (tileUpdateData.clickDetected && tileMenuUpdateData.tileMenuFunction == TileMenuFunction._void_)
+                    if (tileUpdateData.clickDetected && !tileMenuUpdateData.clickDetected)
                     {
                         tileMenu.visible = true;
                         selectedTile = new Point(x, y);
                     }
                 }
             }
-            
-
-
-
         }
         /// <summary>
         /// Drawfunction
@@ -209,11 +203,26 @@ namespace Idle_Civilization.Classes
 
             tileMenu.Draw(spriteBatch, spriteFont);
         }
-
+        /// <summary>
+        /// Execute a function depending on clicked Button from TileMenu
+        /// </summary>
+        /// <param name="function"></param>
+        /// <param name="tile"></param>
         public void ExecuteFunction(TileMenuFunction function, Tile tile)
         {
             switch(function)
             {
+                case TileMenuFunction.foundCity:
+                    if (FoundCityValid(map[selectedTile.X][selectedTile.Y]) && player.CanAfford(buildCosts[(int)Buildcosts.CreateCity]))
+                    {
+                        //Create City on tile
+                        map[selectedTile.X][selectedTile.Y].SetAsCity(GraphicsDevice, tileMap, player.cityCount);
+                        //Add adjacent tiles to this city
+                        MakeNeighborsToPartsOfCity(map[selectedTile.X][selectedTile.Y]);
+
+                        player.cityCount++;
+                    }
+                    break;
                 case TileMenuFunction.addPeople:
                     if (tile.hasCity && player.CanAfford(buildCosts[(int)Buildcosts.Worker]))
                     {
@@ -221,13 +230,26 @@ namespace Idle_Civilization.Classes
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.Worker]);
                     }
                     break;
-                case TileMenuFunction.foundCity:
-                    if (FoundCityValid(map[selectedTile.X][selectedTile.Y]))
-                    {
-                        map[selectedTile.X][selectedTile.Y].SetAsCity(GraphicsDevice, tileMap);
-                    }
+                case TileMenuFunction.addArmy:
                     break;
-
+                case TileMenuFunction.subArmy:
+                    break;
+                case TileMenuFunction.addFood:
+                    break;
+                case TileMenuFunction.subFood:
+                    break;
+                case TileMenuFunction.addOre:
+                    break;
+                case TileMenuFunction.subOre:
+                    break;
+                case TileMenuFunction.addWood:
+                    break;
+                case TileMenuFunction.subWood:
+                    break;
+                case TileMenuFunction.addTile:
+                    break;
+                case TileMenuFunction.attackTile:
+                    break;
                 default: break;
             }
         }
@@ -325,6 +347,21 @@ namespace Idle_Civilization.Classes
 
                 SetNeighbors(start_x, start_y, TileBaseType.Water, GraphicsDevice, tileMap);
             }
+
+            //Add Enemys
+            for(int i = 0; i < enemy_density; i++)
+            {
+                int start_x, start_y;
+                do
+                {
+                    start_x = rand.Next(0, width);
+                    start_y = rand.Next(0, height);
+                } while (!IsValidTile(start_x, start_y) && map[start_x][start_y].tileBaseType != TileBaseType.None);
+
+                map[start_x][start_y].SetAsEnemyBase(GraphicsDevice, tileMap);
+
+                SetNeighbors(start_x, start_y, TileBaseType.Enemy, GraphicsDevice, tileMap);
+            }
         }
         /// <summary>
         /// Check if a Tile is Valid to be set to TileType
@@ -356,6 +393,8 @@ namespace Idle_Civilization.Classes
                     spread = wood_spread; break;
                 case TileBaseType.Water:
                     spread = water_spread; break;
+                case TileBaseType.Enemy:
+                    spread = enemy_spread; break;
             }
 
             //tile on top (x; y-=2)
@@ -418,12 +457,131 @@ namespace Idle_Civilization.Classes
                 }
             }
         }
+        /// <summary>
+        /// Stores Border-Textures in static List
+        /// </summary>
+        public void SerializeBorderTextures(GraphicsDevice GraphicsDevice, Texture2D borders)
+        {
+            Globals.enemyBorders = new List<Texture2D>();
+            Globals.playerBorders = new List<Texture2D>();
+
+            for(int i = 0; i < Enum.GetNames(typeof(BorderNumber)).Length; i++)
+            {
+                //enemy border
+                Rectangle rect = new Rectangle(32 * i, 0, 32, 48);
+                Texture2D tex = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+                Color[] data = new Color[rect.Width * rect.Height];
+
+                borders.GetData(0, rect, data, 0, data.Length);
+                tex.SetData(data);
+
+                Globals.enemyBorders.Add(tex);
+
+                //player border
+                rect = new Rectangle(32 * i, 48, 32, 48);
+                tex = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+                data = new Color[rect.Width * rect.Height];
+
+                borders.GetData(0, rect, data, 0, data.Length);
+                tex.SetData(data);
+
+                Globals.playerBorders.Add(tex);
+            }
+        }
         #endregion
 
         #region controllfunctions
+        /// <summary>
+        /// Check if a city can be founded on a tile.
+        /// Citys may only be founded on grasstiles and no other city adjacent
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <returns></returns>
         private bool FoundCityValid(Tile tile)
         {
-            return true;
+            if (!tile.hasCity && tile.tileBaseType == TileBaseType.None && !AdjacentTo(TileControllType.cityTile,tile))
+                return true;
+            else
+                return false;
+        }
+        /// <summary>
+        /// Check if a given tile is adjacent to a tile with given TileControllType
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="tile"></param>
+        /// <returns></returns>
+        private bool AdjacentTo(TileControllType type, Tile tile)
+        {
+            bool result = false;
+            int x = tile.x, y = tile.y;
+            switch(type)
+            {
+                case TileControllType.cityTile:
+                    result = map[x - 1][y - 1].isCitypart ||
+                            map[x][y - 2].isCitypart ||
+                            map[x + 1][y - 1].isCitypart ||
+                            map[x + 1][y + 1].isCitypart ||
+                            map[x][y + 2].isCitypart ||
+                            map[x - 1][y + 1].isCitypart;
+                    break;
+                case TileControllType.enemyTile:
+                    break;
+                default: break;
+
+            }
+            return result;
+        }
+
+        private void MakeNeighborsToPartsOfCity(Tile tile)
+        {
+            int x = tile.x, y = tile.y;
+
+            map[x - 1][y - 1].SetAsCityPart(tile.cityID);
+            map[x][y - 2].SetAsCityPart(tile.cityID);
+            map[x + 1][y - 1].SetAsCityPart(tile.cityID);
+            map[x + 1][y + 1].SetAsCityPart(tile.cityID);
+            map[x][y + 2].SetAsCityPart(tile.cityID);
+            map[x - 1][y + 1].SetAsCityPart(tile.cityID);
+        }
+        #endregion
+
+        #region setter/getter
+        private List<Tile> GetNeighbors(Tile tile)
+        {
+            List<Tile> result = new List<Tile>();
+            int x = tile.x, y = tile.y;
+
+            if (x > 0 && y > 0)
+                result.Add(map[x - 1][y - 1]);
+            else
+                result.Add(new Tile());
+
+            if (y > 1)
+                result.Add(map[x][y - 2]);
+            else
+                result.Add(new Tile());
+
+            if(x < width - 1 && y > 0)
+                result.Add(map[x + 1][y - 1]);
+            else
+                result.Add(new Tile());
+
+            if(x < width - 1 && y < height - 1)
+                result.Add(map[x + 1][y + 1]);
+            else
+                result.Add(new Tile());
+
+            if(y < height - 2)
+                result.Add(map[x][y + 2]);
+            else
+                result.Add(new Tile());
+
+            if(x > 0 && y < height - 1)
+                result.Add(map[x - 1][y + 1]);
+            else
+                result.Add(new Tile());
+
+            return result;
         }
         #endregion
 
@@ -748,6 +906,7 @@ namespace Idle_Civilization.Classes
         None,
         Mountain,
         Wood,
-        Water
+        Water,
+        Enemy
     }
 }

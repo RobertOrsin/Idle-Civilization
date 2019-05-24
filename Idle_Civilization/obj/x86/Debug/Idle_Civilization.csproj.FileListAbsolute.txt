@@ -120,3 +120,4 @@ F:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.cs
 F:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.csproj.CoreCompileInputs.cache
 F:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.exe
 F:\Privat\Idle-Civilization\Idle_Civilization\obj\x86\Debug\Idle_Civilization.pdb
+F:\Privat\Idle-Civilization\Idle_Civilization\bin\Windows\x86\Debug\Content\borders.xnb

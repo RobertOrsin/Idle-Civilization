@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 
 using Utility_Functions;
 
@@ -11,11 +13,12 @@ namespace Idle_Civilization.Classes
         #region VARS
         public TileBaseType tileBaseType;
         private TileNumber tiletype;
-        private int x, y; //koordinates on map
+        public int x, y; //koordinates on map
         Texture2D tile_texture;
         bool empty = false;
         Rectangle clickArea;
         public Rectangle drawArea;
+        private MouseState old_mouseState;
 
         //Delay for Ressourceupdate
         double timer = 5000; //in ms
@@ -23,14 +26,18 @@ namespace Idle_Civilization.Classes
 
 
         public bool hasCity = false;
+        public int cityID;
         public bool isCitypart;
         public bool hasEnemy; //Tile has fog of war
+
+        public List<bool> borders; //6 lines, beginning upper left and goes CW
 
         #region cityattributes
         public int population;
         public int food_worker;
         public int ore_worker;
         public int wood_worker;
+        public int army_worker;
         public int unemployed;
 
         public int food_upgrade_level = 0, wood_upgrade_level = 0, ore_upgrade_level = 0;
@@ -71,12 +78,23 @@ namespace Idle_Civilization.Classes
 
             tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
+
+            borders = new List<bool>();
+            borders.Add(false);
+            borders.Add(false);
+            borders.Add(false);
+            borders.Add(false);
+            borders.Add(false);
+            borders.Add(false);
         }
         /// <summary>
         /// Update Inputs on Map and its tiles
         /// </summary>
         /// <param name="mouseState"></param>
-        public TileUpdateData Update(MouseState mouseState, GameTime gameTime)
+        /// <param name="gameTime"></param>
+        /// <param name="neighbors">starts at upper left and goes CW</param>
+        /// <returns></returns>
+        public TileUpdateData Update(MouseState mouseState, GameTime gameTime, List<Tile> neighbors)
         {
             TileUpdateData tileUpdateData = new TileUpdateData();
 
@@ -93,10 +111,19 @@ namespace Idle_Civilization.Classes
                 }
                 #endregion
 
-                if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(clickArea, new Vector2(mouseState.X, mouseState.Y)))
+                if (mouseState.LeftButton == ButtonState.Pressed && old_mouseState.LeftButton == ButtonState.Released && Utility.mouseInBounds(clickArea, new Vector2(mouseState.X, mouseState.Y)))
                 {
                     tileUpdateData.clickDetected = true;
                 }
+            }
+
+            old_mouseState = mouseState;
+
+            //update border-state
+            borders = new List<bool>();
+            foreach(Tile tile in neighbors)
+            {
+                borders.Add( (!tile.isCitypart && isCitypart) || (!tile.hasEnemy && hasEnemy));
             }
 
             return tileUpdateData;
@@ -113,7 +140,25 @@ namespace Idle_Civilization.Classes
                 drawArea = GetTileMapPosition(mapPosition);
                 clickArea = GetClickArea();
 
-                spriteBatch.Draw(tile_texture, drawArea, Color.Wheat);
+                spriteBatch.Draw(tile_texture, drawArea,null, Color.Wheat, 0.0f,new Vector2(), SpriteEffects.None, 0.0f);
+
+                if (isCitypart || hasEnemy)
+                {
+                    //draw borders
+                    int counter = 0;
+                    foreach (bool border in borders)
+                    {
+                        if (border)
+                        {
+                            if(isCitypart)
+                                spriteBatch.Draw(Globals.playerBorders[counter], drawArea, null, Color.Wheat, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
+                            if(hasEnemy)
+                                spriteBatch.Draw(Globals.enemyBorders[counter], drawArea, null, Color.Wheat, 0.0f, new Vector2(), SpriteEffects.None, 1.0f);
+                        }
+                        counter++;
+                    }
+                }
+                
             }
         }
 
@@ -146,28 +191,42 @@ namespace Idle_Civilization.Classes
         /// <param name="tileMap"></param>
         public void SetTileType(TileBaseType _tilebasetype, GraphicsDevice GraphicsDevice, Texture2D tileMap)
         {
+            bool isEnvrionment;
+
             tileBaseType = _tilebasetype;
             switch (tileBaseType)
             {
                 case TileBaseType.Mountain:
+                    isEnvrionment = true;
                     tiletype = TileNumber.mountain;
                     break;
                 case TileBaseType.Wood:
+                    isEnvrionment = true;
                     tiletype = TileNumber.wood;
                     break;
                 case TileBaseType.Water:
+                    isEnvrionment = true;
                     tiletype = TileNumber.flatwater;
                     break;
+                case TileBaseType.Enemy:
+                    SetAsEnemyTile();
+                    isEnvrionment = false;
+                    break;
+                default:
+                    isEnvrionment = false; break;
             }
 
-            Color[] data;
-            Rectangle rect = GetTileSpritePosition(tiletype);
+            if (isEnvrionment)
+            {
+                Color[] data;
+                Rectangle rect = GetTileSpritePosition(tiletype);
 
-            tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
-            data = new Color[rect.Width * rect.Height];
+                tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+                data = new Color[rect.Width * rect.Height];
 
-            tileMap.GetData(0, rect, data, 0, data.Length);
-            tile_texture.SetData(data);
+                tileMap.GetData(0, rect, data, 0, data.Length);
+                tile_texture.SetData(data);
+            }
         }
         /// <summary>
         /// Returns a Rectangle descriping position and dimension of sprite on a spritemap
@@ -219,14 +278,41 @@ namespace Idle_Civilization.Classes
                                 Constants.tile_y_space * Constants.tile_stretch_factor);
 
         }
-
-        public void SetAsCity(GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        /// <summary>
+        /// Set Tile as a City
+        /// </summary>
+        /// <param name="GraphicsDevice"></param>
+        /// <param name="tileMap"></param>
+        public void SetAsCity(GraphicsDevice GraphicsDevice, Texture2D tileMap, int _cityID)
         {
             hasCity = true;
+            cityID = _cityID;
+            isCitypart = true;
             SetTileType(TileNumber.town, GraphicsDevice, tileMap);
         }
+        /// <summary>
+        /// Set Tile as Part of a City
+        /// </summary>
+        /// <param name="_cityID"></param>
+        public void SetAsCityPart(int _cityID)
+        {
+            isCitypart = true;
+            cityID = _cityID;
+        }
+
+        public void SetAsEnemyBase(GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        {
+            hasEnemy = true;
+            isEnemyBase = true;
+            SetTileType(TileNumber.townwithstrongwall, GraphicsDevice, tileMap);
+        }
+
+        public void SetAsEnemyTile()
+        {
+            hasEnemy = true;
+        }
         #endregion
-    }
+}
     /// <summary>
     /// Returnvalue of Updatefunction of Tile
     /// </summary>

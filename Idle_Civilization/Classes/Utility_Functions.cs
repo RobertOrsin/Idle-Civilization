@@ -210,6 +210,8 @@ namespace Utility_Functions
         public delegate void ClickEventHandler(TileMenuFunction function);
         public event ClickEventHandler onClick;
 
+        private MouseState old_mouseState;
+
         #region constructors
         /// <summary>
         /// Creates a new Pushbutton-objekt
@@ -280,20 +282,24 @@ namespace Utility_Functions
         {
             if (visible && !locked)
             {
-                if (mouseState.LeftButton == ButtonState.Pressed && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)) && state != ButtonStateType.pressed)
+                if (mouseState.LeftButton == ButtonState.Pressed && old_mouseState.LeftButton == ButtonState.Released && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
                 {
-                        state = ButtonStateType.pressed;
-                        onClick?.Invoke(buttonFunction);
+                    state = ButtonStateType.pressed;
+                    onClick?.Invoke(buttonFunction);
                 }
-                else if (Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
+                else if (mouseState.LeftButton == ButtonState.Released && Utility.mouseInBounds(bounds, new Vector2(mouseState.X, mouseState.Y)))
                 {
                     state = ButtonStateType.hoover;
                 }
                 else
+                {
                     state = ButtonStateType.idle;
+                }
 
                 bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), textures[0].Width, textures[0].Height);
             }
+
+            old_mouseState = mouseState;
         }
         public void Draw(SpriteBatch spriteBatch, SpriteFont font)
         {
@@ -310,16 +316,6 @@ namespace Utility_Functions
                     spriteBatch.DrawString(font, text, textpos, color);
                 }
             }
-        }
-    }
-
-    public class MyEventArgs : EventArgs
-    {
-        public TileMenuFunction function;
-
-        public MyEventArgs(TileMenuFunction _function)
-        {
-            function = _function;
         }
     }
 
