@@ -11,9 +11,11 @@ To do:
 	
 
 done lately:
+
 	- added addTile-Function
 	
 done earlier:
+
 	- debounce of button fixed
 	- prepared all buttonfunctions for execution
 	- created rules for city-creation
