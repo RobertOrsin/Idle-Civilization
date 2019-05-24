@@ -26,7 +26,7 @@ namespace Idle_Civilization.Classes
 
 
         public bool hasCity = false;
-        public int cityID;
+        public int cityID = -1;
         public bool isCitypart;
         public bool hasEnemy; //Tile has fog of war
 
@@ -43,6 +43,8 @@ namespace Idle_Civilization.Classes
 
         public int food_upgrade_level = 0, wood_upgrade_level = 0, ore_upgrade_level = 0;
         public Ressources modifier = new Ressources();
+
+        public int wood_under_controll = 0, grass_under_controll = 0, mountain_under_controll = 0;
 
         #endregion
 
@@ -105,10 +107,16 @@ namespace Idle_Civilization.Classes
                 double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
                 timer -= elapsed;
 
-                if (timer < 0)
+                if (timer < 0 && hasCity)
                 {
                     timer = TIME;
                     //Ressourceupdate
+                    if (hasCity)
+                    {
+                        tileUpdateData.demand.wood = wood_worker * (Globals.baseproduction_wood + modifier.wood);
+                        tileUpdateData.demand.ore = ore_worker * (Globals.baseproduction_ore + modifier.ore);
+                        tileUpdateData.demand.food = (population * Globals.baseFoodconsumption_poeple * -1) + (ore_worker * Globals.baseFoodconsumption_ore * -1) + (wood_worker * Globals.baseFoodconsumption_wood * -1) + food_worker * (Globals.baseproduction_food + modifier.food);
+                    }
                 }
                 #endregion
 
@@ -325,6 +333,17 @@ namespace Idle_Civilization.Classes
         public void SetAsEnemyTile()
         {
             hasEnemy = true;
+        }
+        /// <summary>
+        /// Change a EnemyTile to PlayerTile
+        /// </summary>
+        /// <param name="_cityID"></param>
+        public void ConquerTile(int _cityID)
+        {
+            hasEnemy = false;
+            isEnemyBase = false;
+            isCitypart = true;
+            cityID = _cityID;
         }
         #endregion
 }

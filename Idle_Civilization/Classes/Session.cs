@@ -167,6 +167,7 @@ namespace Idle_Civilization.Classes
 
             TileUpdateData tileUpdateData;
             TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData(false);
+            player.ressource_demand = new Ressources();
 
             tileMenu.selectedTile = map[selectedTile.X][selectedTile.Y];
             tileMenuUpdateData = tileMenu.Update(keyboardState, mouseState);
@@ -181,6 +182,7 @@ namespace Idle_Civilization.Classes
                 for (int y = 0; y < map[0].Count; y++)
                 {
                     tileUpdateData = map[x][y].Update(mouseState, gameTime, GetNeighbors(map[x][y]));
+                    player.ressource_demand.AddRessources(tileUpdateData.demand);
 
                     if (tileUpdateData.clickDetected && !tileMenuUpdateData.clickDetected)
                     {
@@ -189,6 +191,7 @@ namespace Idle_Civilization.Classes
                     }
                 }
             }
+            player.ressources.SubRessources(player.ressource_demand);
         }
         /// <summary>
         /// Drawfunction
@@ -216,12 +219,12 @@ namespace Idle_Civilization.Classes
             switch(function)
             {
                 case TileMenuFunction.foundCity:
-                    if (FoundCityValid(map[selectedTile.X][selectedTile.Y]) && player.CanAfford(buildCosts[(int)Buildcosts.CreateCity]))
+                    if (FoundCityValid(tile) && player.CanAfford(buildCosts[(int)Buildcosts.CreateCity]))
                     {
                         //Create City on tile
-                        map[selectedTile.X][selectedTile.Y].SetAsCity(GraphicsDevice, tileMap, player.cityCount);
+                        tile.SetAsCity(GraphicsDevice, tileMap, player.cityCount);
                         //Add adjacent tiles to this city
-                        MakeNeighborsToPartsOfCity(map[selectedTile.X][selectedTile.Y]);
+                        MakeNeighborsToPartsOfCity(tile);
 
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.CreateCity]);
 
@@ -231,34 +234,84 @@ namespace Idle_Civilization.Classes
                 case TileMenuFunction.addPeople:
                     if (tile.hasCity && player.CanAfford(buildCosts[(int)Buildcosts.Worker]))
                     {
-                        map[selectedTile.X][selectedTile.Y].population++;
+                        tile.population++;
+                        tile.unemployed++;
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.Worker]);
                     }
                     break;
                 case TileMenuFunction.addTile:
                     if(player.CanAfford(buildCosts[(int)Buildcosts.addTile])) //AdjacentTo(TileControllType.cityTile,tile) && 
                     {
-                        map[selectedTile.X][selectedTile.Y].SetAsCityPart(0);
+                        int cityID = GetCityIDOfNeighbors(tile);
+                        tile.SetAsCityPart(cityID);
+                        AddTileTypeToCity(cityID, tile.tileBaseType);
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.addTile]);
                     }
                 break;
                 case TileMenuFunction.attackTile:
+                    if(player.CanAfford(new Ressources(0,0,0,tile.armystrength)))
+                    {
+                        int cityID = GetCityIDOfNeighbors(tile);
+                        player.ressources.SubRessources(new Ressources(0, 0, 0, tile.armystrength));
+                        tile.ConquerTile(cityID);
+                        AddTileTypeToCity(cityID, tile.tileBaseType);
+                    }
                     break;
                 case TileMenuFunction.addArmy:
+                    if(tile.unemployed > 0)
+                    {
+                        tile.army_worker++;
+                        tile.unemployed--;
+                    }
                     break;
                 case TileMenuFunction.subArmy:
+                    if (tile.army_worker > 0)
+                    {
+                        tile.army_worker--;
+                        tile.unemployed++;
+                    }
                     break;
                 case TileMenuFunction.addFood:
+                    if(tile.unemployed > 0)
+                    {
+                        tile.food_worker++;
+                        tile.unemployed--;
+                    }
                     break;
                 case TileMenuFunction.subFood:
+                    if(tile.food_worker > 0)
+                    {
+                        tile.food_worker--;
+                        tile.unemployed++;
+                    }
                     break;
                 case TileMenuFunction.addOre:
+                    if(tile.unemployed > 0)
+                    {
+                        tile.ore_worker++;
+                        tile.unemployed--;
+                    }
                     break;
                 case TileMenuFunction.subOre:
+                    if(tile.ore_worker > 0)
+                    {
+                        tile.ore_worker--;
+                        tile.unemployed++;
+                    }
                     break;
                 case TileMenuFunction.addWood:
+                    if(tile.unemployed > 0)
+                    {
+                        tile.wood_worker++;
+                        tile.unemployed--;
+                    }
                     break;
                 case TileMenuFunction.subWood:
+                    if(tile.wood_worker > 0)
+                    {
+                        tile.wood_worker--;
+                        tile.unemployed++;
+                    }
                     break;
                 
                 default: break;
@@ -542,21 +595,40 @@ namespace Idle_Civilization.Classes
             }
             return result;
         }
-
+        /// <summary>
+        /// If city is created make its adjacent tiles part of it
+        /// </summary>
+        /// <param name="tile"></param>
         private void MakeNeighborsToPartsOfCity(Tile tile)
         {
             int x = tile.x, y = tile.y;
 
             map[x - 1][y - 1].SetAsCityPart(tile.cityID);
+            AddTileTypeToCity(tile.cityID, map[x - 1][y - 1].tileBaseType);
+
             map[x][y - 2].SetAsCityPart(tile.cityID);
+            AddTileTypeToCity(tile.cityID, map[x][y - 2].tileBaseType);
+
             map[x + 1][y - 1].SetAsCityPart(tile.cityID);
+            AddTileTypeToCity(tile.cityID, map[x + 1][y - 1].tileBaseType);
+
             map[x + 1][y + 1].SetAsCityPart(tile.cityID);
+            AddTileTypeToCity(tile.cityID, map[x + 1][y + 1].tileBaseType);
+
             map[x][y + 2].SetAsCityPart(tile.cityID);
+            AddTileTypeToCity(tile.cityID, map[x][y + 2].tileBaseType);
+
             map[x - 1][y + 1].SetAsCityPart(tile.cityID);
+            AddTileTypeToCity(tile.cityID, map[x - 1][y + 1].tileBaseType);
         }
         #endregion
 
         #region setter/getter
+        /// <summary>
+        /// returns a List of tile which are the adjacent neighbors of given tile
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <returns></returns>
         private List<Tile> GetNeighbors(Tile tile)
         {
             List<Tile> result = new List<Tile>();
@@ -594,6 +666,52 @@ namespace Idle_Civilization.Classes
 
             return result;
         }
+        /// <summary>
+        /// return first cityID of tiles neighbors
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <returns></returns>
+        private int GetCityIDOfNeighbors(Tile tile)
+        {
+            foreach(Tile nb_tile in GetNeighbors(tile))
+            {
+                if (nb_tile.cityID != -1)
+                    return nb_tile.cityID;
+            }
+            return -1;
+        }
+        /// <summary>
+        /// add TileType to Controlled Tiles counter, needed for demand-calculation
+        /// </summary>
+        /// <param name="cityID"></param>
+        /// <param name="type"></param>
+        private void AddTileTypeToCity(int cityID, TileBaseType type)
+        {
+            foreach(List<Tile> tile_row in map)
+            {
+                foreach (Tile tile in tile_row)
+                {
+                    if (tile.hasCity && tile.cityID == cityID)
+                    {
+                        switch(type)
+                        {
+                            case TileBaseType.Mountain:
+                                tile.mountain_under_controll++;
+                                break;
+                            case TileBaseType.Wood:
+                                tile.wood_under_controll++;
+                                break;
+                            case TileBaseType.None:
+                                tile.grass_under_controll++;
+                                break;
+                            default: break;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region config-file

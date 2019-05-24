@@ -4,18 +4,21 @@ To do:
 
 	- fancy cursors for normal mouse and scrolling
 	- some exceptions
-	- add all functions of tileMenu
-	- give buttons to citytiles
 	- add informations for enemytiles
 	- add HUD
+	- add demand-calc for army in tile-update
 	
 
 done lately:
 
-	- added addTile-Function
+	- added remaining tileMenuFunction-Executions
+	- added Conquer-Function to Tile-class
+	- advanced tile-update-function to calculate ressource-demand
+	- advanced session-update-function to subtract demand from player-ressources
 	
 done earlier:
 
+	- added addTile-Function
 	- debounce of button fixed
 	- prepared all buttonfunctions for execution
 	- created rules for city-creation

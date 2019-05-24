@@ -29,6 +29,13 @@ namespace Idle_Civilization.Classes
 
         public static List<Texture2D> playerBorders;
         public static List<Texture2D> enemyBorders;
+
+        public static double baseproduction_wood = 0.3;
+        public static double baseproduction_ore = 0.3;
+        public static double baseproduction_food = 1.2;
+        public static double baseFoodconsumption_poeple = 1.0;
+        public static double baseFoodconsumption_wood = 0.1;
+        public static double baseFoodconsumption_ore = 0.2;
     }
 
 
@@ -102,9 +109,9 @@ namespace Idle_Civilization.Classes
     public enum Buildcosts
     {
         CreateCity,
-        AddCityTile,
+        addTile,
         Worker,
-        addTile
+        attackTile
     }
 
     /// <summary>
