@@ -63,13 +63,13 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue, TileMenuFunction.addPeople);
             addPeople.onClick += TileMenuClick;
-            population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
+            population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0,0,0));
 
             oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             oreIcon.locked = true;
-            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
+            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
             addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addOre);
             addOreWorker.onClick += TileMenuClick;
             subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subOre);
@@ -79,7 +79,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             woodIcon.locked = true;
-            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
+            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
             addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addWood);
             addWoodWorker.onClick += TileMenuClick;
             subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subWood);
@@ -89,7 +89,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             FoodIcon.locked = true;
-            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
+            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
             addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addFood);
             addFoodWorker.onClick += TileMenuClick;
             subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subFood);
@@ -99,7 +99,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             armyIcon.locked = true;
-            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, null);
+            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
             addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addArmy);
             addArmyWorker.onClick += TileMenuClick;
             subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subArmy);
@@ -143,22 +143,22 @@ namespace Idle_Civilization.Classes
             subOreWorker.Update(mouseState);
             addOreWorker.Update(mouseState);
             oreIcon.Update(mouseState);
-            oreworkers.update(currentKeyboardState, mouseState);
+            oreworkers.Update(currentKeyboardState, mouseState);
 
             subWoodWorker.Update(mouseState);
             addWoodWorker.Update(mouseState);
             woodIcon.Update(mouseState);
-            woodWorkers.update(currentKeyboardState, mouseState);
+            woodWorkers.Update(currentKeyboardState, mouseState);
 
             subFoodWorker.Update(mouseState);
             addFoodWorker.Update(mouseState);
             FoodIcon.Update(mouseState);
-            foodWorker.update(currentKeyboardState, mouseState);
+            foodWorker.Update(currentKeyboardState, mouseState);
 
             subArmyWorker.Update(mouseState);
             addArmyWorker.Update(mouseState);
             armyIcon.Update(mouseState);
-            armyWorker.update(currentKeyboardState, mouseState);
+            armyWorker.Update(currentKeyboardState, mouseState);
 
             #endregion
 
@@ -182,8 +182,7 @@ namespace Idle_Civilization.Classes
                 SetPositions();
 
                 addPeople.Draw(spriteBatch, spriteFont);
-                population.draw(spriteBatch, spriteFont);
-
+                population.Draw(spriteBatch, spriteFont);
 
                 foundCity.Draw(spriteBatch, spriteFont);
                 addTile.Draw(spriteBatch, spriteFont);
@@ -192,22 +191,22 @@ namespace Idle_Civilization.Classes
                 subOreWorker.Draw(spriteBatch, spriteFont);
                 addOreWorker.Draw(spriteBatch, spriteFont);
                 oreIcon.Draw(spriteBatch, spriteFont);
-                oreworkers.draw(spriteBatch, spriteFont);
+                oreworkers.Draw(spriteBatch, spriteFont);
 
                 subWoodWorker.Draw(spriteBatch, spriteFont);
                 addWoodWorker.Draw(spriteBatch, spriteFont);
                 woodIcon.Draw(spriteBatch, spriteFont);
-                woodWorkers.draw(spriteBatch, spriteFont);
+                woodWorkers.Draw(spriteBatch, spriteFont);
 
                 subFoodWorker.Draw(spriteBatch, spriteFont);
                 addFoodWorker.Draw(spriteBatch, spriteFont);
                 FoodIcon.Draw(spriteBatch, spriteFont);
-                foodWorker.draw(spriteBatch, spriteFont);
+                foodWorker.Draw(spriteBatch, spriteFont);
 
                 subArmyWorker.Draw(spriteBatch, spriteFont);
                 addArmyWorker.Draw(spriteBatch, spriteFont);
                 armyIcon.Draw(spriteBatch, spriteFont);
-                armyWorker.draw(spriteBatch, spriteFont);
+                armyWorker.Draw(spriteBatch, spriteFont);
             }
             #endregion
         }

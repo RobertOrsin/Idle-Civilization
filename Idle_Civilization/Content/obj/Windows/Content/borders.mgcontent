@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/rober/Documents/GitHub/Idle-Civilization/Idle_Civilization/Content/borders.png</SourceFile>
-  <SourceTime>2019-05-24T22:13:39.1720373+02:00</SourceTime>
-  <DestFile>C:/Users/rober/Documents/GitHub/Idle-Civilization/Idle_Civilization/Content/bin/Windows/Content/borders.xnb</DestFile>
-  <DestTime>2019-05-24T22:15:17.4121625+02:00</DestTime>
+  <SourceFile>F:/Privat/Idle-Civilization/Idle_Civilization/Content/borders.png</SourceFile>
+  <SourceTime>2019-05-24T11:40:40+02:00</SourceTime>
+  <DestFile>F:/Privat/Idle-Civilization/Idle_Civilization/Content/bin/Windows/Content/borders.xnb</DestFile>
+  <DestTime>2019-05-27T07:06:40+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-08-16T17:47:58+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

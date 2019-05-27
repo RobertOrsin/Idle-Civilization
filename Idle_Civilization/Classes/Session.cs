@@ -17,19 +17,22 @@ namespace Idle_Civilization.Classes
         #region VARS
         TileMenu tileMenu;
         Point selectedTile;
+
+        int screen_width, screen_height;
         
-        int width, height;  // of map
-        Vector2 mapPosition; //upper left corner
+        
 
         Player player;
         HUD hud;
         UpgradeMenu upgradeMenu;
 
-        bool debounce_function = false;
-
         Texture2D tileMap;
         GraphicsDevice GraphicsDevice;
         private List<List<Tile>> map;
+        Vector2 positionOffset;
+        int map_screen_width, map_screen_height;
+        Vector2 mapPosition; //upper left corner
+        int width, height;  // of map in tiles
         #region Map-Characteristics and Generation
         private int mountain_density = 10;
         private int mountain_spread = 20;
@@ -68,30 +71,43 @@ namespace Idle_Civilization.Classes
         /// <param name="_height"></param>
         /// <param name="screen_width"></param>
         /// <param name="screen_height"></param>
-        public Session(GraphicsDevice _GraphicsDevice, Texture2D _tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _width, int _height, int screen_width, int screen_height)
+        public Session(GraphicsDevice _GraphicsDevice, Texture2D _tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _width, int _height, int _screen_width, int _screen_height)
         {
+            GraphicsDevice = _GraphicsDevice;
             width = _width;
             height = _height;
+            screen_width = _screen_width;
+            screen_height = _screen_height;
+
+            hud = new HUD(GraphicsDevice, screen_width, screen_height);
+
+            positionOffset = new Vector2(0,HUD.hud_height);
+            map_screen_height = screen_height - HUD.hud_height; //to do: change according to HUD
+            map_screen_width = screen_width; //to do: change according to HUD
 
             tileMap = _tileMap;
-            GraphicsDevice = _GraphicsDevice;
+            
             GenerateMap(GraphicsDevice, tileMap);
 
             mapPosition = new Vector2(0, 0);
 
-            top_bar = new Rectangle(50, 0, screen_width - 100, 50);
-            bottom_bar = new Rectangle(50, screen_height - 50, screen_width - 100, 50);
-            left_bar = new Rectangle(0, 50, 50, screen_height - 100);
-            right_bar = new Rectangle(screen_width - 50, 50, 50, screen_height - 100);
+            #region set scrollareas for map on the sides of the map
+            top_bar = new Rectangle(50 + Convert.ToInt32(positionOffset.X), 0 + Convert.ToInt32(positionOffset.Y), map_screen_width - 100, 50);
+            bottom_bar = new Rectangle(50 + Convert.ToInt32(positionOffset.X), map_screen_height, map_screen_width - 100, 50);
+            left_bar = new Rectangle(0 + Convert.ToInt32(positionOffset.X), 50 + Convert.ToInt32(positionOffset.Y), 50, map_screen_height - 100);
+            right_bar = new Rectangle(map_screen_width - 50, 50 + Convert.ToInt32(positionOffset.Y), 50, map_screen_height - 100);
 
-            upper_left = new Rectangle(0, 0, 50, 50);
-            upper_right = new Rectangle(screen_width - 50, 0, 50, 50);
-            lower_left = new Rectangle(0, screen_height - 50, 50, 50);
-            lower_right = new Rectangle(screen_width - 50, screen_height - 50, 50, 50);
+            upper_left = new Rectangle(0 + Convert.ToInt32(positionOffset.X), 0 + Convert.ToInt32(positionOffset.Y), 50, 50);
+            upper_right = new Rectangle(map_screen_width - 50, 0 + Convert.ToInt32(positionOffset.Y), 50, 50);
+            lower_left = new Rectangle(0 + Convert.ToInt32(positionOffset.X), map_screen_height, 50, 50);
+            lower_right = new Rectangle(map_screen_width - 50, map_screen_height, 50, 50);
+            #endregion
 
             tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
 
             player = new Player(new Ressources(100000, 100000, 100000, 100000));
+
+            
             LoadUpgradesCosts();
         }
         /// <summary>
@@ -192,6 +208,8 @@ namespace Idle_Civilization.Classes
                 }
             }
             player.ressources.SubRessources(player.ressource_demand);
+
+            hud.Update(mouseState, gameTime, player);
         }
         /// <summary>
         /// Drawfunction
@@ -199,15 +217,20 @@ namespace Idle_Civilization.Classes
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
-            for (int x = (int)mapPosition.X; x < width; x++)
+            for (int x = (int)mapPosition.X; x < ((map_screen_width - positionOffset.X) / (Constants.tile_x_click_space * Constants.tile_stretch_factor) + (int)mapPosition.X); x++)
             {
-                for (int y = (int)mapPosition.Y; y < height; y++)
+                if (x < width)
                 {
-                    map[x][y].Draw(spriteBatch, mapPosition);
+                    for (int y = (int)mapPosition.Y; y < ((map_screen_height - positionOffset.Y) / ((Constants.tile_y_space/2) * Constants.tile_stretch_factor) + (int)mapPosition.Y); y++)
+                    {
+                        if (y < height)
+                            map[x][y].Draw(spriteBatch, mapPosition, positionOffset);
+                    }
                 }
             }
 
             tileMenu.Draw(spriteBatch, spriteFont);
+            hud.Draw(spriteBatch, spriteFont);
         }
         /// <summary>
         /// Execute a function depending on clicked Button from TileMenu

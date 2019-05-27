@@ -49,7 +49,7 @@ namespace Utility_Functions
     /// <summary>
     /// Represents a Textbox
     /// </summary>
-    class TextBox
+    public class TextBox
     {
         public List<string> textArray; //Intilize Array Bellow, or in declaration
         public bool visible = true;
@@ -64,8 +64,10 @@ namespace Utility_Functions
         private String displayName;
         private Point dimension;
         private bool editingEnables;
+        private bool background_transparent;
+        private Color fontColor;
 
-        public TextBox(GraphicsDevice graphicsDevice, Vector2 _position, Point _dimension, int _maxRows, bool _editingEnables, List<string> _textArray)
+        public TextBox(GraphicsDevice graphicsDevice, Vector2 _position, Point _dimension, int _maxRows, bool _editingEnables, bool _background_transparent, List<string> _textArray, Color _fontColor)
         {
             position = _position;
             dimension = _dimension;
@@ -85,9 +87,11 @@ namespace Utility_Functions
             frame.SetData<Color>(new Color[] { Color.White });
             displayName = "type here";
             editingEnables = _editingEnables;
+            background_transparent = _background_transparent;
+            fontColor = _fontColor;
         }
 
-        public void update(KeyboardState currentKeyboardState, MouseState mouseState)
+        public void Update(KeyboardState currentKeyboardState, MouseState mouseState)
         {
             if (visible)
             {
@@ -168,13 +172,21 @@ namespace Utility_Functions
                 }
             }
         }
-        public void draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
+        public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
             bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), dimension.X, dimension.Y);
             if (visible)
             {
-                //Draw Frame            
-                spriteBatch.Draw(frame, bounds, Color.White);
+                Color color = new Color();
+
+                if (background_transparent)
+                    color = new Color(0, 0, 0, 0);
+                else
+                    color = new Color(255, 255, 255, 255);
+
+
+                //Draw Frame      
+                spriteBatch.Draw(frame, bounds, color);
                 //Displayname if no text typed yet
                 if (textArray.Count <= 1 && textArray[0].Count() < 1)
                     spriteBatch.DrawString(spriteFont, displayName, new Vector2(bounds.X, bounds.Y), Color.LightGray);
@@ -182,7 +194,7 @@ namespace Utility_Functions
                 int i;
                 for (i = 0; i < textArray.Count; i++)
                 {
-                    spriteBatch.DrawString(spriteFont, textArray[i], new Vector2(position.X, position.Y + 20 * i), Color.Black);
+                    spriteBatch.DrawString(spriteFont, textArray[i], new Vector2(position.X, position.Y + 20 * i), fontColor);
                 }
                 //draw prompt
                 if (selected)

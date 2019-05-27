@@ -150,11 +150,13 @@ namespace Idle_Civilization.Classes
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="mapPosition"></param>
-        public void Draw(SpriteBatch spriteBatch, Vector2 mapPosition)
+        public void Draw(SpriteBatch spriteBatch, Vector2 mapPosition, Vector2 positionOffset)
         {
             if (!empty)
             {
                 drawArea = GetTileMapPosition(mapPosition);
+                drawArea.X += Convert.ToInt32(positionOffset.X);
+                drawArea.Y += Convert.ToInt32(positionOffset.Y);
                 clickArea = GetClickArea();
 
                 spriteBatch.Draw(tile_texture, drawArea,null, Color.Wheat, 0.0f,new Vector2(), SpriteEffects.None, 0.0f);
@@ -175,7 +177,6 @@ namespace Idle_Civilization.Classes
                         counter++;
                     }
                 }
-                
             }
         }
 

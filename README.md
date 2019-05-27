@@ -5,20 +5,29 @@ To do:
 	- fancy cursors for normal mouse and scrolling
 	- some exceptions
 	- add informations for enemytiles
-	- add HUD
 	- add demand-calc for army in tile-update
+	- add army deployment to tiles
+	- store all textures as statics
+	- finish HUD
 	
 
 done lately:
+	- started programming of HUD
+	- added offset to map-drawing to make room for HUD
+		o inside Session and Tile
+	- updated map-drawing to be more dynamic to screenresolution
+	- added background-transparency to TextBox-Class
+	- added fontColor to TextBox-Class
+
+done earlier:
 
 	- added remaining tileMenuFunction-Executions
 	- added Conquer-Function to Tile-class
 	- advanced tile-update-function to calculate ressource-demand
 	- advanced session-update-function to subtract demand from player-ressources
-	
-done earlier:
-
+	-....
 	- added addTile-Function
+	-....
 	- debounce of button fixed
 	- prepared all buttonfunctions for execution
 	- created rules for city-creation
