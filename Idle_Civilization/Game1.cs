@@ -49,7 +49,7 @@ namespace Idle_Civilization
             buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
             borders = Content.Load<Texture2D>("borders");
 
-            session = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, 30, 45, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            session = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             session.SerializeBorderTextures(GraphicsDevice, borders);
             base.Initialize();
         }
@@ -84,6 +84,17 @@ namespace Idle_Civilization
         {
             mouseState = Mouse.GetState();
             keyboardState = Keyboard.GetState();
+
+            //import config-data
+            if(keyboardState.IsKeyDown(Keys.I))
+            {
+                session.LoadGameValues();
+            }
+            //reload map/game
+            else if(keyboardState.IsKeyDown(Keys.R))
+            {
+                session = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            }
 
             session.Update(keyboardState, mouseState, gameTime);
 

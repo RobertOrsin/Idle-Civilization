@@ -55,6 +55,7 @@ namespace Utility_Functions
         public bool visible = true;
         public bool selected = false;
         public Vector2 position;
+        public Point dimension;
 
         private KeyboardState previousKeyboardState;
         private int maxRows;
@@ -62,7 +63,7 @@ namespace Utility_Functions
         private Texture2D frame;
         private Rectangle bounds;
         private String displayName;
-        private Point dimension;
+        
         private bool editingEnables;
         private bool background_transparent;
         private Color fontColor;

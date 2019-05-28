@@ -30,12 +30,32 @@ namespace Idle_Civilization.Classes
         public static List<Texture2D> playerBorders;
         public static List<Texture2D> enemyBorders;
 
+        //player parameters
+        public static int player_starting_food = 10000;
+        public static int player_starting_wood = 10000;
+        public static int player_starting_ore = 10000;
+        public static int player_starting_army = 10000;
+
+        //Demand-Calculation
         public static double baseproduction_wood = 0.3;
         public static double baseproduction_ore = 0.3;
         public static double baseproduction_food = 1.2;
         public static double baseFoodconsumption_poeple = 1.0;
         public static double baseFoodconsumption_wood = 0.1;
         public static double baseFoodconsumption_ore = 0.2;
+
+        //Mapgeneration
+        public static int map_width = 30; //tiles in x
+        public static int map_height = 45; //tiles in y
+            
+        public static int mountain_density = 10;
+        public static int mountain_spread = 20;
+        public static int wood_density = 15;
+        public static int wood_spread = 20;
+        public static int water_density = 10;
+        public static int water_spread = 0;
+        public static int enemy_density = 5;
+        public static int enemy_spread = 20;
     }
 
 

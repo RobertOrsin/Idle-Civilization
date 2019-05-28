@@ -5,22 +5,35 @@ To do:
 	- fancy cursors for normal mouse and scrolling
 	- some exceptions
 	- add informations for enemytiles
+	- finish HUD
+		o coloured text for pos/neg demand
+		o add +/- to demand
+		o make backgroundtextures
+		o add buttons for zoom, speed, pause 
 	- add demand-calc for army in tile-update
 	- add army deployment to tiles
 	- store all textures as statics
-	- finish HUD
+	
 	
 
 done lately:
+	
+	- done a super early version for the HUD
+		o plane white text, no fancyness
+	- put values for mapgeneration and demand-calc into static global-class
+	- added function to load certain values from file while game is running
+	- add function to reload map
+	- add helptext for hotkeys (above functions) to HUD
+
+done earlier:
+
 	- started programming of HUD
 	- added offset to map-drawing to make room for HUD
 		o inside Session and Tile
 	- updated map-drawing to be more dynamic to screenresolution
 	- added background-transparency to TextBox-Class
 	- added fontColor to TextBox-Class
-
-done earlier:
-
+	-....
 	- added remaining tileMenuFunction-Executions
 	- added Conquer-Function to Tile-class
 	- advanced tile-update-function to calculate ressource-demand

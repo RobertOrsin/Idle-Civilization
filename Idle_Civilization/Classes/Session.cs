@@ -20,8 +20,6 @@ namespace Idle_Civilization.Classes
 
         int screen_width, screen_height;
         
-        
-
         Player player;
         HUD hud;
         UpgradeMenu upgradeMenu;
@@ -32,17 +30,9 @@ namespace Idle_Civilization.Classes
         Vector2 positionOffset;
         int map_screen_width, map_screen_height;
         Vector2 mapPosition; //upper left corner
-        int width, height;  // of map in tiles
-        #region Map-Characteristics and Generation
-        private int mountain_density = 10;
-        private int mountain_spread = 20;
-        private int wood_density = 15;
-        private int wood_spread = 20;
-        private int water_density = 10;
-        private int water_spread = 0;
-        private int enemy_density = 5;
-        private int enemy_spread = 20;
+        private int width, height;
 
+        #region Map-Characteristics and Generation
         Random rand = new Random();
         int spread = 0;
         #endregion
@@ -71,11 +61,11 @@ namespace Idle_Civilization.Classes
         /// <param name="_height"></param>
         /// <param name="screen_width"></param>
         /// <param name="screen_height"></param>
-        public Session(GraphicsDevice _GraphicsDevice, Texture2D _tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _width, int _height, int _screen_width, int _screen_height)
+        public Session(GraphicsDevice _GraphicsDevice, Texture2D _tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _screen_width, int _screen_height)
         {
             GraphicsDevice = _GraphicsDevice;
-            width = _width;
-            height = _height;
+            width = Globals.map_width;
+            height = Globals.map_height;
             screen_width = _screen_width;
             screen_height = _screen_height;
 
@@ -105,8 +95,7 @@ namespace Idle_Civilization.Classes
 
             tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
 
-            player = new Player(new Ressources(100000, 100000, 100000, 100000));
-
+            player = new Player(new Ressources(Globals.player_starting_wood, Globals.player_starting_ore , Globals.player_starting_food, Globals.player_starting_army));
             
             LoadUpgradesCosts();
         }
@@ -391,7 +380,7 @@ namespace Idle_Civilization.Classes
             }
 
             //Add Mountains
-            for (int i = 0; i < mountain_density; i++)
+            for (int i = 0; i < Globals.mountain_density; i++)
             {
                 int start_x, start_y;
                 do
@@ -406,7 +395,7 @@ namespace Idle_Civilization.Classes
             }
 
             //Add Woods
-            for (int i = 0; i < wood_density; i++)
+            for (int i = 0; i < Globals.wood_density; i++)
             {
                 int start_x, start_y;
                 do
@@ -421,7 +410,7 @@ namespace Idle_Civilization.Classes
             }
 
             //Add Water
-            for (int i = 0; i < water_density; i++)
+            for (int i = 0; i < Globals.water_density; i++)
             {
                 int start_x, start_y;
                 do
@@ -436,7 +425,7 @@ namespace Idle_Civilization.Classes
             }
 
             //Add Enemys
-            for(int i = 0; i < enemy_density; i++)
+            for(int i = 0; i < Globals.enemy_density; i++)
             {
                 int start_x, start_y;
                 do
@@ -475,13 +464,13 @@ namespace Idle_Civilization.Classes
             switch(tileBaseType)
             {
                 case TileBaseType.Mountain:
-                    spread = mountain_spread; break;
+                    spread = Globals.mountain_spread; break;
                 case TileBaseType.Wood:
-                    spread = wood_spread; break;
+                    spread = Globals.wood_spread; break;
                 case TileBaseType.Water:
-                    spread = water_spread; break;
+                    spread = Globals.water_spread; break;
                 case TileBaseType.Enemy:
-                    spread = enemy_spread; break;
+                    spread = Globals.enemy_spread; break;
             }
 
             //tile on top (x; y-=2)
@@ -737,7 +726,7 @@ namespace Idle_Civilization.Classes
 
         #endregion
 
-        #region config-file
+        #region config-files
         /// <summary>
         /// load upgrade-texts from xml-file
         /// </summary>
@@ -1047,6 +1036,34 @@ namespace Idle_Civilization.Classes
             xmlDoc.Save(directory + "\\" + "config.xml");
 
             #endregion
+        }
+        /// <summary>
+        /// load values for demand-calc and map-generation
+        /// </summary>
+        public void LoadGameValues()
+        {
+            string directory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string filepath = directory + "\\GameValues.txt";
+
+            string[] lines = System.IO.File.ReadAllLines(filepath);
+
+            foreach(string line in lines)
+            {
+                if(line[0] == '#')
+                {
+                    //commend-line
+                }
+                else
+                {
+                    string[] splits = line.Split(':');
+
+                    switch(splits[0])
+                    {
+                        case "aaa": break;
+                        default: break;
+                    }
+                }
+            }
         }
         #endregion
     }
