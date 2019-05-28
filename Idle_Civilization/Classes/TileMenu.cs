@@ -63,13 +63,13 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue, TileMenuFunction.addPeople);
             addPeople.onClick += TileMenuClick;
-            population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0,0,0));
+            population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255,0,0));
 
             oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.idle),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             oreIcon.locked = true;
-            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
+            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addOre);
             addOreWorker.onClick += TileMenuClick;
             subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subOre);
@@ -79,7 +79,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             woodIcon.locked = true;
-            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
+            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addWood);
             addWoodWorker.onClick += TileMenuClick;
             subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subWood);
@@ -89,7 +89,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             FoodIcon.locked = true;
-            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
+            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addFood);
             addFoodWorker.onClick += TileMenuClick;
             subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subFood);
@@ -99,7 +99,7 @@ namespace Idle_Civilization.Classes
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.hoover),
                                                         GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             armyIcon.locked = true;
-            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(0, 0, 0));
+            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addArmy);
             addArmyWorker.onClick += TileMenuClick;
             subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subArmy);

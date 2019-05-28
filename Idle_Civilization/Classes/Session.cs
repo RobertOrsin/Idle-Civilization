@@ -1049,18 +1049,83 @@ namespace Idle_Civilization.Classes
 
             foreach(string line in lines)
             {
-                if(line[0] == '#')
-                {
-                    //commend-line
-                }
-                else
-                {
-                    string[] splits = line.Split(':');
+                //clear spaces
+                string short_line = line.Replace(" ", string.Empty);
 
-                    switch(splits[0])
+                if (short_line != "")
+                {
+                    if (short_line[0] == '#')
                     {
-                        case "aaa": break;
-                        default: break;
+                        //commend-line
+                    }
+                    else
+                    {
+                        string[] splits = short_line.Split('=');
+
+                        switch (splits[0])
+                        {
+                            case "starting_food":
+                                Globals.player_starting_food = Convert.ToInt32(splits[1]);
+                                break;
+                            case "starting_wood":
+                                Globals.player_starting_wood = Convert.ToInt32(splits[1]);
+                                break;
+                            case "starting_ore":
+                                Globals.player_starting_ore = Convert.ToInt32(splits[1]);
+                                break;
+                            case "starting_army":
+                                Globals.player_starting_army = Convert.ToInt32(splits[1]);
+                                break;
+                            case "baseproduction_food":
+                                Globals.baseproduction_food = Convert.ToDouble(splits[1]);
+                                break;
+                            case "baseproduction_wood":
+                                Globals.baseproduction_wood = Convert.ToDouble(splits[1]);
+                                break;
+                            case "baseproduction_ore":
+                                Globals.baseproduction_ore = Convert.ToDouble(splits[1]);
+                                break;
+                            case "foodconsumption_all":
+                                Globals.baseFoodconsumption_poeple = Convert.ToDouble(splits[1]);
+                                break;
+                            case "foodconsumtion_wood":
+                                Globals.baseFoodconsumption_wood = Convert.ToDouble(splits[1]);
+                                break;
+                            case "foodconsumption_ore":
+                                Globals.baseFoodconsumption_ore = Convert.ToDouble(splits[1]);
+                                break;
+                            case "map_width":
+                                Globals.map_width = Convert.ToInt32(splits[1]);
+                                break;
+                            case "map_height":
+                                Globals.map_height = Convert.ToInt32(splits[1]);
+                                break;
+                            case "mountain_density":
+                                Globals.mountain_density = Convert.ToInt32(splits[1]);
+                                break;
+                            case "mountain_spread":
+                                Globals.mountain_spread = Convert.ToInt32(splits[1]);
+                                break;
+                            case "wood_density":
+                                Globals.wood_density = Convert.ToInt32(splits[1]);
+                                break;
+                            case "wood_spread":
+                                Globals.wood_spread = Convert.ToInt32(splits[1]);
+                                break;
+                            case "water_density":
+                                Globals.water_density = Convert.ToInt32(splits[1]);
+                                break;
+                            case "water_spread":
+                                Globals.water_spread = Convert.ToInt32(splits[1]);
+                                break;
+                            case "enemy_density":
+                                Globals.enemy_density = Convert.ToInt32(splits[1]);
+                                break;
+                            case "enemy_spread":
+                                Globals.enemy_spread = Convert.ToInt32(splits[1]);
+                                break;
+                            default: break;
+                        }
                     }
                 }
             }
