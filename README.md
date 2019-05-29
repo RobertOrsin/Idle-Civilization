@@ -13,6 +13,11 @@ To do:
 	- add demand-calc for army in tile-update
 	- add army deployment to tiles
 	- store all textures as statics
+	- add Animationclass to animate Tiles
+	- Change TileMenu so Army can be deployd to tiles of citys
+	- Change Enemeygeneration so an Enemycity controlls all tiles around the citytile and progress the spread like it is now
+	- Add a simple AI to the EnemyCitys so they start creeping around and deploy army to there tiles
+		o Act like a player or set ressources after time (ease (less) to hard (many))?
 	
 	
 

@@ -1,8 +1,8 @@
 # Playerparameters
-starting_food = 10
-starting_wood = 10
-starting_ore = 10
-starting_army = 10
+starting_food = 1000
+starting_wood = 1000
+starting_ore = 1000
+starting_army = 1000
 
 # Demand-Calculation
 baseproduction_food = 1.2
