@@ -188,9 +188,23 @@ namespace Idle_Civilization.Classes
                     {
                         tileMenu.visible = true;
                         selectedTile = new Point(x, y);
+
+                        foreach(Tile tile in GetNeighbors(map[selectedTile.X][selectedTile.Y]))
+                        {
+                            tile.alpha = true;
+                        }
                     }
                 }
             }
+
+            if(tileMenu.visible)
+            {
+                foreach (Tile tile in GetNeighbors(map[selectedTile.X][selectedTile.Y]))
+                {
+                    tile.alpha = true;
+                }
+            }
+
             player.ressources.AddRessources(player.ressource_demand);
 
             hud.Update(mouseState, gameTime, player);

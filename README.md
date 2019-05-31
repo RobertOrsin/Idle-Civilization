@@ -19,6 +19,7 @@ done lately:
 	- added animation to tileMenu
 	- updated demand-calc to use tiles under city controll
 		o added Values to Globals and Configfile
+	- added Alpha-Value to tiles around selected tile to aid visibility of TileMenu
 	
 
 done earlier:

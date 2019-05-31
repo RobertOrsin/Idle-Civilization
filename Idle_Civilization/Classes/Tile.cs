@@ -20,6 +20,8 @@ namespace Idle_Civilization.Classes
         public Rectangle drawArea;
         private MouseState old_mouseState;
 
+        public bool alpha = false;
+
         //Delay for Ressourceupdate
         double timer = 5000; //in ms
         const double TIME = 5000;
@@ -128,6 +130,8 @@ namespace Idle_Civilization.Classes
                 {
                     tileUpdateData.clickDetected = true;
                 }
+
+                alpha = false;
             }
 
             old_mouseState = mouseState;
@@ -163,7 +167,10 @@ namespace Idle_Civilization.Classes
                 drawArea.Y += Convert.ToInt32(positionOffset.Y);
                 clickArea = GetClickArea();
 
-                spriteBatch.Draw(tile_texture, drawArea,null, Color.Wheat, 0.0f,new Vector2(), SpriteEffects.None, 0.0f);
+                if(alpha)
+                    spriteBatch.Draw(tile_texture, drawArea,null, Color.White * 0.5f, 0.0f,new Vector2(), SpriteEffects.None, 0.0f);
+                else
+                    spriteBatch.Draw(tile_texture, drawArea, null, Color.White, 0.0f, new Vector2(), SpriteEffects.None, 0.0f);
 
                 if (isCitypart || hasEnemy)
                 {
