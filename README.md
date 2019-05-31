@@ -3,35 +3,38 @@
 To do:
 
 	- fancy cursors for normal mouse and scrolling
-	- some exceptions
 	- add informations for enemytiles
 	- finish HUD
 		o coloured text for pos/neg demand
 		o add +/- to demand
 		o make backgroundtextures
-		o add buttons for zoom, speed, pause 
-	- add demand-calc for army in tile-update
-	- add army deployment to tiles
-	- store all textures as statics
-	- add Animationclass to animate Tiles
-	- Change TileMenu so Army can be deployd to tiles of citys
-	- Change Enemeygeneration so an Enemycity controlls all tiles around the citytile and progress the spread like it is now
+		o add buttons for speed, pause 
 	- Add a simple AI to the EnemyCitys so they start creeping around and deploy army to there tiles
 		o Act like a player or set ressources after time (ease (less) to hard (many))?
+	- Spritesheets to Dictionary
+	- Add an animation for testing
+	- update demand-calc to use tiles under city controll
 	
-	
-
 done lately:
 	
+	- GraphicsDevice is a static global now
+		o changed all using function to use the globals
+	- Added Animation-Class
+	- Textures are now stored as statics in Globals
+	- optimised enemygeneration
+	- got rid of some exceptions from city building
+	- added buttons for zoom in/out
+	- added buttons to deploy/take army to/from a tile
+
+done earlier:
+
 	- done a super early version for the HUD
 		o plane white text, no fancyness
 	- put values for mapgeneration and demand-calc into static global-class
 	- added function to load certain values from file while game is running
 	- add function to reload map
 	- add helptext for hotkeys (above functions) to HUD
-
-done earlier:
-
+	-.....
 	- started programming of HUD
 	- added offset to map-drawing to make room for HUD
 		o inside Session and Tile

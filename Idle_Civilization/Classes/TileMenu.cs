@@ -9,7 +9,6 @@ namespace Idle_Civilization.Classes
 {
     class TileMenu
     {
-        Texture2D mediumButtonSheet, smallButtonSheet;
         public bool visible = false;
         Vector2 centerPosition = new Vector2(5,5);
         //public Rectangle tileArea;
@@ -38,87 +37,99 @@ namespace Idle_Civilization.Classes
         Pushbutton armyIcon;
         TextBox armyWorker;
 
+        Pushbutton subArmy, addArmy;
+        Pushbutton armyIcon_Deploy;
+        TextBox armyDeployed;
+
         Dictionary<MenuElement, Vector2> menuElementOffsets;
         #endregion
 
-        public TileMenu(GraphicsDevice GraphicsDevice, Texture2D _mediumButtonSheet, Texture2D _smallButtonSheet)
+        public TileMenu()
         {
-            mediumButtonSheet = _mediumButtonSheet;
-            smallButtonSheet = _smallButtonSheet;
-
             InitMenuItemOffsets();
 
             #region Init Elements
             List<Texture2D> minusButton, plusButton;
             minusButton = new List<Texture2D>();
-            minusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.minus, ButtonStateType.idle));
-            minusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.minus, ButtonStateType.hoover));
-            minusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.minus, ButtonStateType.pressed));
+            minusButton.Add(GetTexture(SmallButtonNumber.minus, ButtonStateType.idle));
+            minusButton.Add(GetTexture(SmallButtonNumber.minus, ButtonStateType.hoover));
+            minusButton.Add(GetTexture(SmallButtonNumber.minus, ButtonStateType.pressed));
             plusButton = new List<Texture2D>();
-            plusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.plus, ButtonStateType.idle));
-            plusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.plus, ButtonStateType.hoover));
-            plusButton.Add(GetTexture(GraphicsDevice, SmallButtonNumber.plus, ButtonStateType.pressed));
+            plusButton.Add(GetTexture(SmallButtonNumber.plus, ButtonStateType.idle));
+            plusButton.Add(GetTexture(SmallButtonNumber.plus, ButtonStateType.hoover));
+            plusButton.Add(GetTexture(SmallButtonNumber.plus, ButtonStateType.pressed));
 
-            addPeople = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue, TileMenuFunction.addPeople);
+            addPeople = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.people, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.people, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.people, ButtonStateType.pressed),"",Color.AliceBlue, TileMenuFunction.addPeople);
             addPeople.onClick += TileMenuClick;
-            population = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255,0,0));
+            population = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255,0,0));
 
-            oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
+            oreIcon = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.ore, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.ore, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.ore, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             oreIcon.locked = true;
-            oreworkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
+            oreworkers = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addOreWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addOre);
             addOreWorker.onClick += TileMenuClick;
             subOreWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subOre);
             subOreWorker.onClick += TileMenuClick;
 
-            woodIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
+            woodIcon = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.wood, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.wood, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.wood, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             woodIcon.locked = true;
-            woodWorkers = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
+            woodWorkers = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addWoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addWood);
             addWoodWorker.onClick += TileMenuClick;
             subWoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subWood);
             subWoodWorker.onClick += TileMenuClick;
 
-            FoodIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
+            FoodIcon = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.food, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.food, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.food, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             FoodIcon.locked = true;
-            foodWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
+            foodWorker = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addFoodWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addFood);
             addFoodWorker.onClick += TileMenuClick;
             subFoodWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subFood);
             subFoodWorker.onClick += TileMenuClick;
 
-            armyIcon = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
+            armyIcon = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.army, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.army, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
             armyIcon.locked = true;
-            armyWorker = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
+            armyWorker = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
             addArmyWorker = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addArmy);
             addArmyWorker.onClick += TileMenuClick;
             subArmyWorker = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subArmy);
             subArmyWorker.onClick += TileMenuClick;
 
-            foundCity = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.foundCity, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.foundCity);
+            foundCity = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.foundCity, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.foundCity, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.foundCity, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.foundCity);
             foundCity.onClick += TileMenuClick;
 
-            addTile = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.addTile, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.addTile);
+            addTile = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.addTile, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.addTile, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.addTile, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.addTile);
             addTile.onClick += TileMenuClick;
 
-            attackTile = new Pushbutton(new Vector2(0, 0), GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.idle),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.hoover),
-                                                        GetTexture(GraphicsDevice, MediumButtonNumber.attackTile, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.attackTile);
+            attackTile = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.attackTile, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.attackTile, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.attackTile, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.attackTile);
             attackTile.onClick += TileMenuClick;
+
+            armyIcon_Deploy = new Pushbutton(new Vector2(0, 0), GetTexture(MediumButtonNumber.army, ButtonStateType.idle),
+                                                        GetTexture(MediumButtonNumber.army, ButtonStateType.hoover),
+                                                        GetTexture(MediumButtonNumber.army, ButtonStateType.pressed), "", Color.AliceBlue, TileMenuFunction.none);
+            armyIcon_Deploy.locked = true;
+            addArmy = new Pushbutton(new Vector2(0, 0), plusButton, "", Color.AliceBlue, TileMenuFunction.addArmyDeploy);
+            addArmy.onClick += TileMenuClick;
+            subArmy = new Pushbutton(new Vector2(0, 0), minusButton, "", Color.AliceBlue, TileMenuFunction.subArmyDeploy);
+            subArmy.onClick += TileMenuClick;
+            armyDeployed = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 0, 0));
+
             #endregion
         }
 
@@ -160,6 +171,11 @@ namespace Idle_Civilization.Classes
             armyIcon.Update(mouseState);
             armyWorker.Update(currentKeyboardState, mouseState);
 
+            subArmy.Update(mouseState);
+            addArmy.Update(mouseState);
+            armyIcon_Deploy.Update(mouseState);
+            armyDeployed.Update(currentKeyboardState, mouseState);
+
             #endregion
 
             #region write tile-values to menu
@@ -168,6 +184,7 @@ namespace Idle_Civilization.Classes
             woodWorkers.textArray[0] = selectedTile.wood_worker.ToString();
             foodWorker.textArray[0] = selectedTile.food_worker.ToString();
             armyWorker.textArray[0] = selectedTile.army_worker.ToString();
+            armyDeployed.textArray[0] = selectedTile.armystrength.ToString();
             #endregion
 
             tileMenuUpdateData.clickDetected = tileMenuUpdateData.tileMenuFunction != TileMenuFunction.none && tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_;
@@ -207,6 +224,11 @@ namespace Idle_Civilization.Classes
                 addArmyWorker.Draw(spriteBatch, spriteFont);
                 armyIcon.Draw(spriteBatch, spriteFont);
                 armyWorker.Draw(spriteBatch, spriteFont);
+
+                subArmy.Draw(spriteBatch, spriteFont);
+                addArmy.Draw(spriteBatch, spriteFont);
+                armyIcon_Deploy.Draw(spriteBatch, spriteFont);
+                armyDeployed.Draw(spriteBatch, spriteFont);
             }
             #endregion
         }
@@ -219,16 +241,16 @@ namespace Idle_Civilization.Classes
         /// <param name="position"></param>
         /// <param name="buttonStateType"></param>
         /// <returns></returns>
-        private Texture2D GetTexture(GraphicsDevice GraphicsDevice, MediumButtonNumber position, ButtonStateType buttonStateType)
+        private Texture2D GetTexture(MediumButtonNumber position, ButtonStateType buttonStateType)
         {
             Texture2D return_tex;
             Color[] data;
             Rectangle rect = GetTileSpritePosition(position, buttonStateType);
 
-            return_tex = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+            return_tex = new Texture2D(Globals.GraphicsDevice, rect.Width, rect.Height);
             data = new Color[rect.Width * rect.Height];
 
-            mediumButtonSheet.GetData(0, rect, data, 0, data.Length);
+            Globals.buttons_medium.GetData(0, rect, data, 0, data.Length);
             return_tex.SetData(data);
 
 
@@ -241,16 +263,16 @@ namespace Idle_Civilization.Classes
         /// <param name="position"></param>
         /// <param name="buttonStateType"></param>
         /// <returns></returns>
-        private Texture2D GetTexture(GraphicsDevice GraphicsDevice, SmallButtonNumber position, ButtonStateType buttonStateType)
+        private Texture2D GetTexture(SmallButtonNumber position, ButtonStateType buttonStateType)
         {
             Texture2D return_tex;
             Color[] data;
             Rectangle rect = GetTileSpritePosition(position, buttonStateType);
 
-            return_tex = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+            return_tex = new Texture2D(Globals.GraphicsDevice, rect.Width, rect.Height);
             data = new Color[rect.Width * rect.Height];
 
-            smallButtonSheet.GetData(0, rect, data, 0, data.Length);
+            Globals.buttons_small.GetData(0, rect, data, 0, data.Length);
             return_tex.SetData(data);
 
 
@@ -281,8 +303,8 @@ namespace Idle_Civilization.Classes
         /// </summary>
         private void SetPositions()
         {
-            Vector2 centerpoint = new Vector2(selectedTile.drawArea.X + (Constants.tile_width * Constants.tile_stretch_factor / 2),
-                                             selectedTile.drawArea.Y + ((Constants.tile_height - Constants.tile_y_offset)*Constants.tile_stretch_factor) + (Constants.tile_y_space * Constants.tile_stretch_factor / 2));
+            Vector2 centerpoint = new Vector2(selectedTile.drawArea.X + (Constants.tile_width * Globals.tile_stretch_factor / 2),
+                                             selectedTile.drawArea.Y + ((Constants.tile_height - Constants.tile_y_offset)* Globals.tile_stretch_factor) + (Constants.tile_y_space * Globals.tile_stretch_factor / 2));
 
             #region set position of elements
             addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton];
@@ -311,6 +333,11 @@ namespace Idle_Civilization.Classes
             addArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftPlus];
             armyIcon.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftButton];
             armyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftTextBox];
+
+            subArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightMinus];
+            addArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightPlus];
+            armyIcon_Deploy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            armyDeployed.position = centerpoint + menuElementOffsets[MenuElement.UpperRightTextBox];
             #endregion
         }
         #endregion
@@ -326,7 +353,10 @@ namespace Idle_Civilization.Classes
             menuElementOffsets.Add(MenuElement.TopButton, new Vector2(-11, -86));
             menuElementOffsets.Add(MenuElement.TopTextBox, new Vector2(-25, -58));
 
-            menuElementOffsets.Add(MenuElement.UpperRightButton, new Vector2(41, -48));
+            menuElementOffsets.Add(MenuElement.UpperRightMinus, new Vector2(37, -64));
+            menuElementOffsets.Add(MenuElement.UpperRightPlus, new Vector2(67, -64));
+            menuElementOffsets.Add(MenuElement.UpperRightButton, new Vector2(48, -51));
+            menuElementOffsets.Add(MenuElement.UpperRightTextBox, new Vector2(35, -24));
 
             menuElementOffsets.Add(MenuElement.LowerRightMinus, new Vector2(37, 29));
             menuElementOffsets.Add(MenuElement.LowerRightPlus, new Vector2(67, 29));
@@ -377,8 +407,13 @@ namespace Idle_Civilization.Classes
             armyWorker.visible = selectedTile.hasCity;
 
             foundCity.visible = !selectedTile.hasCity && !selectedTile.isCitypart && !selectedTile.aNeighborisCity && !selectedTile.aNeighborisEnemy;
-            addTile.visible = !selectedTile.hasCity && !selectedTile.isCitypart && selectedTile.aNeighborisCity; //TO DO: add check for adjacent city-tile
+            addTile.visible = !selectedTile.hasCity && !selectedTile.isCitypart && selectedTile.aNeighborisCity;
             attackTile.visible = selectedTile.hasEnemy;
+
+            subArmy.visible = selectedTile.isCitypart;
+            addArmy.visible = selectedTile.isCitypart;
+            armyIcon_Deploy.visible = selectedTile.isCitypart;
+            armyDeployed.visible = selectedTile.isCitypart;
         }
     }
     /// <summary>
@@ -388,7 +423,10 @@ namespace Idle_Civilization.Classes
     {
         TopButton,
         TopTextBox,
+        UpperRightMinus,
+        UpperRightPlus,
         UpperRightButton,
+        UpperRightTextBox,
         LowerRightMinus,
         LowerRightPlus,
         LowerRightButton,
@@ -438,6 +476,8 @@ namespace Idle_Civilization.Classes
         subFood,
         addFood,
         subArmy,
-        addArmy
+        addArmy,
+        addArmyDeploy,
+        subArmyDeploy
     }
 }

@@ -25,28 +25,30 @@ namespace Idle_Civilization.Classes
 
         #endregion
 
-        public HUD(GraphicsDevice GraphicsDevice,int screen_width, int screen_height)
+        public HUD(int screen_width, int screen_height)
         {
             hud_width = screen_width;
 
-            player_ressources_food = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
-            player_ressources_wood = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
-            player_ressources_ore = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
-            player_ressources_army = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_ressources_food = new TextBox(new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_ressources_wood = new TextBox(new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_ressources_ore = new TextBox(new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_ressources_army = new TextBox(new Vector2(0, 0), new Point(75, 15), 1, false, true, null, new Color(255, 255, 255));
 
-            player_demand_food = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
-            player_demand_wood = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
-            player_demand_ore = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
-            player_demand_army = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_demand_food = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_demand_wood = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_demand_ore = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            player_demand_army = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
 
             player_demand_food.textArray[0] = "0";
             player_demand_wood.textArray[0] = "0";
             player_demand_ore.textArray[0] = "0";
             player_demand_army.textArray[0] = "0";
 
-            helpstring = new TextBox(GraphicsDevice, new Vector2(0, 0), new Point(100, 15), 1, false, true, null, new Color(255, 255, 255));
+            helpstring = new TextBox(new Vector2(0, 0), new Point(100, 15), 1, false, true, null, new Color(255, 255, 255));
             helpstring.textArray[0] = "I - load GameValues from File";
             helpstring.textArray.Add("R - reload Game");
+            helpstring.textArray.Add("plus - zoom in");
+            helpstring.textArray.Add("minus - zoom out");
 
             SetPositions();
         }

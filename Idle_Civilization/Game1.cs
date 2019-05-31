@@ -18,7 +18,7 @@ namespace Idle_Civilization
 
         Classes.Session session;
 
-        Texture2D tileMap, buttons_medium, buttons_small, borders;
+        Texture2D borders;
 
         public static MouseState mouseState, oldMouseState;
         public static KeyboardState keyboardState, oldKeyboardState;
@@ -41,15 +41,17 @@ namespace Idle_Civilization
         {
             IsMouseVisible = true;
 
+            Globals.GraphicsDevice = GraphicsDevice;
+
             Globals.primitive = new Texture2D(GraphicsDevice, 1, 1);
 
             spriteFont = Content.Load<SpriteFont>("std_font");
-            tileMap = Content.Load<Texture2D>("basetiles");
-            buttons_medium = Content.Load<Texture2D>("Buttons_Medium_Spritesheet");
-            buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
+            Globals.tileMap = Content.Load<Texture2D>("basetiles");
+            Globals.buttons_medium = Content.Load<Texture2D>("Buttons_Medium_Spritesheet");
+            Globals.buttons_small = Content.Load<Texture2D>("Buttons_Small_Spritesheet");
             borders = Content.Load<Texture2D>("borders");
 
-            session = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            session = new Classes.Session(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             session.SerializeBorderTextures(GraphicsDevice, borders);
             base.Initialize();
         }
@@ -85,17 +87,37 @@ namespace Idle_Civilization
             mouseState = Mouse.GetState();
             keyboardState = Keyboard.GetState();
 
-            //import config-data
-            if(keyboardState.IsKeyDown(Keys.I))
+            if (keyboardState != oldKeyboardState)
             {
-                session.LoadGameValues();
-            }
-            //reload map/game
-            else if(keyboardState.IsKeyDown(Keys.R))
-            {
-                session = new Classes.Session(GraphicsDevice, tileMap, buttons_medium, buttons_small, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            }
+                //import config-data
+                if (keyboardState.IsKeyDown(Keys.I))
+                {
+                    session.LoadGameValues();
+                }
+                //reload map/game
+                else if (keyboardState.IsKeyDown(Keys.R))
+                {
+                    session = new Classes.Session(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+                }
+                else if (keyboardState.IsKeyDown(Keys.OemPlus) || keyboardState.IsKeyDown(Keys.Add))
+                {
+                    Globals.tile_stretch_factor++;
 
+                    if (Globals.tile_stretch_factor > 5)
+                        Globals.tile_stretch_factor = 5;
+                }
+                else if (keyboardState.IsKeyDown(Keys.OemMinus) || keyboardState.IsKeyDown(Keys.Subtract))
+                {
+                    Globals.tile_stretch_factor--;
+
+                    if (Globals.tile_stretch_factor < 1)
+                        Globals.tile_stretch_factor = 1;
+                }
+
+                
+            }
+            oldKeyboardState = keyboardState;
+            oldMouseState = mouseState;
             session.Update(keyboardState, mouseState, gameTime);
 
             base.Update(gameTime);

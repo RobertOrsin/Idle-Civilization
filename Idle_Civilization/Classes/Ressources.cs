@@ -17,7 +17,7 @@ namespace Idle_Civilization.Classes
         public const int tile_y_space = 24;
         public const int tile_x_click_space = 16;
 
-        public const int tile_stretch_factor = 3;
+       // public const int tile_stretch_factor = 3;
 
         public const int medium_button_diameter = 24;
         public const int small_button_diameter = 16;
@@ -25,10 +25,17 @@ namespace Idle_Civilization.Classes
 
     public static class Globals
     {
+        public static GraphicsDevice GraphicsDevice;
+
         public static Texture2D primitive;
 
+        public static Texture2D tileMap;
+        public static Texture2D buttons_medium;
+        public static Texture2D buttons_small;
         public static List<Texture2D> playerBorders;
         public static List<Texture2D> enemyBorders;
+
+        public static int tile_stretch_factor = 3;
 
         //player parameters
         public static int player_starting_food = 10000;

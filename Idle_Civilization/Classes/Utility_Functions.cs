@@ -68,7 +68,7 @@ namespace Utility_Functions
         private bool background_transparent;
         private Color fontColor;
 
-        public TextBox(GraphicsDevice graphicsDevice, Vector2 _position, Point _dimension, int _maxRows, bool _editingEnables, bool _background_transparent, List<string> _textArray, Color _fontColor)
+        public TextBox(Vector2 _position, Point _dimension, int _maxRows, bool _editingEnables, bool _background_transparent, List<string> _textArray, Color _fontColor)
         {
             position = _position;
             dimension = _dimension;
@@ -84,7 +84,7 @@ namespace Utility_Functions
                 textArray = _textArray;
             }
             bounds = new Rectangle(Convert.ToInt32(position.X), Convert.ToInt32(position.Y), _dimension.X, _dimension.Y);
-            frame = new Texture2D(graphicsDevice, 1, 1);
+            frame = new Texture2D(Globals.GraphicsDevice, 1, 1);
             frame.SetData<Color>(new Color[] { Color.White });
             displayName = "type here";
             editingEnables = _editingEnables;
@@ -329,6 +329,64 @@ namespace Utility_Functions
                     spriteBatch.DrawString(font, text, textpos, color);
                 }
             }
+        }
+    }
+
+    class Animation
+    {
+        private Texture2D animation_sheet;
+        private int width, height, count_per_row, rows, animation_index = 0;
+        private double timer, time;
+
+        public Animation(Texture2D _animation_sheet, int _width, int _height, int _count_per_row, int _rows, double _time)
+        {
+            animation_sheet = _animation_sheet;
+            width = _width;
+            height = _height;
+            count_per_row = _count_per_row;
+            rows = _rows;
+            time = _time;
+            timer = time;
+        }
+
+        public void Update(MouseState mouseState, GameTime gameTime, List<Tile> neighbors)
+        {
+            double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
+            timer -= elapsed;
+
+            if (timer < 0)
+            {
+                timer = time;
+                animation_index++;
+
+                if (animation_index >= count_per_row * rows)
+                    animation_index = 0;
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Rectangle position)
+        {
+            spriteBatch.Draw(GetActualTexture(), position, null, Color.Wheat, 0.0f, new Vector2(), SpriteEffects.None, 0.0f);
+        }
+
+        private Texture2D GetActualTexture()
+        {
+            Color[] data;
+            Rectangle rect = GetTileSpritePosition();
+
+            Texture2D return_texture = new Texture2D(Globals.GraphicsDevice, rect.Width, rect.Height);
+
+            data = new Color[rect.Width * rect.Height];
+
+            animation_sheet.GetData(0, rect, data, 0, data.Length);
+            return_texture.SetData(data);
+
+            return return_texture;
+        }
+
+        private Rectangle GetTileSpritePosition()
+        {
+            return new Rectangle(width * (animation_index % count_per_row), height * (animation_index / count_per_row), width, height);
         }
     }
 

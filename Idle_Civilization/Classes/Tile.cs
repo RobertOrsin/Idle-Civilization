@@ -67,7 +67,7 @@ namespace Idle_Civilization.Classes
         /// <param name="_value"></param>
         /// <param name="_x"></param>
         /// <param name="_y"></param>
-        public Tile(GraphicsDevice GraphicsDevice, Texture2D tileMap, TileNumber _tiletype, int _x, int _y)
+        public Tile(TileNumber _tiletype, int _x, int _y)
         {
             tiletype = _tiletype;
             x = _x;
@@ -76,10 +76,10 @@ namespace Idle_Civilization.Classes
             Color[] data;
             Rectangle rect = GetTileSpritePosition(tiletype);
 
-            tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+            tile_texture = new Texture2D(Globals.GraphicsDevice, rect.Width, rect.Height);
             data = new Color[rect.Width * rect.Height];
 
-            tileMap.GetData(0, rect, data, 0, data.Length);
+            Globals.tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
 
             borders = new List<bool>();
@@ -192,17 +192,17 @@ namespace Idle_Civilization.Classes
         /// <param name="_tileType"></param>
         /// <param name="GraphicsDevice"></param>
         /// <param name="tileMap"></param>
-        public void SetTileType(TileNumber _tileType, GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        public void SetTileType(TileNumber _tileType)
         {
             tiletype = _tileType;
 
             Color[] data;
             Rectangle rect = GetTileSpritePosition(tiletype);
 
-            tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+            tile_texture = new Texture2D(Globals.GraphicsDevice, rect.Width, rect.Height);
             data = new Color[rect.Width * rect.Height];
 
-            tileMap.GetData(0, rect, data, 0, data.Length);
+            Globals.tileMap.GetData(0, rect, data, 0, data.Length);
             tile_texture.SetData(data);
         }
         /// <summary>
@@ -211,7 +211,7 @@ namespace Idle_Civilization.Classes
         /// <param name="_tilebasetype"></param>
         /// <param name="GraphicsDevice"></param>
         /// <param name="tileMap"></param>
-        public void SetTileType(TileBaseType _tilebasetype, GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        public void SetTileType(TileBaseType _tilebasetype)
         {
             bool isEnvrionment;
 
@@ -243,10 +243,10 @@ namespace Idle_Civilization.Classes
                 Color[] data;
                 Rectangle rect = GetTileSpritePosition(tiletype);
 
-                tile_texture = new Texture2D(GraphicsDevice, rect.Width, rect.Height);
+                tile_texture = new Texture2D(Globals.GraphicsDevice, rect.Width, rect.Height);
                 data = new Color[rect.Width * rect.Height];
 
-                tileMap.GetData(0, rect, data, 0, data.Length);
+                Globals.tileMap.GetData(0, rect, data, 0, data.Length);
                 tile_texture.SetData(data);
             }
         }
@@ -286,7 +286,7 @@ namespace Idle_Civilization.Classes
                 rect_y = (Constants.tile_y_offset/2) + (((y - (int)mapPosition.Y) - 1) / 2) * Constants.tile_y_offset;
             }
                     
-            return new Rectangle(rect_x * Constants.tile_stretch_factor, rect_y * Constants.tile_stretch_factor, Constants.tile_width * Constants.tile_stretch_factor, Constants.tile_height * Constants.tile_stretch_factor);
+            return new Rectangle(rect_x * Globals.tile_stretch_factor, rect_y * Globals.tile_stretch_factor, Constants.tile_width * Globals.tile_stretch_factor, Constants.tile_height * Globals.tile_stretch_factor);
         }
         /// <summary>
         /// Calculate ClickArea of this tile, depending on x,y of this tile
@@ -294,10 +294,10 @@ namespace Idle_Civilization.Classes
         /// <returns></returns>
         private Rectangle GetClickArea()
         {
-            return new Rectangle(drawArea.X + ((Constants.tile_width - Constants.tile_x_click_space) / 2) * Constants.tile_stretch_factor,
-                                drawArea.Y + (Constants.tile_height - Constants.tile_y_space) * Constants.tile_stretch_factor,
-                                Constants.tile_x_click_space * Constants.tile_stretch_factor,
-                                Constants.tile_y_space * Constants.tile_stretch_factor);
+            return new Rectangle(drawArea.X + ((Constants.tile_width - Constants.tile_x_click_space) / 2) * Globals.tile_stretch_factor,
+                                drawArea.Y + (Constants.tile_height - Constants.tile_y_space) * Globals.tile_stretch_factor,
+                                Constants.tile_x_click_space * Globals.tile_stretch_factor,
+                                Constants.tile_y_space * Globals.tile_stretch_factor);
 
         }
         /// <summary>
@@ -305,12 +305,12 @@ namespace Idle_Civilization.Classes
         /// </summary>
         /// <param name="GraphicsDevice"></param>
         /// <param name="tileMap"></param>
-        public void SetAsCity(GraphicsDevice GraphicsDevice, Texture2D tileMap, int _cityID)
+        public void SetAsCity(int _cityID)
         {
             hasCity = true;
             cityID = _cityID;
             isCitypart = true;
-            SetTileType(TileNumber.town, GraphicsDevice, tileMap);
+            SetTileType(TileNumber.town);
         }
         /// <summary>
         /// Set Tile as Part of a City
@@ -326,11 +326,11 @@ namespace Idle_Civilization.Classes
         /// </summary>
         /// <param name="GraphicsDevice"></param>
         /// <param name="tileMap"></param>
-        public void SetAsEnemyBase(GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        public void SetAsEnemyBase()
         {
             hasEnemy = true;
             isEnemyBase = true;
-            SetTileType(TileNumber.townwithstrongwall, GraphicsDevice, tileMap);
+            SetTileType(TileNumber.townwithstrongwall);
         }
         /// <summary>
         /// Set Tile as Part of Enemy

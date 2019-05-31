@@ -24,8 +24,6 @@ namespace Idle_Civilization.Classes
         HUD hud;
         UpgradeMenu upgradeMenu;
 
-        Texture2D tileMap;
-        GraphicsDevice GraphicsDevice;
         private List<List<Tile>> map;
         Vector2 positionOffset;
         int map_screen_width, map_screen_height;
@@ -61,23 +59,20 @@ namespace Idle_Civilization.Classes
         /// <param name="_height"></param>
         /// <param name="screen_width"></param>
         /// <param name="screen_height"></param>
-        public Session(GraphicsDevice _GraphicsDevice, Texture2D _tileMap, Texture2D mediumButtons, Texture2D smallButtons, int _screen_width, int _screen_height)
+        public Session(int _screen_width, int _screen_height)
         {
-            GraphicsDevice = _GraphicsDevice;
             width = Globals.map_width;
             height = Globals.map_height;
             screen_width = _screen_width;
             screen_height = _screen_height;
 
-            hud = new HUD(GraphicsDevice, screen_width, screen_height);
+            hud = new HUD(screen_width, screen_height);
 
             positionOffset = new Vector2(0,HUD.hud_height);
             map_screen_height = screen_height - HUD.hud_height; //to do: change according to HUD
             map_screen_width = screen_width; //to do: change according to HUD
 
-            tileMap = _tileMap;
-            
-            GenerateMap(GraphicsDevice, tileMap);
+            GenerateMap();
 
             mapPosition = new Vector2(0, 0);
 
@@ -93,7 +88,7 @@ namespace Idle_Civilization.Classes
             lower_right = new Rectangle(map_screen_width - 50, map_screen_height, 50, 50);
             #endregion
 
-            tileMenu = new TileMenu(GraphicsDevice, mediumButtons, smallButtons);
+            tileMenu = new TileMenu();
 
             player = new Player(new Ressources(Globals.player_starting_wood, Globals.player_starting_ore , Globals.player_starting_food, Globals.player_starting_army));
             
@@ -206,11 +201,11 @@ namespace Idle_Civilization.Classes
         /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
-            for (int x = (int)mapPosition.X; x < ((map_screen_width - positionOffset.X) / (Constants.tile_x_click_space * Constants.tile_stretch_factor) + (int)mapPosition.X); x++)
+            for (int x = (int)mapPosition.X; x < ((map_screen_width - positionOffset.X) / (Constants.tile_x_click_space * Globals.tile_stretch_factor) + (int)mapPosition.X); x++)
             {
                 if (x < width)
                 {
-                    for (int y = (int)mapPosition.Y; y < ((map_screen_height - positionOffset.Y) / ((Constants.tile_y_space/2) * Constants.tile_stretch_factor) + (int)mapPosition.Y); y++)
+                    for (int y = (int)mapPosition.Y; y < ((map_screen_height - positionOffset.Y) / ((Constants.tile_y_space/2) * Globals.tile_stretch_factor) + (int)mapPosition.Y); y++)
                     {
                         if (y < height)
                             map[x][y].Draw(spriteBatch, mapPosition, positionOffset);
@@ -234,7 +229,7 @@ namespace Idle_Civilization.Classes
                     if (FoundCityValid(tile) && player.CanAfford(buildCosts[(int)Buildcosts.CreateCity]))
                     {
                         //Create City on tile
-                        tile.SetAsCity(GraphicsDevice, tileMap, player.cityCount);
+                        tile.SetAsCity(player.cityCount);
                         //Add adjacent tiles to this city
                         MakeNeighborsToPartsOfCity(tile);
 
@@ -325,6 +320,20 @@ namespace Idle_Civilization.Classes
                         tile.unemployed++;
                     }
                     break;
+                case TileMenuFunction.addArmyDeploy:
+                    if(player.ressources.army > 0)
+                    {
+                        player.ressources.army--;
+                        tile.armystrength++;
+                    }     
+                    break;
+                case TileMenuFunction.subArmyDeploy:
+                    if(tile.armystrength > 0)
+                    {
+                        player.ressources.army++;
+                        tile.armystrength--;
+                    }
+                    break;
                 
                 default: break;
             }
@@ -332,26 +341,11 @@ namespace Idle_Civilization.Classes
 
         #region Map-Generation
         /// <summary>
-        /// Set Map-Parameters to generate different mapstyles
-        /// </summary>
-        /// <param name="_mountain_density"></param>
-        /// <param name="_mountain_spread"></param>
-        /// <param name="_wood_density"></param>
-        /// <param name="_wood_spread"></param>
-        /// <param name="_water_density"></param>
-        /// <param name="_water_spread"></param>
-        /// <param name="_enemy_density"></param>
-        /// <param name="_enemy_spread"></param>
-        public void SetMapParameters(int _mountain_density, int _mountain_spread, int _wood_density, int _wood_spread, int _water_density, int _water_spread, int _enemy_density, int _enemy_spread)
-        {
-
-        }
-        /// <summary>
         /// Generate Map
         /// </summary>
         /// <param name="GraphicsDevice"></param>
         /// <param name="tileMap"></param>
-        private void GenerateMap(GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        private void GenerateMap()
         {
             map = new List<List<Tile>>();
 
@@ -364,12 +358,12 @@ namespace Idle_Civilization.Classes
                     //tile on even x-value with even y-value => visible tile
                     if (x % 2 == 0 && y % 2 == 0)
                     {
-                        map[x].Add(new Tile(GraphicsDevice, tileMap, Classes.TileNumber.gras, x, y));
+                        map[x].Add(new Tile(Classes.TileNumber.gras, x, y));
                     }
                     //tile on odd x-value with odd y-value ==> visible tile
                     else if (x % 2 != 0 && y % 2 != 0)
                     {
-                        map[x].Add(new Tile(GraphicsDevice, tileMap, Classes.TileNumber.gras, x, y));
+                        map[x].Add(new Tile(Classes.TileNumber.gras, x, y));
                     }
                     //empty tile
                     else
@@ -389,9 +383,9 @@ namespace Idle_Civilization.Classes
                     start_y = rand.Next(0, height);
                 } while (!IsValidTile(start_x, start_y));
 
-                map[start_x][start_y].SetTileType(TileNumber.mountain, GraphicsDevice, tileMap);
+                map[start_x][start_y].SetTileType(TileNumber.mountain);
 
-                SetNeighbors(start_x, start_y, TileBaseType.Mountain, GraphicsDevice, tileMap);
+                SetNeighbors(start_x, start_y, TileBaseType.Mountain);
             }
 
             //Add Woods
@@ -404,9 +398,9 @@ namespace Idle_Civilization.Classes
                     start_y = rand.Next(0, height);
                 } while (!IsValidTile(start_x, start_y));
 
-                map[start_x][start_y].SetTileType(TileNumber.wood, GraphicsDevice, tileMap);
+                map[start_x][start_y].SetTileType(TileNumber.wood);
 
-                SetNeighbors(start_x, start_y, TileBaseType.Wood, GraphicsDevice, tileMap);
+                SetNeighbors(start_x, start_y, TileBaseType.Wood);
             }
 
             //Add Water
@@ -419,9 +413,9 @@ namespace Idle_Civilization.Classes
                     start_y = rand.Next(0, height);
                 } while (!IsValidTile(start_x, start_y));
 
-                map[start_x][start_y].SetTileType(TileNumber.flatwater, GraphicsDevice, tileMap);
+                map[start_x][start_y].SetTileType(TileNumber.flatwater);
 
-                SetNeighbors(start_x, start_y, TileBaseType.Water, GraphicsDevice, tileMap);
+                SetNeighbors(start_x, start_y, TileBaseType.Water);
             }
 
             //Add Enemys
@@ -432,11 +426,10 @@ namespace Idle_Civilization.Classes
                 {
                     start_x = rand.Next(0, width);
                     start_y = rand.Next(0, height);
-                } while (!IsValidTile(start_x, start_y) && map[start_x][start_y].tileBaseType != TileBaseType.None);
+                } while (!IsValidTile(start_x, start_y) || map[start_x][start_y].tileBaseType != TileBaseType.None);
 
-                map[start_x][start_y].SetAsEnemyBase(GraphicsDevice, tileMap);
-
-                SetNeighbors(start_x, start_y, TileBaseType.Enemy, GraphicsDevice, tileMap);
+                map[start_x][start_y].SetAsEnemyBase();
+                MakeNeighborsToPartOfEnemy(map[start_x][start_y]);
             }
         }
         /// <summary>
@@ -457,7 +450,7 @@ namespace Idle_Civilization.Classes
         /// <param name="tileBaseType"></param>
         /// <param name="GraphicsDevice"></param>
         /// <param name="tileMap"></param>
-        private void SetNeighbors(int _x, int _y, TileBaseType tileBaseType, GraphicsDevice GraphicsDevice, Texture2D tileMap)
+        private void SetNeighbors(int _x, int _y, TileBaseType tileBaseType)
         {
             int x = _x, y = _y;
             //get spread of tileBaseType
@@ -476,60 +469,60 @@ namespace Idle_Civilization.Classes
             //tile on top (x; y-=2)
             if (y - 2 >= 0 && map[x][y - 2].tileBaseType != tileBaseType)
             {
-                if (rand.Next(0, 100) <= spread)
+                if (rand.Next(0, 100) <= spread && map[x][y - 2].tileBaseType != tileBaseType)
                 {
-                    map[x][y - 2].SetTileType(tileBaseType, GraphicsDevice, tileMap);
-                    SetNeighbors(x, y - 2, tileBaseType, GraphicsDevice, tileMap);
+                    map[x][y - 2].SetTileType(tileBaseType);
+                    SetNeighbors(x, y - 2, tileBaseType);
                 }
             }
 
             //tile upper right (x++;y--)
             if (y-1 >= 0 && x+1 < width && map[x + 1][y - 1].tileBaseType != tileBaseType)
             {
-                if (rand.Next(0, 100) <= spread)
+                if (rand.Next(0, 100) <= spread && map[x + 1][y - 1].tileBaseType != tileBaseType)
                 {
-                    map[x + 1][y - 1].SetTileType(tileBaseType, GraphicsDevice, tileMap);
-                    SetNeighbors(x + 1, y - 1, tileBaseType, GraphicsDevice, tileMap);
+                    map[x + 1][y - 1].SetTileType(tileBaseType);
+                    SetNeighbors(x + 1, y - 1, tileBaseType);
                 }
             }
 
             //tile lower right (x++, y++)
             if (y + 1 < height && x + 1 < width && map[x + 1][y + 1].tileBaseType != tileBaseType)
             {
-                if (rand.Next(0, 100) <= spread)
+                if (rand.Next(0, 100) <= spread && map[x + 1][y + 1].tileBaseType != tileBaseType)
                 {
-                    map[x + 1][y + 1].SetTileType(tileBaseType, GraphicsDevice, tileMap);
-                    SetNeighbors(x + 1, y + 1, tileBaseType, GraphicsDevice, tileMap);
+                    map[x + 1][y + 1].SetTileType(tileBaseType);
+                    SetNeighbors(x + 1, y + 1, tileBaseType);
                 }
             }
 
             //tile bottom (x, y+=2)
             if (y + 2 < height && map[x][y + 2].tileBaseType != tileBaseType)
             {
-                if (rand.Next(0, 100) <= spread)
+                if (rand.Next(0, 100) <= spread && map[x][y + 2].tileBaseType != tileBaseType)
                 {
-                    map[x][y + 2].SetTileType(tileBaseType, GraphicsDevice, tileMap);
-                    SetNeighbors(x, y + 2, tileBaseType, GraphicsDevice, tileMap);
+                    map[x][y + 2].SetTileType(tileBaseType);
+                    SetNeighbors(x, y + 2, tileBaseType);
                 }
             }
 
             //tile lower left (x--, y++)
             if (y + 1 < height && x - 1 >= 0 && map[x - 1][y + 1].tileBaseType != tileBaseType)
             {
-                if (rand.Next(0, 100) <= spread)
+                if (rand.Next(0, 100) <= spread && map[x - 1][y + 1].tileBaseType != tileBaseType)
                 {
-                    map[x - 1][y + 1].SetTileType(tileBaseType, GraphicsDevice, tileMap);
-                    SetNeighbors(x - 1, y + 1, tileBaseType, GraphicsDevice, tileMap);
+                    map[x - 1][y + 1].SetTileType(tileBaseType);
+                    SetNeighbors(x - 1, y + 1, tileBaseType);
                 }
             }
 
             //tile upper left (x--, y--)
             if (y - 1 >= 0 && x - 1 >= 0 && map[x - 1][y - 1].tileBaseType != tileBaseType)
             {
-                if (rand.Next(0, 100) <= spread)
+                if (rand.Next(0, 100) <= spread && map[x - 1][y - 1].tileBaseType != tileBaseType)
                 {
-                    map[x - 1][y - 1].SetTileType(tileBaseType, GraphicsDevice, tileMap);
-                    SetNeighbors(x - 1, y - 1, tileBaseType, GraphicsDevice, tileMap);
+                    map[x - 1][y - 1].SetTileType(tileBaseType);
+                    SetNeighbors(x - 1, y - 1, tileBaseType);
                 }
             }
         }
@@ -593,12 +586,42 @@ namespace Idle_Civilization.Classes
             switch(type)
             {
                 case TileControllType.cityTile:
-                    result = map[x - 1][y - 1].isCitypart ||
+
+                    if (x > 0 && x < width - 1 && y > 1 && y < height - 2)
+                    {
+                        result = map[x - 1][y - 1].isCitypart ||
                             map[x][y - 2].isCitypart ||
                             map[x + 1][y - 1].isCitypart ||
                             map[x + 1][y + 1].isCitypart ||
                             map[x][y + 2].isCitypart ||
                             map[x - 1][y + 1].isCitypart;
+                    }
+                    else if ( x == 0 && y > 0 && y < height - 2)
+                    {
+                        result = map[x][y - 2].isCitypart ||
+                            map[x + 1][y - 1].isCitypart ||
+                            map[x + 1][y + 1].isCitypart ||
+                            map[x][y + 2].isCitypart;
+                    }
+                    else if( x == height -1 && y > 0 && y < height - 2)
+                    {
+                        result = map[x - 1][y - 1].isCitypart ||
+                            map[x][y - 2].isCitypart ||
+                            map[x][y + 2].isCitypart ||
+                            map[x - 1][y + 1].isCitypart;
+                    }
+                    else if(x > 0 && x < width - 1 && y == 0)
+                    {
+                        result = map[x + 1][y + 1].isCitypart ||
+                            map[x][y + 2].isCitypart ||
+                            map[x - 1][y + 1].isCitypart;
+                    }
+                    else if (x > 0 && x < width - 1 && y == height - 2)
+                    {
+                        result = map[x - 1][y - 1].isCitypart ||
+                           map[x][y - 2].isCitypart ||
+                           map[x + 1][y - 1].isCitypart;
+                    }
                     break;
                 case TileControllType.enemyTile:
                     break;
@@ -615,23 +638,85 @@ namespace Idle_Civilization.Classes
         {
             int x = tile.x, y = tile.y;
 
-            map[x - 1][y - 1].SetAsCityPart(tile.cityID);
-            AddTileTypeToCity(tile.cityID, map[x - 1][y - 1].tileBaseType);
+            if (x > 0 && y > 0)
+            {
+                map[x - 1][y - 1].SetAsCityPart(tile.cityID);
+                AddTileTypeToCity(tile.cityID, map[x - 1][y - 1].tileBaseType);
+            }
 
-            map[x][y - 2].SetAsCityPart(tile.cityID);
-            AddTileTypeToCity(tile.cityID, map[x][y - 2].tileBaseType);
+            if (y > 1)
+            {
+                map[x][y - 2].SetAsCityPart(tile.cityID);
+                AddTileTypeToCity(tile.cityID, map[x][y - 2].tileBaseType);
+            }
 
-            map[x + 1][y - 1].SetAsCityPart(tile.cityID);
-            AddTileTypeToCity(tile.cityID, map[x + 1][y - 1].tileBaseType);
+            if (x < width - 1 && y > 0)
+            {
+                map[x + 1][y - 1].SetAsCityPart(tile.cityID);
+                AddTileTypeToCity(tile.cityID, map[x + 1][y - 1].tileBaseType);
+            }
 
-            map[x + 1][y + 1].SetAsCityPart(tile.cityID);
-            AddTileTypeToCity(tile.cityID, map[x + 1][y + 1].tileBaseType);
+            if (x < width - 1 && y < height - 1)
+            {
+                map[x + 1][y + 1].SetAsCityPart(tile.cityID);
+                AddTileTypeToCity(tile.cityID, map[x + 1][y + 1].tileBaseType);
+            }
 
-            map[x][y + 2].SetAsCityPart(tile.cityID);
-            AddTileTypeToCity(tile.cityID, map[x][y + 2].tileBaseType);
+            if (y < height - 2)
+            {
+                map[x][y + 2].SetAsCityPart(tile.cityID);
+                AddTileTypeToCity(tile.cityID, map[x][y + 2].tileBaseType);
+            }
 
-            map[x - 1][y + 1].SetAsCityPart(tile.cityID);
-            AddTileTypeToCity(tile.cityID, map[x - 1][y + 1].tileBaseType);
+            if (x > 0 && y < height - 1)
+            {
+                map[x - 1][y + 1].SetAsCityPart(tile.cityID);
+                AddTileTypeToCity(tile.cityID, map[x - 1][y + 1].tileBaseType);
+            }
+        }
+        /// <summary>
+        /// If Enemy is created make its adjacent tiles part of it
+        /// </summary>
+        /// <param name="tile"></param>
+        private void MakeNeighborsToPartOfEnemy(Tile tile)
+        {
+            int x = tile.x, y = tile.y;
+
+            if (x > 0 && y > 0)
+            {
+                map[x - 1][y - 1].SetAsEnemyTile();
+                SetNeighbors(x - 1, y - 1, TileBaseType.Enemy);
+            }
+
+            if (y > 1)
+            {
+                map[x][y - 2].SetAsEnemyTile();
+                SetNeighbors(x, y - 2, TileBaseType.Enemy);
+            }
+
+            if (x < width - 1 && y > 0)
+            {
+                map[x + 1][y - 1].SetAsEnemyTile();
+                SetNeighbors(x + 1, y - 1, TileBaseType.Enemy);
+            }
+
+            if (x < width - 1 && y < height - 1)
+            {
+                map[x + 1][y + 1].SetAsEnemyTile();
+                SetNeighbors(x + 1, y + 1, TileBaseType.Enemy);
+            }
+
+            if (y < height - 2)
+            {
+                map[x][y + 2].SetAsEnemyTile();
+                SetNeighbors(x, y + 2, TileBaseType.Enemy);
+            }
+
+            if (x > 0 && y < height - 1)
+            {
+                map[x - 1][y + 1].SetAsEnemyTile();
+                SetNeighbors(x - 1, y + 1, TileBaseType.Enemy);
+            }
         }
         #endregion
 
