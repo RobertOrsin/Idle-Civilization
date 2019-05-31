@@ -1,8 +1,8 @@
 # Playerparameters
-starting_food = 10
-starting_wood = 10
-starting_ore = 10
-starting_army = 10
+starting_food = 1000
+starting_wood = 1000
+starting_ore = 1000
+starting_army = 1000
 
 # Demand-Calculation
 baseproduction_food = 1.2
@@ -11,6 +11,9 @@ baseproduction_ore = 0.3
 foodconsumption_all = 1.0
 foodconsumtion_wood = 0.1
 foodconsumption_ore = 0.2
+tileControllFactor_wood = 1.0
+tileControllFactor_food = 1.0
+tileControllFactor_ore = 1.0
 
 # Mapgeneration
 map_width = 30

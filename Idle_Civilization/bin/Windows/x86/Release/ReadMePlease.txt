@@ -24,4 +24,6 @@ Stuff that sucks but is still there:
 	- Creating army resets army-worker and costs no other ressources
 		--> you can cheat to get army
 		--> using no other ressources for this is not good
+	- You can producte Ressources by just having the respective tiles within your city
+		--> this is not intendet
 	

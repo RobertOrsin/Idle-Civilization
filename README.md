@@ -12,11 +12,17 @@ To do:
 	- Add a simple AI to the EnemyCitys so they start creeping around and deploy army to there tiles
 		o Act like a player or set ressources after time (ease (less) to hard (many))?
 	- Spritesheets to Dictionary
-	- Add an animation for testing
-	- update demand-calc to use tiles under city controll
+	- Add an sprite-animation for testing
 	
 done lately:
+
+	- added animation to tileMenu
+	- updated demand-calc to use tiles under city controll
+		o added Values to Globals and Configfile
 	
+
+done earlier:
+
 	- GraphicsDevice is a static global now
 		o changed all using function to use the globals
 	- Added Animation-Class
@@ -25,9 +31,7 @@ done lately:
 	- got rid of some exceptions from city building
 	- added buttons for zoom in/out
 	- added buttons to deploy/take army to/from a tile
-
-done earlier:
-
+	-.....
 	- done a super early version for the HUD
 		o plane white text, no fancyness
 	- put values for mapgeneration and demand-calc into static global-class

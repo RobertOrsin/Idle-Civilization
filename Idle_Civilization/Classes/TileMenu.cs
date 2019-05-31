@@ -12,8 +12,15 @@ namespace Idle_Civilization.Classes
         public bool visible = false;
         Vector2 centerPosition = new Vector2(5,5);
         //public Rectangle tileArea;
-        public Tile selectedTile;
+        public Tile selectedTile, oldselectedTile;
         public TileMenuUpdateData tileMenuUpdateData = new TileMenuUpdateData(false);
+
+        private bool animation_finished = false;
+        private int animation_steps = 10;
+        private int animation_step = 0;
+        double timer = 20; //in ms
+        const double TIME = 20;
+
 
         #region MenuItems
         Pushbutton addPeople;
@@ -138,7 +145,7 @@ namespace Idle_Civilization.Classes
             tileMenuUpdateData.tileMenuFunction = function;
         }
 
-        public TileMenuUpdateData Update(KeyboardState currentKeyboardState, MouseState mouseState)
+        public TileMenuUpdateData Update(KeyboardState currentKeyboardState, MouseState mouseState, GameTime gameTime)
         {
             tileMenuUpdateData = new TileMenuUpdateData(false);
             #region update elements
@@ -188,6 +195,32 @@ namespace Idle_Civilization.Classes
             #endregion
 
             tileMenuUpdateData.clickDetected = tileMenuUpdateData.tileMenuFunction != TileMenuFunction.none && tileMenuUpdateData.tileMenuFunction != TileMenuFunction._void_;
+
+            if (selectedTile != oldselectedTile)
+            {
+                animation_finished = false;
+                oldselectedTile = selectedTile;
+                animation_step = 0;
+            }
+
+            double elapsed = gameTime.ElapsedGameTime.TotalMilliseconds;
+            timer -= elapsed;
+
+            if (timer < 0)
+            {
+                timer = TIME;
+
+                if (!animation_finished)
+                {
+                    animation_step++;
+
+                    if (animation_step >= animation_steps)
+                    {
+                        animation_finished = true;
+                        
+                    }
+                }
+            }
 
             return tileMenuUpdateData;
         }
@@ -307,38 +340,79 @@ namespace Idle_Civilization.Classes
                                              selectedTile.drawArea.Y + ((Constants.tile_height - Constants.tile_y_offset)* Globals.tile_stretch_factor) + (Constants.tile_y_space * Globals.tile_stretch_factor / 2));
 
             #region set position of elements
-            addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton];
-            population.position = centerpoint + menuElementOffsets[MenuElement.TopTextBox];
+            addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton] / animation_steps * animation_step;
+            population.position = centerpoint + menuElementOffsets[MenuElement.TopTextBox] / animation_steps * animation_step;
 
-            foundCity.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
-            addTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
-            attackTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            foundCity.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton] / animation_steps * animation_step;
+            addTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton] / animation_steps * animation_step;
+            attackTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton] / animation_steps * animation_step;
 
-            subOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightMinus];
-            addOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightPlus];
-            oreIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerRightButton];
-            oreworkers.position = centerpoint + menuElementOffsets[MenuElement.LowerRightTextBox];
+            subOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightMinus] / animation_steps * animation_step;
+            addOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightPlus] / animation_steps * animation_step;
+            oreIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerRightButton] / animation_steps * animation_step;
+            oreworkers.position = centerpoint + menuElementOffsets[MenuElement.LowerRightTextBox] / animation_steps * animation_step;
 
-            subWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomMinus];
-            addWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomPlus];
-            woodIcon.position = centerpoint + menuElementOffsets[MenuElement.BottomButton];
-            woodWorkers.position = centerpoint + menuElementOffsets[MenuElement.BottomTextBox];
+            subWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomMinus] / animation_steps * animation_step;
+            addWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomPlus] / animation_steps * animation_step;
+            woodIcon.position = centerpoint + menuElementOffsets[MenuElement.BottomButton] / animation_steps * animation_step;
+            woodWorkers.position = centerpoint + menuElementOffsets[MenuElement.BottomTextBox] / animation_steps * animation_step;
 
-            subFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftMinus];
-            addFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftPlus];
-            FoodIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftButton];
-            foodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftTextBox];
+            subFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftMinus] / animation_steps * animation_step;
+            addFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftPlus] / animation_steps * animation_step;
+            FoodIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftButton] / animation_steps * animation_step;
+            foodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftTextBox] / animation_steps * animation_step;
 
-            subArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftMinus];
-            addArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftPlus];
-            armyIcon.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftButton];
-            armyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftTextBox];
+            subArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftMinus] / animation_steps * animation_step;
+            addArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftPlus] / animation_steps * animation_step;
+            armyIcon.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftButton] / animation_steps * animation_step;
+            armyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftTextBox] / animation_steps * animation_step;
 
-            subArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightMinus];
-            addArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightPlus];
-            armyIcon_Deploy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
-            armyDeployed.position = centerpoint + menuElementOffsets[MenuElement.UpperRightTextBox];
+            subArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightMinus] / animation_steps * animation_step;
+            addArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightPlus] / animation_steps * animation_step;
+            armyIcon_Deploy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton] / animation_steps * animation_step;
+            armyDeployed.position = centerpoint + menuElementOffsets[MenuElement.UpperRightTextBox] / animation_steps * animation_step;
             #endregion
+
+            //#region set position of elements
+            //addPeople.position = centerpoint + menuElementOffsets[MenuElement.TopButton];
+            //population.position = centerpoint + menuElementOffsets[MenuElement.TopTextBox];
+
+            //foundCity.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            //addTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            //attackTile.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+
+            //subOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightMinus];
+            //addOreWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerRightPlus];
+            //oreIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerRightButton];
+            //oreworkers.position = centerpoint + menuElementOffsets[MenuElement.LowerRightTextBox];
+
+            //subWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomMinus];
+            //addWoodWorker.position = centerpoint + menuElementOffsets[MenuElement.BottomPlus];
+            //woodIcon.position = centerpoint + menuElementOffsets[MenuElement.BottomButton];
+            //woodWorkers.position = centerpoint + menuElementOffsets[MenuElement.BottomTextBox];
+
+            //subFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftMinus];
+            //addFoodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftPlus];
+            //FoodIcon.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftButton];
+            //foodWorker.position = centerpoint + menuElementOffsets[MenuElement.LowerLeftTextBox];
+
+            //subArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftMinus];
+            //addArmyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftPlus];
+            //armyIcon.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftButton];
+            //armyWorker.position = centerpoint + menuElementOffsets[MenuElement.UpperLeftTextBox];
+
+            //subArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightMinus];
+            //addArmy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightPlus];
+            //armyIcon_Deploy.position = centerpoint + menuElementOffsets[MenuElement.UpperRightButton];
+            //armyDeployed.position = centerpoint + menuElementOffsets[MenuElement.UpperRightTextBox];
+            //#endregion
+        }
+
+        public void ResetAnimation()
+        {
+            animation_finished = false;
+            oldselectedTile = selectedTile;
+            animation_step = 0;
         }
         #endregion
 

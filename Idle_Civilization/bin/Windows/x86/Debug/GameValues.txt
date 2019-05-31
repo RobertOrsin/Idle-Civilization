@@ -11,9 +11,12 @@ baseproduction_ore = 0.3
 foodconsumption_all = 1.0
 foodconsumtion_wood = 0.1
 foodconsumption_ore = 0.2
+tileControllFactor_wood = 1.0
+tileControllFactor_food = 1.0
+tileControllFactor_ore = 1.0
 
 # Mapgeneration
-map_width = 30
+map_width = 50
 map_height = 45
 mountain_density = 10
 mountain_spread = 20

@@ -113,9 +113,9 @@ namespace Idle_Civilization.Classes
                     //Ressourceupdate
                     if (hasCity)
                     {
-                        tileUpdateData.demand.wood = wood_worker * (Globals.baseproduction_wood + modifier.wood);
-                        tileUpdateData.demand.ore = ore_worker * (Globals.baseproduction_ore + modifier.ore);
-                        tileUpdateData.demand.food = (population * Globals.baseFoodconsumption_poeple * -1) + (ore_worker * Globals.baseFoodconsumption_ore * -1) + (wood_worker * Globals.baseFoodconsumption_wood * -1) + food_worker * (Globals.baseproduction_food + modifier.food);
+                        tileUpdateData.demand.wood = wood_worker * (Globals.baseproduction_wood + modifier.wood) + wood_under_controll * Globals.tileControllFactor_wood;
+                        tileUpdateData.demand.ore = ore_worker * (Globals.baseproduction_ore + modifier.ore) + mountain_under_controll * Globals.tileControllFactor_ore;
+                        tileUpdateData.demand.food = (population * Globals.baseFoodconsumption_poeple * -1) + (ore_worker * Globals.baseFoodconsumption_ore * -1) + (wood_worker * Globals.baseFoodconsumption_wood * -1) + food_worker * (Globals.baseproduction_food + modifier.food) + grass_under_controll * Globals.tileControllFactor_food;
                         tileUpdateData.demand.army = army_worker;
                         population -= army_worker;
                         army_worker = 0;

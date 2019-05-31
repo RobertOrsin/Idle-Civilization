@@ -50,6 +50,9 @@ namespace Idle_Civilization.Classes
         public static double baseFoodconsumption_poeple = 1.0;
         public static double baseFoodconsumption_wood = 0.1;
         public static double baseFoodconsumption_ore = 0.2;
+        public static double tileControllFactor_wood = 1.0;
+        public static double tileControllFactor_food = 1.0;
+        public static double tileControllFactor_ore = 1.0;
 
         //Mapgeneration
         public static int map_width = 30; //tiles in x

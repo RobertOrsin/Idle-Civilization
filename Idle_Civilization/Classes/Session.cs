@@ -170,7 +170,7 @@ namespace Idle_Civilization.Classes
             player.ressource_demand = new Ressources();
 
             tileMenu.selectedTile = map[selectedTile.X][selectedTile.Y];
-            tileMenuUpdateData = tileMenu.Update(keyboardState, mouseState);
+            tileMenuUpdateData = tileMenu.Update(keyboardState, mouseState, gameTime);
 
             if (tileMenuUpdateData.clickDetected)
             {
@@ -191,7 +191,7 @@ namespace Idle_Civilization.Classes
                     }
                 }
             }
-            player.ressources.SubRessources(player.ressource_demand);
+            player.ressources.AddRessources(player.ressource_demand);
 
             hud.Update(mouseState, gameTime, player);
         }
@@ -236,6 +236,8 @@ namespace Idle_Civilization.Classes
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.CreateCity]);
 
                         player.cityCount++;
+
+                        tileMenu.ResetAnimation();
                     }
                     break;
                 case TileMenuFunction.addPeople:
@@ -1178,6 +1180,15 @@ namespace Idle_Civilization.Classes
                                 break;
                             case "foodconsumption_ore":
                                 Globals.baseFoodconsumption_ore = Convert.ToDouble(splits[1]);
+                                break;
+                            case "tileControllFactor_wood":
+                                Globals.tileControllFactor_wood = Convert.ToDouble(splits[1]);
+                                break;
+                            case "tileControllFactor_food":
+                                Globals.tileControllFactor_food = Convert.ToDouble(splits[1]);
+                                break;
+                            case "tileControllFactor_ore":
+                                Globals.tileControllFactor_ore = Convert.ToDouble(splits[1]);
                                 break;
                             case "map_width":
                                 Globals.map_width = Convert.ToInt32(splits[1]);
