@@ -21,7 +21,11 @@ namespace Idle_Civilization.Classes
         private TextBox player_ressources_food, player_ressources_wood, player_ressources_ore, player_ressources_army;
         private TextBox player_demand_food, player_demand_wood, player_demand_ore, player_demand_army;
 
+        private TextBox enemy_food, enemy_wood, enemy_ore, enemy_army;
+
         private TextBox helpstring;
+
+        private TextBox pauseString;
 
         #endregion
 
@@ -39,6 +43,11 @@ namespace Idle_Civilization.Classes
             player_demand_ore = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
             player_demand_army = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
 
+            enemy_food = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            enemy_wood = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            enemy_ore = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+            enemy_army = new TextBox(new Vector2(0, 0), new Point(50, 15), 1, false, true, null, new Color(255, 255, 255));
+
             player_demand_food.textArray[0] = "0";
             player_demand_wood.textArray[0] = "0";
             player_demand_ore.textArray[0] = "0";
@@ -49,11 +58,17 @@ namespace Idle_Civilization.Classes
             helpstring.textArray.Add("R - reload Game");
             helpstring.textArray.Add("plus - zoom in");
             helpstring.textArray.Add("minus - zoom out");
+            helpstring.textArray.Add("P - pause");
+
+
+            pauseString = new TextBox(new Vector2(0, 0), new Point(100, 15), 1, false, true, null, new Color(255, 0, 0));
+            pauseString.textArray[0] = "Pause active";
+            pauseString.visible = true;
 
             SetPositions();
         }
 
-        public void Update(MouseState mouseState, GameTime gameTime, Player player)
+        public void Update(MouseState mouseState, GameTime gameTime, Player player, Enemy enemy)
         {
             #region write player-values to textboxes
             player_ressources_food.textArray[0] = player.ressources.food.ToString();
@@ -69,6 +84,13 @@ namespace Idle_Civilization.Classes
                 player_demand_army.textArray[0] = player.ressource_demand.army.ToString();
             }
             #endregion
+
+            #region write enemy-values to textboxes
+            enemy_army.textArray[0] = enemy.ressources.army.ToString();
+            enemy_food.textArray[0] = enemy.ressources.food.ToString();
+            enemy_wood.textArray[0] = enemy.ressources.wood.ToString();
+            enemy_ore.textArray[0] = enemy.ressources.ore.ToString();
+            #endregion
         }
 
         public void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont)
@@ -83,7 +105,14 @@ namespace Idle_Civilization.Classes
             player_demand_ore.Draw(spriteBatch, spriteFont);
             player_demand_army.Draw(spriteBatch, spriteFont);
 
+            enemy_ore.Draw(spriteBatch, spriteFont);
+            enemy_food.Draw(spriteBatch, spriteFont);
+            enemy_wood.Draw(spriteBatch, spriteFont);
+            enemy_army.Draw(spriteBatch, spriteFont);
+
             helpstring.Draw(spriteBatch, spriteFont);
+
+            pauseString.Draw(spriteBatch, spriteFont);
         }
         /// <summary>
         /// Set positions for all elements on HUD
@@ -104,7 +133,19 @@ namespace Idle_Civilization.Classes
             player_ressources_army.position = new Vector2(offset * 3 + 5, 0);
             player_demand_army.position = new Vector2(offset * 3 + player_ressources_army.dimension.X + 5, 0);
 
+            enemy_food.position = new Vector2(0, 30);
+            enemy_wood.position = new Vector2(offset * 1 + 5, 30);
+            enemy_ore.position = new Vector2(offset * 2 + 5, 30);
+            enemy_army.position = new Vector2(offset * 3 + 5, 30);
+
             helpstring.position = new Vector2(offset * 4 + 5, 0);
+
+            pauseString.position = new Vector2(hud_width / 2 - pauseString.dimension.X / 2, hud_height / 2);
+        }
+
+        public void Pause()
+        {
+            pauseString.visible = !pauseString.visible;
         }
 
 

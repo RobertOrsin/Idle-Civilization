@@ -34,6 +34,6 @@
     <BuildCost Cost="200;200;200;0" /> <!-- to build city /-->
     <BuildCost Cost="100;100;100;0" /> <!-- to add free tile to town /-->
 	<BuildCost Cost="0;100;0;0" />	<!-- to add a worker to city /-->
-	<BuildCost Cost="0;0;0;200" />	<!-- to add an enemy tile to city /-->
+	<BuildCost Cost="50;50;50;0" />	<!-- to add an army to enemy /-->
   </BuildCosts>
 </IDLECIV_Upgrades>

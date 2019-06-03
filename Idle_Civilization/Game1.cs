@@ -23,6 +23,8 @@ namespace Idle_Civilization
         public static MouseState mouseState, oldMouseState;
         public static KeyboardState keyboardState, oldKeyboardState;
 
+        public bool paused = true;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -113,12 +115,21 @@ namespace Idle_Civilization
                     if (Globals.tile_stretch_factor < 1)
                         Globals.tile_stretch_factor = 1;
                 }
+                else if (keyboardState.IsKeyDown(Keys.P))
+                {
+                    paused = !paused;
+                    session.Pause();
+                }
 
-                
+
+
             }
+
             oldKeyboardState = keyboardState;
             oldMouseState = mouseState;
-            session.Update(keyboardState, mouseState, gameTime);
+
+            if(!paused)
+                session.Update(keyboardState, mouseState, gameTime);
 
             base.Update(gameTime);
         }

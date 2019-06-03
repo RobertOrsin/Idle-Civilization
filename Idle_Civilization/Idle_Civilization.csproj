@@ -41,6 +41,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classes\Enemy.cs" />
     <Compile Include="Classes\HUD.cs" />
     <Compile Include="Classes\Session.cs" />
     <Compile Include="Classes\Player.cs" />

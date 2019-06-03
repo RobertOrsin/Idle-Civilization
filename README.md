@@ -8,22 +8,30 @@ To do:
 		o coloured text for pos/neg demand
 		o add +/- to demand
 		o make backgroundtextures
-		o add buttons for speed, pause 
-	- Add a simple AI to the EnemyCitys so they start creeping around and deploy army to there tiles
-		o Act like a player or set ressources after time (ease (less) to hard (many))?
+		o add button for speed
 	- Spritesheets to Dictionary
 	- Add an sprite-animation for testing
+	- add difficulty-levels to enemy-ai
 	
 done lately:
+
+	- EnemyBases now start with armystrength of 100
+	- Added Enemy-Class to keep track of enemy-values
+	- Codesektions for adding/subing extended with add/sub tile to enemy
+	- Added Enum to determine enemy-playstile
+	- added pause-key
+		o added text to hud to visualice pause
+	- added Enemyparameter to Globals and Configfile
+	- added Enemyvalues to HUD for debugging
+	- first version of enemy-ai implemented
+	
+done earlier:
 
 	- added animation to tileMenu
 	- updated demand-calc to use tiles under city controll
 		o added Values to Globals and Configfile
 	- added Alpha-Value to tiles around selected tile to aid visibility of TileMenu
-	
-
-done earlier:
-
+	-.....
 	- GraphicsDevice is a static global now
 		o changed all using function to use the globals
 	- Added Animation-Class

@@ -4,6 +4,14 @@ starting_wood = 1000
 starting_ore = 1000
 starting_army = 1000
 
+# Enemyparameters
+enemy_ressource_factor = 2.0
+# 0 - stronghold, 1 - conquer, 2 - even
+AI_Preference = 2
+enemy_base_production_wood = 5.0
+enemy_base_production_food = 5.0
+enemy_base_production_ore = 5.0
+
 # Demand-Calculation
 baseproduction_food = 1.2
 baseproduction_wood = 0.3

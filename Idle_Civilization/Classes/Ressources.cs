@@ -43,6 +43,13 @@ namespace Idle_Civilization.Classes
         public static int player_starting_ore = 10000;
         public static int player_starting_army = 10000;
 
+        //enemy parameters
+        public static double enemy_ressource_factor = 2.0;
+        public static AI_Preference AI_Preference = AI_Preference.evenly;
+        public static double enemy_base_production_food = 5.0;
+        public static double enemy_base_production_wood = 5.0;
+        public static double enemy_base_production_ore = 5.0;
+
         //Demand-Calculation
         public static double baseproduction_wood = 0.3;
         public static double baseproduction_ore = 0.3;
@@ -65,7 +72,7 @@ namespace Idle_Civilization.Classes
         public static int water_density = 10;
         public static int water_spread = 0;
         public static int enemy_density = 5;
-        public static int enemy_spread = 20;
+        public static int enemy_spread = 0;
     }
 
 
@@ -141,7 +148,7 @@ namespace Idle_Civilization.Classes
         CreateCity,
         addTile,
         Worker,
-        attackTile
+        enemyAddArmy
     }
 
     /// <summary>

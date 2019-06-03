@@ -21,6 +21,7 @@ namespace Idle_Civilization.Classes
         int screen_width, screen_height;
         
         Player player;
+        Enemy enemy;
         HUD hud;
         UpgradeMenu upgradeMenu;
 
@@ -72,6 +73,10 @@ namespace Idle_Civilization.Classes
             map_screen_height = screen_height - HUD.hud_height; //to do: change according to HUD
             map_screen_width = screen_width; //to do: change according to HUD
 
+            LoadUpgradesCosts();
+
+            enemy = new Enemy(AI_Preference.conquering, buildCosts);
+
             GenerateMap();
 
             mapPosition = new Vector2(0, 0);
@@ -92,7 +97,8 @@ namespace Idle_Civilization.Classes
 
             player = new Player(new Ressources(Globals.player_starting_wood, Globals.player_starting_ore , Globals.player_starting_food, Globals.player_starting_army));
             
-            LoadUpgradesCosts();
+            
+            
         }
         /// <summary>
         /// Updatefunction
@@ -206,8 +212,9 @@ namespace Idle_Civilization.Classes
             }
 
             player.ressources.AddRessources(player.ressource_demand);
+            enemy.Update(gameTime, map);
 
-            hud.Update(mouseState, gameTime, player);
+            hud.Update(mouseState, gameTime, player, enemy);
         }
         /// <summary>
         /// Drawfunction
@@ -242,15 +249,10 @@ namespace Idle_Civilization.Classes
                 case TileMenuFunction.foundCity:
                     if (FoundCityValid(tile) && player.CanAfford(buildCosts[(int)Buildcosts.CreateCity]))
                     {
-                        //Create City on tile
                         tile.SetAsCity(player.cityCount);
-                        //Add adjacent tiles to this city
                         MakeNeighborsToPartsOfCity(tile);
-
                         player.ressources.SubRessources(buildCosts[(int)Buildcosts.CreateCity]);
-
                         player.cityCount++;
-
                         tileMenu.ResetAnimation();
                     }
                     break;
@@ -278,6 +280,7 @@ namespace Idle_Civilization.Classes
                         player.ressources.SubRessources(new Ressources(0, 0, 0, tile.armystrength));
                         tile.ConquerTile(cityID);
                         AddTileTypeToCity(cityID, tile.tileBaseType);
+                        enemy.SubTileFromControll(tile);
                     }
                     break;
                 case TileMenuFunction.addArmy:
@@ -399,7 +402,7 @@ namespace Idle_Civilization.Classes
                     start_y = rand.Next(0, height);
                 } while (!IsValidTile(start_x, start_y));
 
-                map[start_x][start_y].SetTileType(TileNumber.mountain);
+                map[start_x][start_y].SetTileType(TileBaseType.Mountain);
 
                 SetNeighbors(start_x, start_y, TileBaseType.Mountain);
             }
@@ -414,7 +417,7 @@ namespace Idle_Civilization.Classes
                     start_y = rand.Next(0, height);
                 } while (!IsValidTile(start_x, start_y));
 
-                map[start_x][start_y].SetTileType(TileNumber.wood);
+                map[start_x][start_y].SetTileType(TileBaseType.Wood);
 
                 SetNeighbors(start_x, start_y, TileBaseType.Wood);
             }
@@ -429,7 +432,7 @@ namespace Idle_Civilization.Classes
                     start_y = rand.Next(0, height);
                 } while (!IsValidTile(start_x, start_y));
 
-                map[start_x][start_y].SetTileType(TileNumber.flatwater);
+                map[start_x][start_y].SetTileType(TileBaseType.Water);
 
                 SetNeighbors(start_x, start_y, TileBaseType.Water);
             }
@@ -702,37 +705,48 @@ namespace Idle_Civilization.Classes
             {
                 map[x - 1][y - 1].SetAsEnemyTile();
                 SetNeighbors(x - 1, y - 1, TileBaseType.Enemy);
+                enemy.AddTileToControll(map[x - 1][y - 1]);
             }
 
             if (y > 1)
             {
                 map[x][y - 2].SetAsEnemyTile();
                 SetNeighbors(x, y - 2, TileBaseType.Enemy);
+                enemy.AddTileToControll(map[x][y - 2]);
             }
 
             if (x < width - 1 && y > 0)
             {
                 map[x + 1][y - 1].SetAsEnemyTile();
                 SetNeighbors(x + 1, y - 1, TileBaseType.Enemy);
+                enemy.AddTileToControll(map[x + 1][y - 1]);
             }
 
             if (x < width - 1 && y < height - 1)
             {
                 map[x + 1][y + 1].SetAsEnemyTile();
                 SetNeighbors(x + 1, y + 1, TileBaseType.Enemy);
+                enemy.AddTileToControll(map[x + 1][y + 1]);
             }
 
             if (y < height - 2)
             {
                 map[x][y + 2].SetAsEnemyTile();
                 SetNeighbors(x, y + 2, TileBaseType.Enemy);
+                enemy.AddTileToControll(map[x][y + 2]);
             }
 
             if (x > 0 && y < height - 1)
             {
                 map[x - 1][y + 1].SetAsEnemyTile();
                 SetNeighbors(x - 1, y + 1, TileBaseType.Enemy);
+                enemy.AddTileToControll(map[x - 1][y + 1]);
             }
+        }
+
+        public void Pause()
+        {
+            hud.Pause();
         }
         #endregion
 
@@ -824,6 +838,7 @@ namespace Idle_Civilization.Classes
                 }
             }
         }
+        
 
         #endregion
 
@@ -1176,6 +1191,21 @@ namespace Idle_Civilization.Classes
                                 break;
                             case "starting_army":
                                 Globals.player_starting_army = Convert.ToInt32(splits[1]);
+                                break;
+                            case "enemy_ressource_factor":
+                                Globals.enemy_ressource_factor = Convert.ToDouble(splits[1]);
+                                break;
+                            case "AI_Preference":
+                                Globals.AI_Preference = (AI_Preference)Convert.ToInt32(splits[1]);
+                                break;
+                            case "enemy_base_production_wood":
+                                Globals.enemy_base_production_wood = Convert.ToDouble(splits[1]);
+                                break;
+                            case "enemy_base_production_food":
+                                Globals.enemy_base_production_food = Convert.ToDouble(splits[1]);
+                                break;
+                            case "enemy_base_production_ore":
+                                Globals.enemy_base_production_ore = Convert.ToDouble(splits[1]);
                                 break;
                             case "baseproduction_food":
                                 Globals.baseproduction_food = Convert.ToDouble(splits[1]);

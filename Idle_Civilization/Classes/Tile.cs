@@ -15,7 +15,7 @@ namespace Idle_Civilization.Classes
         private TileNumber tiletype;
         public int x, y; //koordinates on map
         Texture2D tile_texture;
-        bool empty = false;
+        public bool empty = false;
         Rectangle clickArea;
         public Rectangle drawArea;
         private MouseState old_mouseState;
@@ -122,6 +122,11 @@ namespace Idle_Civilization.Classes
                         population -= army_worker;
                         army_worker = 0;
                         
+                    }
+                    //Enemy-AI
+                    else if(hasEnemy)
+                    {
+
                     }
                 }
                 #endregion
@@ -338,12 +343,14 @@ namespace Idle_Civilization.Classes
             hasEnemy = true;
             isEnemyBase = true;
             SetTileType(TileNumber.townwithstrongwall);
+            armystrength = 100;
         }
         /// <summary>
         /// Set Tile as Part of Enemy
         /// </summary>
         public void SetAsEnemyTile()
         {
+            isCitypart = false;
             hasEnemy = true;
         }
         /// <summary>
