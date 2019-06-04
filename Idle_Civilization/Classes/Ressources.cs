@@ -73,6 +73,11 @@ namespace Idle_Civilization.Classes
         public static int water_spread = 0;
         public static int enemy_density = 5;
         public static int enemy_spread = 0;
+
+        //Builddurations
+        public static double buildCityDuration = 5.0;
+        public static double addTileDuration = 3.0;
+        public static double conquerTileDuration = 5.0;
     }
 
 
@@ -242,5 +247,16 @@ namespace Idle_Civilization.Classes
     {
         cityTile,
         enemyTile,       
+    }
+    /// <summary>
+    /// the duration of an action on a tile is expired, session fullfills an coresponding order
+    /// </summary>
+    public enum TileOrder
+    {
+        none,
+        buildCity,
+        addTile,
+        conquerTile
+
     }
 }

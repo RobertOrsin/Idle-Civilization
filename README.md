@@ -15,6 +15,12 @@ To do:
 	
 done lately:
 
+	- Added Progressbar-class
+		o used for conquering tiles
+	
+	
+done earlier:
+
 	- EnemyBases now start with armystrength of 100
 	- Added Enemy-Class to keep track of enemy-values
 	- Codesektions for adding/subing extended with add/sub tile to enemy
@@ -24,9 +30,7 @@ done lately:
 	- added Enemyparameter to Globals and Configfile
 	- added Enemyvalues to HUD for debugging
 	- first version of enemy-ai implemented
-	
-done earlier:
-
+	-.....
 	- added animation to tileMenu
 	- updated demand-calc to use tiles under city controll
 		o added Values to Globals and Configfile

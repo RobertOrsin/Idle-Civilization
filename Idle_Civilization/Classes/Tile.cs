@@ -26,7 +26,6 @@ namespace Idle_Civilization.Classes
         double timer = 5000; //in ms
         const double TIME = 5000;
 
-
         public bool hasCity = false;
         public int cityID = -1;
         public bool isCitypart;
