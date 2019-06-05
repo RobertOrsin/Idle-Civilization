@@ -20,11 +20,13 @@ namespace Idle_Civilization.Classes
         public Rectangle drawArea;
         private MouseState old_mouseState;
 
-        public bool alpha = false;
+        public bool alpha = false; //dim tile to aid vision on menu-items
 
         //Delay for Ressourceupdate
         double timer = 5000; //in ms
         const double TIME = 5000;
+
+        Progressbar progressbar;
 
         public bool hasCity = false;
         public int cityID = -1;
@@ -90,6 +92,8 @@ namespace Idle_Civilization.Classes
             borders.Add(false);
             borders.Add(false);
             borders.Add(false);
+
+            progressbar = new Progressbar();
         }
         /// <summary>
         /// Update Inputs on Map and its tiles
@@ -155,6 +159,8 @@ namespace Idle_Civilization.Classes
                     aNeighborisEnemy = true;
             }
 
+            progressbar.Update(gameTime);
+
             return tileUpdateData;
         }
         /// <summary>
@@ -192,6 +198,8 @@ namespace Idle_Civilization.Classes
                         counter++;
                     }
                 }
+
+                progressbar.Draw(spriteBatch, drawArea);
             }
         }
 
