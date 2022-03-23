@@ -1,3 +1,6 @@
+Abandonded game, feel free to use what you like.
+
+
 # Idle-Civilization
 
 To do:
